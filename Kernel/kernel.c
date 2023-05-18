@@ -3,8 +3,8 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
-#include <videoDriver.h>
 #include <idtLoader.h>
+#include "drivers/include/videoDriver.h"
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -81,13 +81,10 @@ void * initializeKernelBinary()
 	return getStackBase();
 	
 }
-
 int main()
 {
 	load_idt();
-	int xCursor[1] = {100}; 
-	int yCursor[1] = {100};
-	paintChar(30, 0xFF,0xFF,0xFF,xCursor,yCursor);
-	paintChar(31, 0xFF,0xFF,0xFF,xCursor,yCursor);
+	boke();
+	drawSquare(RED,100,200,200);
 	return 0;
 }

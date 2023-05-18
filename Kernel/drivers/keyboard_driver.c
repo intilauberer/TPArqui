@@ -1,6 +1,6 @@
 #include <lib.h>
 #include <naiveConsole.h>
-#include "keyboard_driver.h"
+#include "include/keyboard_driver.h"
 
 static char ScanCodes[256]={0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
 '\b', '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\n', 0, 'A', 'S', 

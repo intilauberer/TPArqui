@@ -1,12 +1,8 @@
-#include <videoDriver.h>
+#include "include/videoDriver.h"
 
 unsigned int SCREEN_WIDTH = 1024;
 unsigned int SCREEN_HEIGHT = 768;
 unsigned int BPP = 3;
-
-#define TO_RED(hex) hex & 0xFF
-#define TO_BLUE(hex) hex & 0xFF
-#define TO_GREEN(hex) hex & 0xFF
 
 struct vbe_mode_info_structure { 
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -55,28 +51,96 @@ void putPixel(uint32_t hexColor, uint32_t x, uint32_t y) {
 	uint8_t * screen = (uint8_t *) ((uint64_t) (VBE_mode_info->framebuffer));
     uint32_t offset = VBE_mode_info->pitch*y + x*3;
     
-    screen[offset] = hexColor & 0xFF;
-    screen[offset+1] = (hexColor >> 8) & 0xFF;
-    screen[offset+2] = (hexColor >> 16) &  0xFF;
+    screen[offset] = TO_RED(hexColor);
+    screen[offset+1] = TO_BLUE(hexColor);
+    screen[offset+2] = TO_GREEN(hexColor);
 }
 
-// void putPixel(uint8_t r, uint8_t g, uint8_t b, uint32_t x, uint32_t y) {
-// 	uint8_t * videoPtr = VBE_mode_info->framebuffer;
-// 	int offset = y * VBE_mode_info->pitch + x * (VBE_mode_info->bpp / 8);
-// 	videoPtr[offset] = b;
-// 	videoPtr[offset+1] = g;
-// 	videoPtr[offset+2] = r;
-// 	return;
+void drawRectangle(uint32_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y){
+	for (uint32_t x_aux = x; x_aux < x+b; x_aux++){
+		for (uint32_t y_aux = y; y_aux < y+h; y_aux++){
+			putPixel(hexColor,x_aux,y_aux);
+		}
+	}
+}
+
+
+
+// char ellipseFormula(uint32_t height, uint32_t width, uint32_t x_center, uint32_t y_center, uint32_t x, uint32_t y) {
+//     double x_normalized = (double)(x - x_center) / width;
+//     double y_normalized = (double)(y - y_center) / height;
+    
+//     double result = (x_normalized * x_normalized) + (y_normalized * y_normalized);
+    
+//     if (result <= 1.0) {
+//         return 1;
+//     } else {
+//         return 0;
+//     }
 // }
+
+// void drawEllipse(uint32_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y) {
+//     uint32_t top_left_x = x;
+//     uint32_t top_left_y = y;
+//     uint32_t bottom_right_x = x + width;
+//     uint32_t bottom_right_y = y + height;
+    
+//     for (uint32_t curr_x = top_left_x; curr_x <= bottom_right_x; curr_x++) {
+//         for (uint32_t curr_y = top_left_y; curr_y <= bottom_right_y; curr_y++) {
+//             if (ellipseFormula(height, width, x + (width / 2), y + (height / 2), curr_x, curr_y)) {
+//                 putPixel(hexColor, curr_x, curr_y);
+//             }
+//         }
+//     }
+// }
+
+
+void drawCircle(uint32_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
+
+void drawSquare(uint32_t hexColor, uint32_t side_length, uint32_t x, uint32_t y){
+	drawRectangle(hexColor, side_length, side_length, x, y);
+}
+
+void fillSection(uint32_t hexColor, int startY, int endY) {
+    for (int y = startY; y < endY; y++) {
+        for (int x = 0; x < VBE_mode_info->width; x++) {
+            putPixel(hexColor, x, y);
+        }
+    }
+}
+
+void boke() {
+    int height = VBE_mode_info->height / 3 ;
+
+    fillSection(BLUE, 0, height);
+
+
+    fillSection(YELLOW, height, height * 2);
+
+ 
+    fillSection(BLUE, height * 2, VBE_mode_info->height);
+}
 
 
 
 void paintScreen(uint32_t hexColor){
-	uint
 	for (int x = 0; x < VBE_mode_info->width; x++){
 		for (int y = 0; y < VBE_mode_info-> pitch; y++){
-			putPixel(r,g,b,x,y);
+			putPixel(hexColor,x,y);
 		}
 	}
 	return;
+}
+
+void drawChar(uint32_t hexColor,
+ 			  uint32_t backHexColor,
+			  uint8_t strokeSize,
+			  uint32_t x, 
+			  uint32_t y, 
+			  char character){
+	uint32_t x_aux = x;
+	uint32_t y_aux = y;
+		
+	return;
+
 }
