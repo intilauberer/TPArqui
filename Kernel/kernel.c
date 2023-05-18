@@ -85,6 +85,9 @@ void * initializeKernelBinary()
 int main()
 {
 	load_idt();
-	paintScreen(0xFF,0xFF,0xFF);
+	int xCursor[1] = {100}; 
+	int yCursor[1] = {100};
+	paintChar(30, 0xFF,0xFF,0xFF,xCursor,yCursor);
+	paintChar(31, 0xFF,0xFF,0xFF,xCursor,yCursor);
 	return 0;
 }
