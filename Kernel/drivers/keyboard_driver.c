@@ -7,19 +7,11 @@ static char ScanCodes[256]={0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '
 '\b', '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\n', 0, 'A', 'S', 
 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', '`', 0, '\\', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 0, 0 };
 
-void keyboard_handler() {
-    char key = getKey();
-    uint32_t *cursorX = getCursorX();
-    uint32_t *cursorY = getCursorY();
 
-    int size = 1;
-    if (key == 0x39) { // Espacio
-        drawChar(WHITE, ' ', *cursorX, *cursorY, size);
-        *cursorX += 8;
-        return;
-    }
-    if (ScanCodes[key] == '\b') { // Retroceso
-        if (*cursorX > 0) {
+
+
+void backspace(uint32_t *cursorX, uint32_t *cursorY){
+     if (*cursorX > 0) {
             *cursorX -= 8;
         } else if (*cursorY > 0 && *cursorX == 0) { // El cursor está al principio de una línea
             // Borra el último carácter de la línea anterior
@@ -34,20 +26,43 @@ void keyboard_handler() {
                 drawRectangle(BLUE, *cursorX, *cursorY, 8, 16); // Dibuja un rectángulo azul en lugar del carácter borrado
             }
         return;
+}
+
+void newline(uint32_t *cursorX, uint32_t *cursorY){
+    *cursorX = 0;
+    *cursorY += 16;
+    return;
+}
+
+
+
+void keyboard_handler() {
+    char key = getKey();
+    uint32_t *cursorX = getCursorX();
+    uint32_t *cursorY = getCursorY();
+
+    int size = 1;
+    if (key == 0x39) { // Espacio
+        drawChar(WHITE, ' ');
+        *cursorX += 8;
+        return;
+    }
+    if (ScanCodes[key] == '\b') { // Retroceso
+       backspace(cursorX, cursorY);
+        return;
     }
     if (ScanCodes[key] == '\t') { // Tabulación
         int tabWidth = 32;
         int spaces = tabWidth - (*cursorX / 8) % tabWidth;
 
         for (int i = 0; i < spaces; i++) {
-            drawChar(WHITE, ' ', *cursorX, *cursorY, size);
+            drawChar(WHITE, ' ');
             *cursorX += 8;
         }
         return;
     }
     if (ScanCodes[key] == '\n') { // Salto de línea
-        *cursorX = 0;
-        *cursorY += 16;
+        newline(cursorX, cursorY);
         return;
     }
     if (key >= 0 && key <= 256 && ScanCodes[key] != 0) { // Carácter
@@ -55,7 +70,7 @@ void keyboard_handler() {
             *cursorX = 0;
             *cursorY += 16;
         }
-        drawChar(WHITE, ScanCodes[key], *cursorX, *cursorY, size);
+        drawChar(WHITE, ScanCodes[key]);
         *cursorX += 8;
         return;
     }

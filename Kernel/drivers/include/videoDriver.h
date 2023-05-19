@@ -32,7 +32,7 @@ void drawSquare(uint32_t hexColor, uint32_t side_length, uint32_t x, uint32_t y)
 // char ellipseFormula(uint32_t height, uint32_t width, uint32_t x_center, uint32_t y_center, uint32_t x, uint32_t y);
 
 // void drawEllipse(uint32_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y);
-void drawChar(uint32_t hexColor, char character, uint32_t x, uint32_t y, uint32_t tam);
+void drawChar(uint32_t hexColor, char character);
 
 uint32_t *getCursorX();
   

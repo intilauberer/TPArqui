@@ -149,7 +149,7 @@ void paintScreen(uint32_t hexColor){
 // }
 uint32_t cursorX  = 0;
 uint32_t cursorY  = 0;
-
+uint32_t tam = 1;
 uint32_t* getCursorX() {
     return &cursorX;
 }
@@ -178,8 +178,10 @@ void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor) {
 
 
 
-void drawChar(uint32_t hexColor, char character, uint32_t x, uint32_t y, uint32_t tam) {
-    int a = x;  // Posición horizontal actual
+void drawChar(uint32_t hexColor, char character) {
+    int a = cursorX;  // Posición horizontal actual
+    int x = a;  // Posición horizontal actual
+    int y = cursorY;  // Posición vertical actual
     int start = character - 33;  // Índice de inicio en el vector de fuentes
     
     // Si el carácter es minúscula, ajusta el índice de inicio
