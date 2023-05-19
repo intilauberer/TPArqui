@@ -149,13 +149,17 @@ void paintScreen(uint32_t hexColor){
 // }
 uint32_t cursorX  = 0;
 uint32_t cursorY  = 0;
-uint32_t tam = 1;
+uint32_t size = 2;
 uint32_t* getCursorX() {
     return &cursorX;
 }
 
 uint32_t* getCursorY() {
     return &cursorY;
+}
+
+uint32_t* getSize() {
+    return size;
 }
 
 unsigned int getMaxHeight() {
@@ -175,7 +179,76 @@ void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor) {
     }
 }
 
+void backspace(){
+     if (cursorX > 0) {
+            cursorX -= size*8;
+        } else if (cursorY > 0 && cursorX == 0) { // El cursor está al principio de una línea
+            // Borra el último carácter de la línea anterior
+            cursorY -= size*16;
+            cursorX = getMaxWidth() - size*8; // Establece el cursorX al último carácter de la línea anterior
+            
+        }
+		int height = getMaxHeight();
+		if (cursorY >= height / 3 && cursorY < (height / 3) * 2) { // Essizeos en el segundo tercio de la pantalla
+                drawRectangle(YELLOW, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo amarillo en lugar del carácter borrado
+            } else {
+                drawRectangle(BLUE, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo azul en lugar del carácter borrado
+            }
+        return;
+}
 
+void newline(){
+    cursorX = 0;
+    cursorY += (size*16);
+    return;
+}
+
+void tab(){
+    int tabWidth = 32;
+        int spaces = tabWidth - (cursorX / size*8) % tabWidth;
+
+        for (int i = 0; i < spaces; i++) {
+            drawChar(WHITE, ' ');
+            cursorX += size*8;
+        }
+        return;
+}
+
+void character(char c){
+        if (c == '\b') { // backspace
+            backspace();
+            return;
+        }
+        if (c == '\t') { // Tab
+            tab();
+            return;
+        }
+        if (c == '\n') { // Salto de línea
+            newline();
+            return;
+        }
+        // Carácter
+        if (cursorX >= getMaxWidth()) {
+            cursorX = 0;
+            cursorY += size*16;
+        }
+        drawChar(WHITE, c);
+        cursorX += size*8;
+        return;
+}
+
+
+void drawWordColor(uint32_t hexColor, char* word) {
+    int x = cursorX;
+    int y = cursorY;
+    for (int i=0; word[i]; i++) {
+        character(word[i]);
+    }
+}
+
+void drawWord(char* word) {
+    drawWordColor(WHITE, word);
+}
 
 
 void drawChar(uint32_t hexColor, char character) {
@@ -194,20 +267,20 @@ void drawChar(uint32_t hexColor, char character) {
 
     for (int i = 0; i < 32; i++) {
         if (i % 2 == 0 && i != 0) {
-            y += tam;  // Salto a la siguiente fila de píxeles
+            y += size;  // Salto a la siguiente fila de píxeles
             a = x;  // Reinicia la posición horizontal al inicio
         }
         
         // Comprueba el bit correspondiente en la fuente para determinar si se debe dibujar un píxel
-        font[i + (start * 32)] & (char)0x01 ? put_square(a, y, tam, hexColor) : 0;
+        font[i + (start * 32)] & (char)0x01 ? put_square(a, y, size, hexColor) : 0;
         
-        a += tam;  // Avanza a la siguiente posición horizontal
+        a += size;  // Avanza a la siguiente posición horizontal
         
         uint8_t aux = 0x02;
         for (int j = 0; j < 8; j++) {
             // Comprueba cada bit de la fuente y dibuja un píxel si está activo
-            ((uint8_t)font[i + (start * 32)] & (uint8_t)aux) >> j ? put_square(a, y, tam, hexColor) : 0;
-            a += tam;  // Avanza a la siguiente posición horizontal
+            ((uint8_t)font[i + (start * 32)] & (uint8_t)aux) >> j ? put_square(a, y, size, hexColor) : 0;
+            a += size;  // Avanza a la siguiente posición horizontal
             aux <<= 1;  // Desplaza el bit auxiliar hacia la izquierda
         }
     }

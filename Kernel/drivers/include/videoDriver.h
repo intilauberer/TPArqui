@@ -27,7 +27,7 @@ void drawRectangle(uint32_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32
 
 void drawCircle(uint32_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
-void drawSquare(uint32_t hexColor, uint32_t side_length, uint32_t x, uint32_t y);
+void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor);
 
 // char ellipseFormula(uint32_t height, uint32_t width, uint32_t x_center, uint32_t y_center, uint32_t x, uint32_t y);
 
@@ -37,3 +37,15 @@ void drawChar(uint32_t hexColor, char character);
 uint32_t *getCursorX();
   
 uint32_t *getCursorY();
+
+unsigned int getMaxWidth();
+
+unsigned int getMaxHeight();
+
+void newline();
+void backspace();
+void tab();
+void character(char c);
+
+void drawWordColor(uint32_t hexColor, char* word);
+void drawWord(char* word);
