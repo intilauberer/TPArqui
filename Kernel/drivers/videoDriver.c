@@ -1,8 +1,9 @@
 #include "include/videoDriver.h"
-
+#include "include/font.h"
 unsigned int SCREEN_WIDTH = 1024;
 unsigned int SCREEN_HEIGHT = 768;
 unsigned int BPP = 3;
+
 
 struct vbe_mode_info_structure { 
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -56,13 +57,15 @@ void putPixel(uint32_t hexColor, uint32_t x, uint32_t y) {
     screen[offset+2] = TO_GREEN(hexColor);
 }
 
-void drawRectangle(uint32_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y){
-	for (uint32_t x_aux = x; x_aux < x+b; x_aux++){
-		for (uint32_t y_aux = y; y_aux < y+h; y_aux++){
-			putPixel(hexColor,x_aux,y_aux);
-		}
-	}
+void drawRectangle(uint32_t hexColor, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+    for (uint32_t i = 0; i < height; i++) {
+        for (uint32_t j = 0; j < width; j++) {
+            putPixel(hexColor, x + j, y + i);
+        }
+    }
 }
+
+
 
 
 
@@ -132,15 +135,79 @@ void paintScreen(uint32_t hexColor){
 	return;
 }
 
-void drawChar(uint32_t hexColor,
- 			  uint32_t backHexColor,
-			  uint8_t strokeSize,
-			  uint32_t x, 
-			  uint32_t y, 
-			  char character){
-	uint32_t x_aux = x;
-	uint32_t y_aux = y;
+// void drawChar(uint32_t hexColor,
+//  			  uint32_t backHexColor,
+// 			  uint8_t strokeSize,
+// 			  uint32_t x, 
+// 			  uint32_t y, 
+// 			  char character){
+// 	uint32_t x_aux = x;
+// 	uint32_t y_aux = y;
 		
-	return;
+// 	return;
 
+// }
+uint32_t cursorX  = 0;
+uint32_t cursorY  = 0;
+
+uint32_t* getCursorX() {
+    return &cursorX;
 }
+
+uint32_t* getCursorY() {
+    return &cursorY;
+}
+
+unsigned int getMaxHeight() {
+	return SCREEN_HEIGHT;
+}
+
+unsigned int getMaxWidth() {
+	return SCREEN_WIDTH;
+}
+
+
+void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor) {
+    for (uint32_t i = 0; i < size; i++) {
+        for (uint32_t j = 0; j < size; j++) {
+            putPixel(hexColor, x + i, y + j);
+        }
+    }
+}
+
+
+
+
+void drawChar(uint32_t hexColor, char character, uint32_t x, uint32_t y, uint32_t tam) {
+    int a = x;  // Posición horizontal actual
+    int start = character - 33;  // Índice de inicio en el vector de fuentes
+    
+    // Si el carácter es minúscula, ajusta el índice de inicio
+    if (isMinusc(character))
+        start = character - 'a';
+    
+    if (character == ' ') {
+        return;  // Si es un espacio, no se dibuja nada
+    }
+
+    for (int i = 0; i < 32; i++) {
+        if (i % 2 == 0 && i != 0) {
+            y += tam;  // Salto a la siguiente fila de píxeles
+            a = x;  // Reinicia la posición horizontal al inicio
+        }
+        
+        // Comprueba el bit correspondiente en la fuente para determinar si se debe dibujar un píxel
+        font[i + (start * 32)] & (char)0x01 ? put_square(a, y, tam, hexColor) : 0;
+        
+        a += tam;  // Avanza a la siguiente posición horizontal
+        
+        uint8_t aux = 0x02;
+        for (int j = 0; j < 8; j++) {
+            // Comprueba cada bit de la fuente y dibuja un píxel si está activo
+            ((uint8_t)font[i + (start * 32)] & (uint8_t)aux) >> j ? put_square(a, y, tam, hexColor) : 0;
+            a += tam;  // Avanza a la siguiente posición horizontal
+            aux <<= 1;  // Desplaza el bit auxiliar hacia la izquierda
+        }
+    }
+}
+

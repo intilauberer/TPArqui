@@ -85,6 +85,7 @@ int main()
 {
 	load_idt();
 	boke();
-	drawSquare(RED,100,200,200);
+	//drawSquare(RED,100,200,200);
+	while(1);
 	return 0;
 }
