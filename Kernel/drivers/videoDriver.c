@@ -65,39 +65,6 @@ void drawRectangle(uint64_t hexColor, uint32_t x, uint32_t y, uint32_t width, ui
     }
 }
 
-
-
-
-
-// char ellipseFormula(uint32_t height, uint32_t width, uint32_t x_center, uint32_t y_center, uint32_t x, uint32_t y) {
-//     double x_normalized = (double)(x - x_center) / width;
-//     double y_normalized = (double)(y - y_center) / height;
-    
-//     double result = (x_normalized * x_normalized) + (y_normalized * y_normalized);
-    
-//     if (result <= 1.0) {
-//         return 1;
-//     } else {
-//         return 0;
-//     }
-// }
-
-// void drawEllipse(uint64_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y) {
-//     uint32_t top_left_x = x;
-//     uint32_t top_left_y = y;
-//     uint32_t bottom_right_x = x + width;
-//     uint32_t bottom_right_y = y + height;
-    
-//     for (uint32_t curr_x = top_left_x; curr_x <= bottom_right_x; curr_x++) {
-//         for (uint32_t curr_y = top_left_y; curr_y <= bottom_right_y; curr_y++) {
-//             if (ellipseFormula(height, width, x + (width / 2), y + (height / 2), curr_x, curr_y)) {
-//                 putPixel(hexColor, curr_x, curr_y);
-//             }
-//         }
-//     }
-// }
-
-
 void drawCircle(uint64_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
 void drawSquare(uint64_t hexColor, uint32_t side_length, uint32_t x, uint32_t y){
@@ -135,18 +102,6 @@ void paintScreen(uint64_t hexColor){
 	return;
 }
 
-// void drawChar(uint64_t hexColor,
-//  			  uint32_t backHexColor,
-// 			  uint8_t strokeSize,
-// 			  uint32_t x, 
-// 			  uint32_t y, 
-// 			  char character){
-// 	uint32_t x_aux = x;
-// 	uint32_t y_aux = y;
-		
-// 	return;
-
-// }
 uint32_t cursorX  = 0;
 uint32_t cursorY  = 0;
 uint32_t size = 2;

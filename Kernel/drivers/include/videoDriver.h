@@ -15,12 +15,6 @@
 void putPixel(uint64_t hexColor, uint32_t x, uint32_t y);
 void paintScreen(uint64_t hexColor);
 void fillSection(uint64_t hexColor, int startY, int endY);
-// void drawChar(uint64_t hexColor,
-//  			  uint32_t backHexColor,
-// 			  uint8_t strokeSize,
-// 			  uint32_t x, 
-// 			  uint32_t y, 
-// 			  char character);
 void boke();
 void drawRectangle(uint64_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y);
 
@@ -28,10 +22,6 @@ void drawRectangle(uint64_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32
 void drawCircle(uint64_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
 void put_square(uint32_t x, uint32_t y, uint32_t size, uint64_t hexColor);
-
-// char ellipseFormula(uint32_t height, uint32_t width, uint32_t x_center, uint32_t y_center, uint32_t x, uint32_t y);
-
-// void drawEllipse(uint64_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y);
 void drawChar(uint64_t hexColor, char character);
 void changeSize(uint32_t new_size);
 uint32_t *getCursorX();
