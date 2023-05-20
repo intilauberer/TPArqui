@@ -150,6 +150,11 @@ void paintScreen(uint32_t hexColor){
 uint32_t cursorX  = 0;
 uint32_t cursorY  = 0;
 uint32_t size = 2;
+
+void changeSize(uint32_t new_size){
+    size=new_size;
+}
+
 uint32_t* getCursorX() {
     return &cursorX;
 }
@@ -214,7 +219,7 @@ void tab(){
         return;
 }
 
-void character(char c){
+void character(uint32_t hexColor, char c){
         if (c == '\b') { // backspace
             backspace();
             return;
@@ -232,22 +237,25 @@ void character(char c){
             cursorX = 0;
             cursorY += size*16;
         }
-        drawChar(WHITE, c);
+        drawChar(hexColor, c);
         cursorX += size*8;
         return;
 }
 
+void drawWordColor2(char* word);
 
 void drawWordColor(uint32_t hexColor, char* word) {
-    int x = cursorX;
-    int y = cursorY;
-    for (int i=0; word[i]; i++) {
-        character(word[i]);
+    for (int i=0; word[i] != 0; i++) {
+        character(hexColor, word[i]);
     }
 }
 
+
 void drawWord(char* word) {
     drawWordColor(WHITE, word);
+}
+void drawWordColor2(char* word) {
+    drawWordColor(RED, word);
 }
 
 

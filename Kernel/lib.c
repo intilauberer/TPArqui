@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "include/defs.h"
 
 void * memset(void * destination, int32_t c, uint64_t length)
 {
@@ -49,3 +50,13 @@ void * memcpy(void * destination, const void * source, uint64_t length)
 	return destination;
 }
 
+char strcmp(char * str1, char * str2){
+	int i = 0;
+	for (i; str1[i] != NULL && str2[i] != NULL; i++){
+		if (str1[i] > str2[i]){
+			return 1;
+		} else if (str1[i] < str2[i]){
+			return -1;
+		}
+	}
+}

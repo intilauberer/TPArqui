@@ -6,7 +6,7 @@ test:
 mov rdi, 1
 mov rsi, msg
 mov rdx, len
-mov rcx, 1
+mov rcx, 2
 int 80h
 ret
 

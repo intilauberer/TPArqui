@@ -21,7 +21,7 @@ void keyboard_handler() {
         return;
     }
     if (key >= 0 && key <= 256 && ScanCodes[key] != 0) {
-        character(ScanCodes[key]);
+        character(WHITE, ScanCodes[key]);
     }
     return;
 }

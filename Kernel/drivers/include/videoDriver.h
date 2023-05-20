@@ -33,7 +33,7 @@ void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor);
 
 // void drawEllipse(uint32_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y);
 void drawChar(uint32_t hexColor, char character);
-
+void changeSize(uint32_t new_size);
 uint32_t *getCursorX();
   
 uint32_t *getCursorY();
@@ -45,7 +45,7 @@ unsigned int getMaxHeight();
 void newline();
 void backspace();
 void tab();
-void character(char c);
+void character(uint32_t hexColor, char c);
 
 void drawWordColor(uint32_t hexColor, char* word);
 void drawWord(char* word);
