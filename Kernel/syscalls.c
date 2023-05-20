@@ -7,13 +7,14 @@
 
 extern int getKey();
 
+
 void sys_write(const char *buf, int len, int filedescriptor){
     if(filedescriptor == 1){
         drawWord(buf);
         return;
     }
     if(filedescriptor == 2){
-        drawWordColor2(buf);
+        drawWordColor(RED, buf);
     }
     return;
 }

@@ -12,27 +12,27 @@
 #define TO_BLUE(hex) (hex >> 8) & 0xFF
 #define TO_GREEN(hex) (hex >> 16) & 0xFF
 #define isMinusc(x) ((x)<='a'?(((x)>='z')?1:0):0)
-void putPixel(uint32_t hexColor, uint32_t x, uint32_t y);
-void paintScreen(uint32_t hexColor);
-void fillSection(uint32_t hexColor, int startY, int endY);
-// void drawChar(uint32_t hexColor,
+void putPixel(uint64_t hexColor, uint32_t x, uint32_t y);
+void paintScreen(uint64_t hexColor);
+void fillSection(uint64_t hexColor, int startY, int endY);
+// void drawChar(uint64_t hexColor,
 //  			  uint32_t backHexColor,
 // 			  uint8_t strokeSize,
 // 			  uint32_t x, 
 // 			  uint32_t y, 
 // 			  char character);
 void boke();
-void drawRectangle(uint32_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y);
+void drawRectangle(uint64_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y);
 
 
-void drawCircle(uint32_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
+void drawCircle(uint64_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
-void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor);
+void put_square(uint32_t x, uint32_t y, uint32_t size, uint64_t hexColor);
 
 // char ellipseFormula(uint32_t height, uint32_t width, uint32_t x_center, uint32_t y_center, uint32_t x, uint32_t y);
 
-// void drawEllipse(uint32_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y);
-void drawChar(uint32_t hexColor, char character);
+// void drawEllipse(uint64_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y);
+void drawChar(uint64_t hexColor, char character);
 void changeSize(uint32_t new_size);
 uint32_t *getCursorX();
   
@@ -45,7 +45,7 @@ unsigned int getMaxHeight();
 void newline();
 void backspace();
 void tab();
-void character(uint32_t hexColor, char c);
+void character(uint64_t hexColor, char c);
 
-void drawWordColor(uint32_t hexColor, char* word);
+void drawWordColor(uint64_t hexColor, char* word);
 void drawWord(char* word);

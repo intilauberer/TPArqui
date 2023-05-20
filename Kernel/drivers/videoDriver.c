@@ -48,7 +48,7 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00; 
 
 
-void putPixel(uint32_t hexColor, uint32_t x, uint32_t y) {
+void putPixel(uint64_t hexColor, uint32_t x, uint32_t y) {
 	uint8_t * screen = (uint8_t *) ((uint64_t) (VBE_mode_info->framebuffer));
     uint32_t offset = VBE_mode_info->pitch*y + x*3;
     
@@ -57,7 +57,7 @@ void putPixel(uint32_t hexColor, uint32_t x, uint32_t y) {
     screen[offset+2] = TO_GREEN(hexColor);
 }
 
-void drawRectangle(uint32_t hexColor, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+void drawRectangle(uint64_t hexColor, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
     for (uint32_t i = 0; i < height; i++) {
         for (uint32_t j = 0; j < width; j++) {
             putPixel(hexColor, x + j, y + i);
@@ -82,7 +82,7 @@ void drawRectangle(uint32_t hexColor, uint32_t x, uint32_t y, uint32_t width, ui
 //     }
 // }
 
-// void drawEllipse(uint32_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y) {
+// void drawEllipse(uint64_t hexColor, uint32_t height, uint32_t width, uint32_t x, uint32_t y) {
 //     uint32_t top_left_x = x;
 //     uint32_t top_left_y = y;
 //     uint32_t bottom_right_x = x + width;
@@ -98,13 +98,13 @@ void drawRectangle(uint32_t hexColor, uint32_t x, uint32_t y, uint32_t width, ui
 // }
 
 
-void drawCircle(uint32_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
+void drawCircle(uint64_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
-void drawSquare(uint32_t hexColor, uint32_t side_length, uint32_t x, uint32_t y){
+void drawSquare(uint64_t hexColor, uint32_t side_length, uint32_t x, uint32_t y){
 	drawRectangle(hexColor, side_length, side_length, x, y);
 }
 
-void fillSection(uint32_t hexColor, int startY, int endY) {
+void fillSection(uint64_t hexColor, int startY, int endY) {
     for (int y = startY; y < endY; y++) {
         for (int x = 0; x < VBE_mode_info->width; x++) {
             putPixel(hexColor, x, y);
@@ -126,7 +126,7 @@ void boke() {
 
 
 
-void paintScreen(uint32_t hexColor){
+void paintScreen(uint64_t hexColor){
 	for (int x = 0; x < VBE_mode_info->width; x++){
 		for (int y = 0; y < VBE_mode_info-> pitch; y++){
 			putPixel(hexColor,x,y);
@@ -135,7 +135,7 @@ void paintScreen(uint32_t hexColor){
 	return;
 }
 
-// void drawChar(uint32_t hexColor,
+// void drawChar(uint64_t hexColor,
 //  			  uint32_t backHexColor,
 // 			  uint8_t strokeSize,
 // 			  uint32_t x, 
@@ -176,7 +176,7 @@ unsigned int getMaxWidth() {
 }
 
 
-void put_square(uint32_t x, uint32_t y, uint32_t size, uint32_t hexColor) {
+void put_square(uint32_t x, uint32_t y, uint32_t size, uint64_t hexColor) {
     for (uint32_t i = 0; i < size; i++) {
         for (uint32_t j = 0; j < size; j++) {
             putPixel(hexColor, x + i, y + j);
@@ -219,7 +219,7 @@ void tab(){
         return;
 }
 
-void character(uint32_t hexColor, char c){
+void character(uint64_t hexColor, char c){
         if (c == '\b') { // backspace
             backspace();
             return;
@@ -242,9 +242,7 @@ void character(uint32_t hexColor, char c){
         return;
 }
 
-void drawWordColor2(char* word);
-
-void drawWordColor(uint32_t hexColor, char* word) {
+void drawWordColor(uint64_t hexColor, char* word) {
     for (int i=0; word[i] != 0; i++) {
         character(hexColor, word[i]);
     }
@@ -254,12 +252,9 @@ void drawWordColor(uint32_t hexColor, char* word) {
 void drawWord(char* word) {
     drawWordColor(WHITE, word);
 }
-void drawWordColor2(char* word) {
-    drawWordColor(RED, word);
-}
 
 
-void drawChar(uint32_t hexColor, char character) {
+void drawChar(uint64_t hexColor, char character) {
     int a = cursorX;  // Posición horizontal actual
     int x = a;  // Posición horizontal actual
     int y = cursorY;  // Posición vertical actual
