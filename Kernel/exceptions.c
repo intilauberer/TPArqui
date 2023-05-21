@@ -21,5 +21,5 @@ static void zero_division() {
 
 static void invalid_opcode() {
 	drawWordColor(RED, "FATAL ERROR:Invalid opcode");
-	newline()
+	newline();
 }
