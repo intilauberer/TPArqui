@@ -81,13 +81,14 @@ void * initializeKernelBinary()
 	return getStackBase();
 	
 }
-int main()
-{
+int main(){
 	load_idt();
 	
 	boke();
+
 	((EntryPoint)sampleCodeModuleAddress)();
-	//drawSquare(RED,100,200,200);
+
 	while(1);
+
 	return 0;
 }

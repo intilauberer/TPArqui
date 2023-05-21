@@ -38,7 +38,7 @@ void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8)
 		break;
 	
 	case 2:
-		// sys_read();
+		sys_read((char*)rsi, rdx, rcx);
 		break;
 	}
 	

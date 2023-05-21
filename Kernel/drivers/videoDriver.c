@@ -244,3 +244,39 @@ void drawChar(uint64_t hexColor, char character) {
     }
 }
 
+void invalidFd(){
+    drawWordColor(RED, "Invalid file descriptor");
+    return;
+}
+
+// #define BUFSIZE 4096
+// char buffer[BUFSIZE] = { 0 };
+// int bufIndex = 0;
+
+
+// int * getBufIndex(){
+//     return &bufIndex;
+// }
+
+// char * getBuffer(){
+//     return buffer;
+// }
+
+// char getchar(){
+//     char c = getKey();
+//     if (c != 0) {
+//         character(c);
+//     }
+//     return c;
+// }
+
+// void getCommand(char * buf, int len){
+//     int i = 0;
+//     char c = 0;
+//     while ((c = getchar()) && c != '\n' && i < len) {
+//         buf[i] = c;
+//         i++;
+//     }
+//     buf[i] = 0;
+//     return;
+// }
