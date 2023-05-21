@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 
-void keyboard_handler();
+char keyboard_handler();
 extern int getKey();
 
 #endif /* KEYBOARD_DRIVER_H */

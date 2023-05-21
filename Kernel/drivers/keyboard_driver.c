@@ -10,7 +10,7 @@ static char ScanCodes[256]={0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '
 
 
 
-void keyboard_handler() {
+char keyboard_handler() {
     char key = getKey();
     uint32_t *cursorX = getCursorX();
     uint32_t *cursorY = getCursorY();
@@ -18,12 +18,13 @@ void keyboard_handler() {
     if (key == 0x39) { // Espacio
         drawChar(WHITE, ' ');
         *cursorX += size*8;
-        return;
+        return key;
     }
+
     if (key >= 0 && key <= 256 && ScanCodes[key] != 0) {
         character(WHITE, ScanCodes[key]);
     }
-    return;
+    return ScanCodes[key];
 }
 
 
