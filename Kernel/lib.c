@@ -59,4 +59,10 @@ char strcmp(char * str1, char * str2){
 			return -1;
 		}
 	}
+	if (str1[i] == NULL && str2[i] == NULL) {
+        return 0;
+    } else if (str1[i] == NULL) {
+        return -1; 
+    } else return 1;
+
 }
