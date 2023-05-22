@@ -17,9 +17,9 @@ char keyboard_handler() {
     uint32_t *cursorY = getCursorY();
     int size = getSize();
 
-    // char * buff = getBufferAddress();
-    // int buff_pos = getBufferPosition();
-    // int buff_len = getBufferLen();
+    char * buff = getBufferAddress();
+    int buff_pos = getBufferPosition();
+    int buff_len = getBufferLen();
 
     // if (buff_len+1 < 128){
     //     // buff[buff_pos] = ScanCodes[key];

@@ -187,9 +187,15 @@ void drawNumber(int value){
 }
 
 void drawRegisters(int value){
-     char buffer[256] = {0};
-    uintToBase(value, buffer, 16);
-    drawWordColor(WHITE, buffer);
+   //  if(value == 0){
+   //     drawWordColor(WHITE, "0");
+    // }
+    // else{
+        char buffer[256] = {0};
+        uintToBase(value, buffer, 16);
+        drawWordColor(WHITE, buffer);
+     //}
+     newline();
 }
 
 

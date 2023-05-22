@@ -120,7 +120,6 @@ SECTION .text
 %macro exceptionHandler 1
 	pushState
 	dState
-
 	mov rsi, registers
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
