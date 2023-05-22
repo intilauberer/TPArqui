@@ -4,7 +4,7 @@
 #include "drivers/include/videoDriver.h"
 #include "include/defs.h"
 #include "drivers/include/keyboard_driver.h"
-
+#include "stdin.h"
 extern int getKey();
 
 
@@ -61,22 +61,27 @@ void sys_read( char *buf, int len, int filedescriptor){
 
     switch (filedescriptor){
         case 0:;
-        char aux;
-        for (int i = 0; i < len; ){
-            _hlt();
-            aux = keyboard_handler();
-            if ( aux == 0){
-                continue;
-            }
-            if (aux == '\b'){
-                if (i>0)
-                    i--;
-            }
-            else {
-                buf[i++]=aux;
-            }
-        }
+        // int pos = getBufferPosition();
+        // char aux = getCharAt(pos);
+        // for (int i = 0; i < len; ){
+        //     _hlt();
+        //     aux = getCharAt(pos);
+        //     if ( aux == 0){
+        //         continue;
+        //     }
+        //     if (aux == '\b'){
+        //         if (i>0)
+        //             i--;
+        //     }
+        //     else {
+        //         buf[i++]=aux;
+        //         pos++;
+        //     }
+        // }
         character(RED, 'a'); //[DEBUG]
+        // for (int i = 0; i < len; i++){
+        //     character(GREEN, getCharAt(i));
+        // }
         return;
         default: invalidFd();
     }

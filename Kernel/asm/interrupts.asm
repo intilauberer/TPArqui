@@ -126,8 +126,11 @@ SECTION .text
 	call exceptionDispatcher
    
 	popState
-	 mov rax, 0x400000 ; stack no se reincia arreglar!!!!!
-    mov [rsp], rax
+	 ;mov rax, 0x400000 ; stack no se reincia arreglar!!!!!
+   ; mov [rsp], rax
+	mov rax, [rsp]
+	add rax, 4
+	mov [rsp], rax
 	iretq
 %endmacro
 
