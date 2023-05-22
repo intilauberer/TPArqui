@@ -13,4 +13,5 @@ void ncPrintBase(uint64_t value, uint32_t base);
 void ncClear();
 void ncBackspace();
 char * TimeClock();
+ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 #endif

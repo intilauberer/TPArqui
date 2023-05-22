@@ -1,8 +1,7 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
-
-
-void exceptionDispatcher(int exception);
+#include "include/registers.h"
+void exceptionDispatcher(int exception, registerStructT registers);
 
 static void zero_division();
 static void invalid_opcode();

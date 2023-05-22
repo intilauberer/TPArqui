@@ -1,0 +1,55 @@
+#include <registers.h>
+#include "../drivers/include/videoDriver.h"
+void printRegisters(registerStructT * registers) {
+	drawWord("RIP=0x");
+	drawRegisters(registers->rip);
+	tab();
+	drawWord("RAX=0x");
+	drawRegisters(registers->rax);
+	tab();
+	drawWord("RBX=0x");
+	drawRegisters(registers->rbx);
+	tab();
+	drawWord("RCX=0x");
+	drawRegisters(registers->rcx);
+	tab();
+	drawWord("RDX=0x");
+	drawRegisters(registers->rdx);
+	tab();
+	drawWord("RSP=0x");
+	drawRegisters(registers->rsp);
+	tab();
+	drawWord("RBP=0x");
+	drawRegisters(registers->rbp);
+	tab();
+	drawWord("RSI=0x");
+	drawRegisters(registers->rsi);
+	tab();
+	drawWord("RDI=0x");
+	drawRegisters(registers->rdi);
+	tab();
+	drawWord("R8 =0x");
+	drawRegisters(registers->r8);
+	tab();
+	drawWord("R9 =0x");
+	drawRegisters(registers->r9);
+	tab();
+	drawWord("R10=0x");
+	drawRegisters(registers->r10);
+	tab();
+	drawWord("R11=0x");
+	drawRegisters(registers->r11);
+	tab();
+	drawWord("R12=0x");
+	drawRegisters(registers->r12);
+	tab();
+	drawWord("R13=0x");
+	drawRegisters(registers->r13);
+	tab();
+	drawWord("R14=0x");
+	drawRegisters(registers->r14);
+	tab();
+	drawWord("R15=0x");
+	drawRegisters(registers->r15);
+	tab();
+}

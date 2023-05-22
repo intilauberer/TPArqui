@@ -1,5 +1,7 @@
 #include "include/videoDriver.h"
 #include "include/font.h"
+#include "../include/naiveConsole.h"
+#include <naiveConsole.h>
 unsigned int SCREEN_WIDTH = 1024;
 unsigned int SCREEN_HEIGHT = 768;
 unsigned int BPP = 3;
@@ -164,7 +166,7 @@ void newline(){
 }
 
 void tab(){
-    int tabWidth = 32;
+    int tabWidth = 15;
         int spaces = tabWidth - (cursorX / size*8) % tabWidth;
 
         for (int i = 0; i < spaces; i++) {
@@ -173,6 +175,23 @@ void tab(){
         }
         return;
 }
+
+void drawNumberColor(int value, uint64_t hexColor){
+    char buffer[256] = {0};
+    uintToBase(value, buffer, 10);
+    drawWordColor(hexColor, buffer);
+}
+
+void drawNumber(int value){
+    drawNumberColor(value, WHITE);
+}
+
+void drawRegisters(int value){
+     char buffer[256] = {0};
+    uintToBase(value, buffer, 16);
+    drawWordColor(WHITE, buffer);
+}
+
 
 void character(uint64_t hexColor, char c){
         if (c == '\b') { // backspace

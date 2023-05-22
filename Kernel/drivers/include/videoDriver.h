@@ -40,3 +40,9 @@ void character(uint64_t hexColor, char c);
 void drawWordColor(uint64_t hexColor, char* word);
 void drawWord(char* word);
 void invalidFd();
+
+void drawNumberColor(int value, uint64_t hexColor);
+
+void drawNumber(int value);
+
+void drawRegisters(int value);

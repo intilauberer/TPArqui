@@ -5,12 +5,15 @@
 
 
 #define ZERO_EXCEPTION_ID 0
-void exceptionDispatcher(int exception) {
+void exceptionDispatcher(int exception, registerStructT registers) {
 	if (exception == ZERO_EXCEPTION_ID){
 		zero_division();
-		return;
 	}
-	invalid_opcode();
+	else{
+		invalid_opcode();
+	}
+	printRegisters(&registers);
+
 	
 }
 
