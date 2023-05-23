@@ -84,6 +84,7 @@ void * initializeKernelBinary()
 int main()
 {
 	load_idt();
+	bokee();
 	boke();
 	((EntryPoint)sampleCodeModuleAddress)();
 	//drawSquare(RED,100,200,200);

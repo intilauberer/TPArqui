@@ -66,3 +66,13 @@ char strcmp(char * str1, char * str2){
     } else return 1;
 
 }
+
+void sleep(uint32_t seconds) {
+	uint32_t startTime = seconds_elapsed();
+	while (seconds > seconds_elapsed() - startTime) _hlt();
+};
+
+void sleepms(int mseconds) {
+	int startTime = ticks_elapsed();
+	while (mseconds > ticks_elapsed()*55 - startTime*55) _hlt();
+};

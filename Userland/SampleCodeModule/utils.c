@@ -1,23 +1,21 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include <utils.h> //crear
-#include <syscalls.h> 
+#include "utils.h"
+#include "UserSyscalls.h"
 
 //deben faltar mil cosas i know
-#define MAX_BUFFER 64;
-char BUFFER[MAX_BUFFER] = {0};
 
-
-char getChar(){
+char getC(){
     char c;
-    sys_read(&c, 1, STDIN);
+    call_sys_read(&c, 1, STDIN);
+    return c;
 }
 
-void putChar(char c){
-    sys_write(&c, 1, STDOUT);
+void putC(char c){
+    call_sys_write(&c, 1, STDOUT);
 }
 
-int scanf(char * format, ...){
+int own_scanf(char * format, ...){
     va_list args;
     va_start(args, format);
     int toRet = 0;
@@ -25,11 +23,11 @@ int scanf(char * format, ...){
     while(*format != '\0'){
 
         if(*format == '%'){
-            *format++; 
+            format++; 
             switch(*format){
                 case 'c': {
                     char* c = va_arg(args, char*);
-                    *c = getChar();
+                    *c = getC();
                     toRet++;
                     break;
                 }
@@ -52,7 +50,7 @@ int scanf(char * format, ...){
                 break;
             }
         }
-        *format++;
+        format++;
     }
     va_end(args);
 
@@ -62,16 +60,16 @@ int scanf(char * format, ...){
 int readInt(int* d){
     int value = 0;
     int sign = 1; //en principio positivo
-    char c = getChar();
+    char c = getC();
 
     if(c == '-'){
         sign = -1;
-        c = getChar();
+        c = getC();
     }
 
-    while(c != '\0' && (c >= '0' && c <= '9')){
+    while((c != '\0') && (c >= '0' && c <= '9')){
         value = (c - '0') + value*10;
-        c = getChar();
+        c = getC();
     }
 
     *d = value * sign;
@@ -80,11 +78,11 @@ int readInt(int* d){
 
 int readString(char *s){
     int i = 0;
-    char c = getChar();
+    char c = getC();
 
     while(c != '\0' && c != '\n'){
         s[i++] = c;
-        c = getChar();
+        c = getC();
     }
     s[i] = '\0'; //null terminated
     return i;
@@ -93,24 +91,61 @@ int readString(char *s){
 int readHexInt(int* d){
     int value = 0;
     int sign = 1;
-    char c = getChar();
+    char c = getC();
 
     if(c == '-'){
         sign = -1;
-        c = getChar();
+        c = getC();
     }
 
-    while(c != '\0' && (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')){
+    while(c != '\0' && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))){
         if(c >= 'A' && c <= 'F'){
             c = c - 'A' + 10;
         }else{
             c = c - '0';
         }
         value = value * 16 + c;
-        c = getChar();
+        c = getC();
     }
 
     *d = value * sign;
     return 1;
 }
+
+
+//ACORDARSE IMPRIMIR TODO JUNTO O A MEDIDA QUE LEE??? SIGNO DE PREGUNTA.
+//FALTA BASETOINT O ALGO QUE TRADUZCA AHRE
+
+void print(const char * format, ...){
+    va_list args;
+    va_start(args, format);
+
+    int len = 0;
+
+    while(*format != '\0'){
+        if(*format == '%'){
+            format++;
+
+            switch(*format){
+                case 'c': {
+                    char c = va_arg(args, char*);
+                    putC(c);
+                    break;
+                }
+                case 'd': {
+                    int d = va_arg(args, int*);
+
+                }
+            }
+        } else {
+            putC(*format);
+        }
+        format++;
+    }
+
+    va_end(args);
+    return;
+}
+
+
 

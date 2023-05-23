@@ -14,5 +14,7 @@ int get_weekDay();
 int get_monthDay();
 int get_month();
 int get_year();
+void sleep(uint32_t seconds);
+void sleepms(int mseconds);
 
 #endif
