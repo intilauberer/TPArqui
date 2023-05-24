@@ -48,10 +48,7 @@ char keyboard_handler() {
 
     if (key >= 0 && key <= 256 && ScanCodes[key] != 0) {
         if (buff_pos+1 < BUFF_SIZE){
-            if (ScanCodes[key] == '\n'){
-                setPos(0);
-            } else 
-                setPos(buff_pos+1);
+            setPos(buff_pos+1);
             buff[buff_pos+1] = 0;
         } else {
             setPos(0);   

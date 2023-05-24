@@ -11,7 +11,12 @@
 #define TO_RED(hex) hex & 0xFF
 #define TO_BLUE(hex) (hex >> 8) & 0xFF
 #define TO_GREEN(hex) (hex >> 16) & 0xFF
+
+#define FROM_RGB(r,g,b) (r << 16) | (g << 8) | b
+
 #define isMinusc(x) ((x)<='a'?(((x)>='z')?1:0):0)
+
+
 void putPixel(uint64_t hexColor, uint32_t x, uint32_t y);
 void paintScreen(uint64_t hexColor);
 void fillSection(uint64_t hexColor, int startY, int endY);

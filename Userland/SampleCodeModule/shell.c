@@ -59,3 +59,12 @@ int __shell_init__(){
         bufferize();
     }
 }
+
+
+
+// Vuelve a principio de userland cuando se lanza excepcion
+// RESTAURAR STACK
+
+// MAPEAR TECLA A FOTO DE REGISTROS
+
+// 

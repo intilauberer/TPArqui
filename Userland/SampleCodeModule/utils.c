@@ -5,6 +5,13 @@
 
 //deben faltar mil cosas i know
 
+int null_or_space(char c){
+    return (c == NULL || c == ' ');
+}
+
+int null_or_newline(char c){
+    return (c == NULL || c == '\n');
+}
 char getC(){
     char c;
     call_sys_read(&c, 1, STDIN);
@@ -113,6 +120,7 @@ int readHexInt(int* d){
 }
 
 
+
 //ACORDARSE IMPRIMIR TODO JUNTO O A MEDIDA QUE LEE??? SIGNO DE PREGUNTA.
 //FALTA BASETOINT O ALGO QUE TRADUZCA AHRE
 
@@ -165,5 +173,29 @@ int strcmp(char * str1, char * str2){
 
 }
 
+int strcmpspace(char * str1, char * str2){
+    char partition[20];
+    int j = 0;
+    for (j; str2[j] != NULL && str2[j] != ' ';j++){
+        partition[j]=str2[j];
+    }
+    partition[j+1]=0;
+	int i = 0;
+	for (i; str1[i] != NULL && !null_or_space(partition[i]); i++){
+        // putC(str1[i]);
+        // putC(partition[i]);
+		if (str1[i] > str2[i]){
+			return 1;
+		} else if (str1[i] < str2[i]){
+			return -1;
+		}
+	}
+	if (str1[i] == NULL && null_or_space(partition[i])) {
+        return 0;
+    } else if (null_or_space(partition[i])) {
+        return -1; 
+    } else return 1;
+
+}
 
 

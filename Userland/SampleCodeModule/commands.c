@@ -1,17 +1,21 @@
 #include "commands.h"
 #include "UserSyscalls.h"
+#include "stdint.h"
+
+
 void __seek_command__(char * command){
+    
     int i = 0;
     for (i; i < COMMAND_LEN; i++){
-        if (strcmp(command, command_list[i]) == 0){
-                __call_command__(i);
+        if (strcmpspace(command_list[i],command) == 0){
+                __call_command__(i, command);
                 return;
         }
     }
-    __call_command__(-1);
+    __call_command__(-1, command);
 }
 
-void __call_command__(int i){
+void __call_command__(int i, char * command){
     switch (i)
     {
     case HELP:;
@@ -24,6 +28,9 @@ void __call_command__(int i){
         call_regState();
         return;
     case PONG:;
+        return;
+    case SETCOLOR:;
+        setbg(command);
         return;
     default:;
         call_sys_write("ERROR - Comando no reconocido",50,2);
@@ -39,6 +46,7 @@ void help(){
         call_sys_write("\n",1,1);
     }
 }
+
 void time(){
     char timeClock[50];
     call_timeClock(timeClock);
@@ -46,5 +54,56 @@ void time(){
     for (int i = 0; (c = timeClock[i]) != 0; i++){
         putC(c);
     }
+    putC('\n');
+}
+
+
+void setbgEnum(int i){
+    switch (i){
+        case RED_:; call_paintScreen(RED);
+            return;
+        case GREEN_:; call_paintScreen(GREEN);
+            return;
+        case BLUE_:; call_paintScreen(BLUE);
+            return;
+        case WHITE_:; call_paintScreen(WHITE);
+            return;
+        case BLACK_: ;call_paintScreen(BLACK);
+            return;
+        case YELLOW_: ;call_paintScreen(YELLOW);
+            return;
+        case ORANGE_:; call_paintScreen(ORANGE_);
+            return;
+        case BOKE_: call_boke();
+            return;    
+        default:
+            return;
+    }
+}
+
+void findColor(char * color){
+    
+    int i = 0;
+    for (i; i < COMMAND_LEN; i++){
+        putC(strcmp(hexArr[i],color)+'0'); 
+        if (strcmp(hexArr[i],color) == 0){
+                setbgEnum(i);
+                return;
+        }
+    }
+    setbgEnum(-1);
+}
+
+void setbg(char * command){
+    char partition[20];
+    int i=0;
+    for (i; !null_or_space(command[i]); i++);
+    i++;
+    int j = 0;
+    for (i; command[i] != NULL; i++){
+        partition[j++]=command[i];
+    }
+    partition[j]=0;
+    findColor(partition);
     putC('\n');
 }

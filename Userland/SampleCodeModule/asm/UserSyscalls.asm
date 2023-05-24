@@ -2,6 +2,8 @@ GLOBAL call_sys_read
 GLOBAL call_sys_write
 GLOBAL call_timeClock
 GLOBAL call_regState
+GLOBAL call_paintScreen
+GLOBAL call_boke
 section .text
 
 %macro call_to_handler 1
@@ -27,3 +29,7 @@ call_timeClock:
     call_to_handler 3
 call_regState:
     call_to_handler 4
+call_paintScreen:
+    call_to_handler 5
+call_boke:
+    call_to_handler 6
