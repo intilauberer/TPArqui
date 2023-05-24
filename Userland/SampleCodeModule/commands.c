@@ -25,6 +25,12 @@ void __call_command__(int i){
         return;
     case PONG:;
         return;
+    case DIV0:;
+        Div0();
+        return;
+    case INVALOP:;
+        call_invalidOp();
+        return;
     default:;
         call_sys_write("ERROR - Comando no reconocido",50,2);
         putC('\n');
@@ -47,4 +53,10 @@ void time(){
         putC(c);
     }
     putC('\n');
+}
+
+void Div0(){
+    int a = 0;
+    int b = 1;
+    int c = b/a;
 }
