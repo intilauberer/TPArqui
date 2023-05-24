@@ -88,7 +88,7 @@ int main()
 {
 	load_idt();
 	// bokee();
-	// boke();
+	//boke();
 	((EntryPoint)sampleCodeModuleAddress)();
 	//drawSquare(RED,100,200,200);
 	while(1);

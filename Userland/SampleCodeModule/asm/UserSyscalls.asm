@@ -4,6 +4,7 @@ GLOBAL call_timeClock
 GLOBAL call_regState
 GLOBAL call_paintScreen
 GLOBAL call_boke
+GLOBAL call_invalidOp
 section .text
 
 %macro call_to_handler 1
@@ -33,3 +34,5 @@ call_paintScreen:
     call_to_handler 5
 call_boke:
     call_to_handler 6
+call_invalidOp:
+    call_to_handler 420

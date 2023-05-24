@@ -11,6 +11,10 @@ void call_sys_read(char *buf, int size, int fd);
 void call_sys_write(char *buf, int size, int fd);
 void call_timeClock(char *buf);
 void call_regState();
+<<<<<<< HEAD
 void call_paintScreen(uint64_t hex);
 void call_boke();
+=======
+void call_invalidOp();
+>>>>>>> origin/master
 #endif /* USERSYSCALLS_H */

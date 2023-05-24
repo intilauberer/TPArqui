@@ -29,8 +29,16 @@ void __call_command__(int i, char * command){
         return;
     case PONG:;
         return;
+<<<<<<< HEAD
     case SETCOLOR:;
         setbg(command);
+=======
+    case DIV0:;
+        Div0();
+        return;
+    case INVALOP:;
+        call_invalidOp();
+>>>>>>> origin/master
         return;
     default:;
         call_sys_write("ERROR - Comando no reconocido",50,2);
@@ -57,6 +65,7 @@ void time(){
     putC('\n');
 }
 
+<<<<<<< HEAD
 
 void setbgEnum(int i){
     switch (i){
@@ -107,3 +116,10 @@ void setbg(char * command){
     findColor(partition);
     putC('\n');
 }
+=======
+void Div0(){
+    int a = 0;
+    int b = 1;
+    int c = b/a;
+}
+>>>>>>> origin/master

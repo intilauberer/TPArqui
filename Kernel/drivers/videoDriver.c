@@ -237,6 +237,7 @@ void character(uint64_t hexColor, char c){
         }
         if (c == ' '){
             cursorX += size*8;
+            return;
         }
         // Carácter
         if (cursorX >= getMaxWidth()) {
