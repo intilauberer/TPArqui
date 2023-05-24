@@ -2,7 +2,8 @@
 #include <stdint.h>
 #include "syscall.h"
 #include "include/defs.h"
-
+#include "naiveConsole.h"
+#include "interrupts.h"
 static void int_20();
 static void int_21();
 static void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8);
@@ -40,6 +41,11 @@ void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8)
 	case 2:
 		sys_read((char*)rsi, rdx, rcx);
 		break;
+	case 3:
+		TimeClock((char*)rsi);
+		break;
+	case 4:
+		printRegAsm();
+		break;
 	}
-	
 }

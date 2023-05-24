@@ -1,6 +1,6 @@
 #include "stdin.h"
 #include "defs.h"
-static struct stdin_buffer buff = { {'\0'}, 0, 0 };
+static struct stdin_buffer buff = { 0, 0, {0} };
 
 static stdin_ptr ptr = &buff;
 
@@ -12,14 +12,6 @@ int setPos(int new_pos){
     return new_pos;
 }
 
-int getBufferLen(){
-    return ptr->bufferLen;
-}
-int setLen(int new_len){
-    ptr->bufferLen = new_len;
-    return new_len;
-}
-
 char * getBufferAddress(){
     return ptr->buff;
 }
@@ -29,6 +21,13 @@ char getCharAt(int pos){
 }
 
 
-void setBuffNext(char c){
-    ptr->buff[ptr->bufferPos]=c;
+void consumeBuffAt(int pos){
+    ptr->buff[pos] = 0;
+}
+
+void cleanBuffer(){
+    char * buffer = ptr->buff;
+    for (int i = 0; i < BUFF_SIZE; i++){
+        buffer[i] = '\0';
+    }
 }

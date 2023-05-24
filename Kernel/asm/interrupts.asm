@@ -14,12 +14,12 @@ GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
 GLOBAL _irq60Handler
-
+GLOBAL printRegAsm
 GLOBAL _exception0Handler
 
+EXTERN printRegisters
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
-
 SECTION .text
 
 %macro dState 0
@@ -125,14 +125,19 @@ SECTION .text
 	call exceptionDispatcher
    
 	popState
-	 ;mov rax, 0x400000 ; stack no se reincia arreglar!!!!!
-   ; mov [rsp], rax
 	mov rax, [rsp]
 	add rax, 4
 	mov [rsp], rax
 	iretq
 %endmacro
 
+printRegAsm:
+	pushState
+	dState
+	mov rdi, registers
+	call printRegisters
+	popState
+	ret
 
 _hlt:
 	sti

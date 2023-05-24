@@ -16,5 +16,5 @@ int readInt(int* d);
 int readString(char *s);
 int readHexInt(int* d);
 void print(const char * format, ...);
-
+int strcmp(char * str1, char * str2);
 #endif /* UTILS_H */

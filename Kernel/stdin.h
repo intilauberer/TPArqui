@@ -1,12 +1,13 @@
 
 
 #include <stdint.h>
+#define BUFF_SIZE 4096
 typedef struct stdin_buffer* stdin_ptr; 
 
 struct stdin_buffer { 
-    char buff[128];
     int bufferPos;
     int bufferLen;
+    char buff[BUFF_SIZE];
 };
 
 int getBufferPosition();
@@ -15,4 +16,5 @@ int getBufferLen();
 int setLen(int new_len);
 char * getBufferAddress();
 char getCharAt(int pos);
-void setBuffNext(char c);
+void cleanBuffer();
+void consumeBuffAt(int pos);

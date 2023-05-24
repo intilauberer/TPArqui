@@ -50,22 +50,6 @@ void * memcpy(void * destination, const void * source, uint64_t length)
 	return destination;
 }
 
-char strcmp(char * str1, char * str2){
-	int i = 0;
-	for (i; str1[i] != NULL && str2[i] != NULL; i++){
-		if (str1[i] > str2[i]){
-			return 1;
-		} else if (str1[i] < str2[i]){
-			return -1;
-		}
-	}
-	if (str1[i] == NULL && str2[i] == NULL) {
-        return 0;
-    } else if (str1[i] == NULL) {
-        return -1; 
-    } else return 1;
-
-}
 
 void sleep(uint32_t seconds) {
 	uint32_t startTime = seconds_elapsed();

@@ -5,6 +5,8 @@
 #include <naiveConsole.h>
 #include <idtLoader.h>
 #include "drivers/include/videoDriver.h"
+#include "include/interrupts.h"
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -81,11 +83,12 @@ void * initializeKernelBinary()
 	return getStackBase();
 	
 }
+// extern void printRegAsm();
 int main()
 {
 	load_idt();
-	bokee();
-	boke();
+	// bokee();
+	// boke();
 	((EntryPoint)sampleCodeModuleAddress)();
 	//drawSquare(RED,100,200,200);
 	while(1);

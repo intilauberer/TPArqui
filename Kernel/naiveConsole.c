@@ -181,7 +181,4 @@ char * TimeClock(char * buffer){
 	buffer[digits++] =' ';
 	buffer[digits] = 0;
 	return buffer;
-
-
-
 }

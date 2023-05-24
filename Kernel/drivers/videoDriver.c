@@ -141,6 +141,24 @@ void put_square(uint32_t x, uint32_t y, uint32_t size, uint64_t hexColor) {
     }
 }
 
+// void backspace(){
+//      if (cursorX > 0) {
+//             cursorX -= size*8;
+//         } else if (cursorY > 0 && cursorX == 0) { // El cursor está al principio de una línea
+//             // Borra el último carácter de la línea anterior
+//             cursorY -= size*16;
+//             cursorX = getMaxWidth() - size*8; // Establece el cursorX al último carácter de la línea anterior
+            
+//         }
+// 		int height = getMaxHeight();
+// 		if (cursorY >= height / 3 && cursorY < (height / 3) * 2) { // Essizeos en el segundo tercio de la pantalla
+//                 drawRectangle(YELLOW, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo amarillo en lugar del carácter borrado
+//             } else {
+//                 drawRectangle(BLUE, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo azul en lugar del carácter borrado
+//             }
+//         return;
+// }
+
 void backspace(){
      if (cursorX > 0) {
             cursorX -= size*8;
@@ -151,12 +169,7 @@ void backspace(){
             
         }
 		int height = getMaxHeight();
-		if (cursorY >= height / 3 && cursorY < (height / 3) * 2) { // Essizeos en el segundo tercio de la pantalla
-                drawRectangle(YELLOW, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo amarillo en lugar del carácter borrado
-            } else {
-                drawRectangle(BLUE, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo azul en lugar del carácter borrado
-            }
-        return;
+		drawRectangle(BLACK, cursorX, cursorY, size*8, size*16);
 }
 
 void newline(){
@@ -211,6 +224,9 @@ void character(uint64_t hexColor, char c){
         if (c == '\n') { // Salto de línea
             newline();
             return;
+        }
+        if (c == ' '){
+            cursorX += size*8;
         }
         // Carácter
         if (cursorX >= getMaxWidth()) {
