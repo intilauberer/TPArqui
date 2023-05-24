@@ -1,6 +1,10 @@
 #include "utils.h"
 #include "UserSyscalls.h"
 #define COMMAND_LEN 6
+#define COLOR_LEN 8
+#define RED 0xFF00000
+#define GREEN 0x00FF00
+#define BLUE 0x0000FF
 #define WHITE 0xFFFFFF
 #define BLACK 0x000000
 #define YELLOW 0xFFFF00
@@ -27,9 +31,9 @@ enum Colors {
     ORANGE_,
     BOKE_
 };
-static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR"};
+// static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR"};
 
-static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "DIV0", "INVALOP"};
+static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR","DIV0", "INVALOP"};
 
 void __seek_command__(char * command);
 void __call_command__(int i, char * command);
