@@ -6,7 +6,7 @@
 #include <idtLoader.h>
 #include "drivers/include/videoDriver.h"
 #include "include/interrupts.h"
-
+#include "drivers/include/pong.h"
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -87,6 +87,7 @@ void * initializeKernelBinary()
 int main()
 {
 	load_idt();
+	Pong();
 	// bokee();
 	//boke();
 	((EntryPoint)sampleCodeModuleAddress)();
