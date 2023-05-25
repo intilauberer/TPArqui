@@ -45,6 +45,7 @@ void character(uint64_t hexColor, char c);
 void drawWordColor(uint64_t hexColor, char* word);
 void drawWord(char* word);
 void invalidFd();
+void clear();
 
 void drawNumberColor(int value, uint64_t hexColor);
 

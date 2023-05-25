@@ -34,5 +34,3 @@ call_paintScreen:
     call_to_handler 5
 call_boke:
     call_to_handler 6
-call_invalidOp:
-    call_to_handler 420

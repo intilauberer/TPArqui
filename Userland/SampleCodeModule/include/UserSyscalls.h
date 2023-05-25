@@ -13,5 +13,4 @@ void call_timeClock(char *buf);
 void call_regState();
 void call_paintScreen(uint64_t hex);
 void call_boke();
-void call_invalidOp();
 #endif /* USERSYSCALLS_H */

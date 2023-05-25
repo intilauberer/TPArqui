@@ -12,7 +12,6 @@ void clearBuffer(){
 }
 
 void lineRead(char * line){
-
     __seek_command__(line);
     // Morfar linea
     clearBuffer();
@@ -36,8 +35,12 @@ void bufferize (){
                 i--;
             else continue;
         } else if (c == '\n'){
-            buffer[i]=0;
             putC(c);
+            if ( i == 0 ){
+                clearBuffer();
+                return;
+            }
+            buffer[i]=0;
             lineRead(buffer);
             return;
         } else

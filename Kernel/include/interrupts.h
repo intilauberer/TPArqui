@@ -9,6 +9,7 @@
 #define INTERRUPS_H_
 
 #include "idtLoader.h"
+#include "registers.h"
 
 void _irq00Handler(void);
 void _irq01Handler(void);
@@ -19,7 +20,9 @@ void _irq05Handler(void);
 void _irq60Handler(void);
 
 void _exception0Handler(void);
+void _exception6Handler(void);
 void printRegAsm(void);
+void saveState(void);
 
 void _cli(void);
 

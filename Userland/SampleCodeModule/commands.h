@@ -1,6 +1,6 @@
 #include "utils.h"
 #include "UserSyscalls.h"
-#define COMMAND_LEN 6
+#define COMMAND_LEN 7
 #define COLOR_LEN 8
 #define RED 0xFF00000
 #define GREEN 0x00FF00

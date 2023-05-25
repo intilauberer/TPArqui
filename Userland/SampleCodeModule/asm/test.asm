@@ -3,10 +3,8 @@ GLOBAL test
 section .text
 
 test:
-mov rbx, 0x41
-mov rcx, 0x59
-mov rdi, 4      ;syscall deseada
-int 80h
+mov rax, 0x12345678
+rdpmc
 ret
 
 

@@ -16,10 +16,16 @@ GLOBAL _irq05Handler
 GLOBAL _irq60Handler
 GLOBAL printRegAsm
 GLOBAL _exception0Handler
+GLOBAL _exception6Handler
+GLOBAL saveState
 
+EXTERN getStackBase
 EXTERN printRegisters
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
+EXTERN sampleCodeModuleAddress
+EXTERN clear
+
 SECTION .text
 
 %macro dState 0
@@ -101,6 +107,12 @@ SECTION .text
 	pop rax
 %endmacro
 
+saveState:
+	pushState
+	dState
+	popState
+	ret
+
 %macro irqHandlerMaster 1
 	pushState
 
@@ -123,17 +135,19 @@ SECTION .text
 	mov rsi, registers
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
-   
 	popState
-	mov rax, [rsp]
-	add rax, 4
+	call clear
+	call getStackBase
 	mov [rsp], rax
+	mov [rbp], rax
+	;mov rax, [rsp]
+	;add rax, 4
+	;mov [rsp], rax
 	iretq
 %endmacro
 
 printRegAsm:
 	pushState
-	dState
 	mov rdi, registers
 	call printRegisters
 	popState
@@ -223,7 +237,10 @@ _irq60Handler:
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
-
+	jmp haltcpu
+_exception6Handler:
+	exceptionHandler 6
+	jmp haltcpu
 haltcpu:
 	cli
 	hlt

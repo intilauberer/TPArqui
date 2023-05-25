@@ -3,7 +3,9 @@
 #include "syscall.h"
 #include "include/defs.h"
 #include "naiveConsole.h"
-#include "interrupts.h"
+#include "include/interrupts.h"
+#include "include/exceptions.h"
+#include "registers.h"
 static void int_20();
 static void int_21();
 static void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8);
@@ -19,6 +21,7 @@ void irqDispatcher(uint64_t irq, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint6
     if (irq >= 0 && irq < 256 && interruption[irq] != NULL) {
         InterruptHandler handler = interruption[irq];
         handler(rdi, rsi, rdx, rcx, r8);
+		return;
     }
 }
 
@@ -53,5 +56,7 @@ void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8)
 	case 6:
 		boke();
 		break;
+	default:
+		return;
 	}
 }

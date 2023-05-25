@@ -31,11 +31,12 @@ void __call_command__(int i, char * command){
         return;
     case SETCOLOR:;
         setbg(command);
+        return;
     case DIV0:;
         Div0();
         return;
     case INVALOP:;
-        call_invalidOp();
+        invalidOp();
         return;
     default:;
         call_sys_write("ERROR - Comando no reconocido",50,2);
@@ -90,7 +91,6 @@ void findColor(char * color){
     
     int i = 0;
     for (i; i < COMMAND_LEN; i++){
-        putC(strcmp(hexArr[i],color)+'0'); 
         if (strcmp(hexArr[i],color) == 0){
                 setbgEnum(i);
                 return;
@@ -116,4 +116,7 @@ void Div0(){
     int a = 0;
     int b = 1;
     int c = b/a;
+}
+void invalidOp(){
+    invalidOpAsm();
 }

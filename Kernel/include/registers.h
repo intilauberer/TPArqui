@@ -2,7 +2,7 @@
 #define _REGISTERS_H
 
 #include <stdint.h>
-
+#include "interrupts.h"
 
 typedef struct registerStrucT{
 	uint64_t rax, rbx, rcx, rdx;
@@ -13,6 +13,8 @@ typedef struct registerStrucT{
 } registerStructT;
 
 extern registerStructT registers;
+
+extern int flag_snapshot_taken;
 
 void printRegisters(registerStructT * dumpedRegisters);
 #endif

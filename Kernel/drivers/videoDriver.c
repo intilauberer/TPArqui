@@ -49,6 +49,12 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00; 
 
 uint64_t bg_color = 0x000000;
+uint64_t font_color = 0xFFFFFF;
+
+uint32_t cursorX  = 0;
+uint32_t cursorY  = 0;
+uint32_t size = 2;
+
 
 void putPixel(uint64_t hexColor, uint32_t x, uint32_t y) {
 	uint8_t * screen = (uint8_t *) ((uint64_t) (VBE_mode_info->framebuffer));
@@ -58,13 +64,13 @@ void putPixel(uint64_t hexColor, uint32_t x, uint32_t y) {
     screen[offset+1] = TO_BLUE(hexColor);
     screen[offset+2] = TO_GREEN(hexColor);
 }
-uint64_t getPixelHex(uint64_t hexColor, uint32_t x, uint32_t y) {
+uint64_t getPixelHex(uint32_t x, uint32_t y) {
 	uint8_t * screen = (uint8_t *) ((uint64_t) (VBE_mode_info->framebuffer));
     uint32_t offset = VBE_mode_info->pitch*y + x*3;
     
-    int r = screen[offset];
+    int b = screen[offset];
     int g = screen[offset+1];
-    int b = screen[offset+2];
+    int r = screen[offset+2];
     return FROM_RGB(r,g,b);
 }
 
@@ -101,21 +107,28 @@ void boke() {
  
     fillSection(BLUE, height * 2, VBE_mode_info->height);
 }
+void clear(){
+	for (int x = 0; x < VBE_mode_info->width; x++){
+		for (int y = 0; y < VBE_mode_info-> pitch; y++){
+			putPixel(bg_color,x,y);
+		}
+	}
+    cursorX=0;
+    cursorY=0;
+	return;
+}
 
 
 void paintScreen(uint64_t hexColor){
     bg_color = hexColor;
 	for (int x = 0; x < VBE_mode_info->width; x++){
 		for (int y = 0; y < VBE_mode_info-> pitch; y++){
-			putPixel(hexColor,x,y);
+            if (getPixelHex(x,y) != font_color && getPixelHex(x,y) != RED)
+			    putPixel(hexColor,x,y);
 		}
 	}
 	return;
 }
-
-uint32_t cursorX  = 0;
-uint32_t cursorY  = 0;
-uint32_t size = 2;
 
 void changeSize(uint32_t new_size){
     size=new_size;
@@ -243,6 +256,11 @@ void character(uint64_t hexColor, char c){
         if (cursorX >= getMaxWidth()) {
             cursorX = 0;
             cursorY += size*16;
+        }
+        if (cursorY >= getMaxHeight()){  //TEMPORARIO HASTA IMPLEMENTAR SCROLLABLE / PAGE UP
+            cursorX = 0;
+            cursorY = 0;
+            clear();
         }
         drawChar(hexColor, c);
         cursorX += size*8;
