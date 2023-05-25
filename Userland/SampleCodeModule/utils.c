@@ -27,7 +27,7 @@ int own_scanf(char * format, ...){
     va_start(args, format);
     int toRet = 0;
 
-    while(*format != '\0'){
+    while(*format != '\0' ){
 
         if(*format == '%'){
             format++; 
@@ -95,6 +95,7 @@ int readString(char *s){
     return i;
 }
 
+
 int readHexInt(int* d){
     int value = 0;
     int sign = 1;
@@ -142,7 +143,12 @@ void print(const char * format, ...){
                 }
                 case 'd': {
                     int d = va_arg(args, int*);
-
+                    putInt(d);
+                }
+                case 's': {
+                    char* s = va_arg(args, char*);
+                    putString(s);
+                    break;
                 }
             }
         } else {
@@ -155,6 +161,31 @@ void print(const char * format, ...){
     return;
 }
 
+void putString(char * str){
+    while(*str != '\0'){
+        putC(*str);
+        str++;
+    }
+}
+
+void putInt(int num) {
+    if (num < 0) {
+        putC('-');
+        num = -num;
+    }
+
+    int divisor = 1;
+    while (num / divisor >= 10) {
+        divisor *= 10;
+    }
+
+    while (divisor > 0) {
+        int digit = num / divisor;
+        putC('0' + digit);
+        num %= divisor;
+        divisor /= 10;
+    }
+}
 
 int strcmp(char * str1, char * str2){
 	int i = 0;

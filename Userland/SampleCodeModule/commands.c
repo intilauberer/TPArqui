@@ -1,6 +1,7 @@
 #include "commands.h"
 #include "UserSyscalls.h"
 #include "stdint.h"
+#include "utils.h"
 
 
 void __seek_command__(char * command){

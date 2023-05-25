@@ -11,6 +11,8 @@
 
 char getC();
 void putC(char c);
+void putInt(int num);
+void putString(char * str);
 int own_scanf(char * format, ...);
 int readInt(int* d);
 int readString(char *s);
