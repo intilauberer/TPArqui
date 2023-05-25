@@ -18,9 +18,12 @@ void lineRead(char * line){
 }
 
 void putLineStart(){
+    /*
     putC('O');
     putC(']');
     putC(' ');
+    */
+   print("O] ");
     clearBuffer();
 }
 
