@@ -139,8 +139,8 @@ void clearColor(uint64_t hexColor){
 
 void paintScreen(uint64_t hexColor){
     bg_color = hexColor;
-	for (int x = 0; x < VBE_mode_info->width; x++){
-		for (int y = 0; y < VBE_mode_info-> pitch; y++){
+	for (int x = 0; x < VBE_mode_info->pitch; x++){
+		for (int y = 0; y < VBE_mode_info-> width; y++){
             if (getPixelHex(x,y) != font_color && getPixelHex(x,y) != RED)
 			    putPixel(hexColor,x,y);
 		}

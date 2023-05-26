@@ -52,21 +52,18 @@ void movePaddleDown(Paddle* paddle) {
 
 void showScoreCard(uint64_t hexColor){
     setFontSize(SCORE_CARD_FONT_SIZE);
-    drawWordColorAt(hexColor, "P1", SCORE_CARD_X+50, SCORE_CARD_Y);
-    drawWordColorAt(hexColor, "P2", SCORE_CARD_X + 100, SCORE_CARD_Y);
-    characterAt(hexColor, player1Score+'0', SCORE_CARD_X+60, SCORE_CARD_Y+50);
-    characterAt(hexColor, player2Score+'0', SCORE_CARD_X+110, SCORE_CARD_Y+50);
-    setFontSize(DEFAULT_FONT_SIZE);
+    characterAt(hexColor, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
+    characterAt(hexColor, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
 }
 void updateScore(int player){
     if (player == 1){
-        characterAt(BLACK, player1Score+'0', SCORE_CARD_X+60, SCORE_CARD_Y+50);
+        characterAt(BLACK, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
         player1Score++;
-        characterAt(WHITE, player1Score+'0', SCORE_CARD_X+60, SCORE_CARD_Y+50);
+        characterAt(WHITE, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
     } else {
-        characterAt(BLACK, player2Score+'0', SCORE_CARD_X+110, SCORE_CARD_Y+50);
+        characterAt(BLACK, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
         player2Score++;
-        characterAt(WHITE, player2Score+'0', SCORE_CARD_X+110, SCORE_CARD_Y+50);
+        characterAt(WHITE, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
     }
 }
 void clearScoreCard(){
@@ -136,6 +133,11 @@ void resetGame(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* s
     drawPaddle(paddle2, WHITE);
 }
 
+void drawMiddleLine(){
+    for (int i = 0; i < SCREEN_HEIGHT; i+= 20){
+        drawRectangle2(WHITE, SCREEN_WIDTH/2-5, i, 10, 10);
+    }
+}
 
 
 
@@ -181,7 +183,8 @@ void Pong() {
     char c = sys_read(&c, 1, 0);
     char p = 0;
     clear(BLACK);
-    drawBorders();  
+    drawBorders();
+    drawMiddleLine();  
     drawPaddle(&paddle1, WHITE);  
     drawPaddle(&paddle2, WHITE);
     showScoreCard(WHITE);
@@ -236,9 +239,18 @@ void Pong() {
         // }
 
         if (player1Score >= 3 || player2Score >= 3) {
-            clearColor(RED);
+            clearColor(BLACK);
+            setFontSize(18);
+            setFontSize(DEFAULT_FONT_SIZE);
+            drawWordColorAt(WHITE, "GAME OVER", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-170);
+            if(player1Score>player2Score){
+                drawWordColorAt(WHITE, "PLAYER 1 WINS", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-130);
+            }
+            else{
+                drawWordColorAt(WHITE, "PLAYER 2 WINS", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-130);
+            }
             drawWordColorAt(WHITE, "Press X to exit. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-100);
-            drawWordColorAt(WHITE, "Press any other key to play again.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-74);
+            drawWordColorAt(WHITE, "Press any other key to play again.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-75);
             sys_read(&p, 1, 0);
             if (p == 'X'){
                 clear();
@@ -248,6 +260,7 @@ void Pong() {
             player1Score = 0;
             player2Score = 0;
             resetGame(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
+            drawMiddleLine();
         }
 
         sleepms(1);

@@ -18,7 +18,7 @@ char keyboard_handler() {
     char key = getKey();
     if (key == NULL)
         return key;
-    _hlt();
+    //_hlt();
     uint32_t *cursorX = getCursorX();
     uint32_t *cursorY = getCursorY();
     int size = getSize();

@@ -24,9 +24,11 @@
 #define UP 1
 #define DOWN 0
 
-#define SCORE_CARD_X (SCREEN_WIDTH + 10)
-#define SCORE_CARD_Y (SCREEN_HEIGHT - 568)
-#define SCORE_CARD_FONT_SIZE 2
+
+#define SCORE_CARD_X 385
+#define SCORE_CARD_Y 10
+#define SCORE_CARD_FONT_SIZE 4
+
 
 typedef struct {
     int x;
@@ -52,4 +54,4 @@ void movePaddleDown(Paddle* paddle);
 void moveBall(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* score2);
 void drawBorders();
 void Pong();
-
+void drawMiddleLine();
