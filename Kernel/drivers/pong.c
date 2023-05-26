@@ -121,13 +121,13 @@ void Pong() {
     while (1) {
         // c = getc();
         // sys_read(&c, 1, 0);
-        // if (c == 'w')
+        // if (c == 'W')
         //     movePaddleUp(&paddle1);
-        // else if (c == 's')
+        // else if (c == 'S')
         //     movePaddleDown(&paddle1);
-        // else if (c == 'i')
+        // else if (c == 'I')
         //     movePaddleUp(&paddle2);
-        // else if (c == 'k')
+        // else if (c == 'K')
         //     movePaddleDown(&paddle2);
 
         moveBall(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
