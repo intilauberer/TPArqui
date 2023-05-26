@@ -60,3 +60,8 @@ void sleepms(int mseconds) {
 	int startTime = ticks_elapsed();
 	while (mseconds > ticks_elapsed()*18 - startTime*18)_hlt();
 };
+
+void nanoms(int nseconds) {
+	int startTime = ticks_elapsed();
+	while (nseconds > ticks_elapsed()*18000 - startTime*18000)_hlt();
+};

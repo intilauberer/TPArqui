@@ -323,7 +323,8 @@ void Pong() {
             resetGame(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
             drawMiddleLine();
         }
-        // sleepms(1);
-        for (k = 0; k < 1000000; k++);
+        drawMiddleLine();
+        nanoms(1);
+        //for (k = 0; k < 1000000; k++);
     }
 }
