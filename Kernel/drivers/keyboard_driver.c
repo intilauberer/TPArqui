@@ -25,22 +25,6 @@ char keyboard_handler() {
     char * buff = getBufferAddress();
     int buff_pos = getBufferPosition();
 
-    // char * buff = getBufferAddress();
-    // int buff_pos = getBufferPosition();
-
-    // if (buff_pos+1 < 128){
-    //     buff[buff_pos] = ScanCodes[key];
-    //     // setBuffNext(ScanCodes[key]);
-    //     if (ScanCodes[key] == '\n'){
-    //         setPos(0);
-    //     } else  {
-    //         setPos(buff_pos+1);}
-    // } else {  
-    //     setPos(0);
-    //     buff[buff_pos] = '\n';   
-    // }
-    // character(WHITE, buff[buff_pos]);
-
     if (key[ScanCodes] == ';'){
         saveState();
         flag_snapshot_taken = 1;
@@ -61,7 +45,6 @@ char keyboard_handler() {
             buff[0] = 0;
         }
         buff[buff_pos] = ScanCodes[key];
-        // character(WHITE, buff[buff_pos]);
     }
     return ScanCodes[key];
 }

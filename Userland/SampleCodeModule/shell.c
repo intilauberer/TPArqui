@@ -53,6 +53,7 @@ void bufferize (){
     return;
 }
 void welcome(){
+    call_paintScreen(BLACK);
     char * WELCOME_MESSAGE = "Bienvenido a BOKE.\nIngrese un comando para continuar:\n(Ingrese HELP para ver todos los comandos)\n";
     for (int j=0; WELCOME_MESSAGE[j] != 0; j++){
         putC(WELCOME_MESSAGE[j]);

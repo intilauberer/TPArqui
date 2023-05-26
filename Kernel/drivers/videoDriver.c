@@ -53,8 +53,14 @@ uint64_t font_color = 0xFFFFFF;
 
 uint32_t cursorX  = 0;
 uint32_t cursorY  = 0;
-uint32_t size = 2;
+uint32_t size = DEFAULT_FONT_SIZE;
 
+void setFontSize(uint32_t new_size){
+    size = new_size;
+}
+uint32_t getFontSize(){
+    return size;
+}
 
 void putPixel(uint64_t hexColor, uint32_t x, uint32_t y) {
 	uint8_t * screen = (uint8_t *) ((uint64_t) (VBE_mode_info->framebuffer));
@@ -117,6 +123,18 @@ void clear(){
     cursorY=0;
 	return;
 }
+
+void clearColor(uint64_t hexColor){
+	for (int x = 0; x < VBE_mode_info->width; x++){
+		for (int y = 0; y < VBE_mode_info-> pitch; y++){
+			putPixel(hexColor,x,y);
+		}
+	}
+    cursorX=0;
+    cursorY=0;
+	return;
+}
+
 
 
 void paintScreen(uint64_t hexColor){
@@ -235,6 +253,7 @@ void drawRegisters(int value){
 }
 
 
+
 void character(uint64_t hexColor, char c){
         if (c == '\b') { // backspace
             backspace();
@@ -267,12 +286,31 @@ void character(uint64_t hexColor, char c){
         return;
 }
 
+void characterAt(uint64_t hexColor, char c, uint32_t x, uint32_t y){
+    uint32_t auxX = cursorX;
+    uint32_t auxY = cursorY;
+    cursorX = x;
+    cursorY = y;
+    character(hexColor, c);
+    cursorX = auxX;
+    cursorY = auxY;
+}
+
 void drawWordColor(uint64_t hexColor, char* word) {
     for (int i=0; word[i] != 0; i++) {
         character(hexColor, word[i]);
     }
 }
 
+void drawWordColorAt(uint64_t hexColor, char* word, uint32_t x, uint32_t y){
+    uint32_t auxX = cursorX;
+    uint32_t auxY = cursorY;
+    cursorX = x;
+    cursorY = y;
+    drawWordColor(hexColor, word);
+    cursorX = auxX;
+    cursorY = auxY;
+}
 
 void drawWord(char* word) {
     drawWordColor(WHITE, word);

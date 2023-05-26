@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "include/videoDriver.h"
 #include "include/pong.h"
-
+#include "stdin.h"
 int player1Score = 0;
 int player2Score = 0;
 
@@ -50,8 +50,48 @@ void movePaddleDown(Paddle* paddle) {
     drawPaddle(paddle, WHITE);
 }
 
+void showScoreCard(uint64_t hexColor){
+    setFontSize(SCORE_CARD_FONT_SIZE);
+    drawWordColorAt(hexColor, "P1", SCORE_CARD_X+50, SCORE_CARD_Y);
+    drawWordColorAt(hexColor, "P2", SCORE_CARD_X + 100, SCORE_CARD_Y);
+    characterAt(hexColor, player1Score+'0', SCORE_CARD_X+60, SCORE_CARD_Y+50);
+    characterAt(hexColor, player2Score+'0', SCORE_CARD_X+110, SCORE_CARD_Y+50);
+    setFontSize(DEFAULT_FONT_SIZE);
+}
+void updateScore(int player){
+    if (player == 1){
+        characterAt(BLACK, player1Score+'0', SCORE_CARD_X+60, SCORE_CARD_Y+50);
+        player1Score++;
+        characterAt(WHITE, player1Score+'0', SCORE_CARD_X+60, SCORE_CARD_Y+50);
+    } else {
+        characterAt(BLACK, player2Score+'0', SCORE_CARD_X+110, SCORE_CARD_Y+50);
+        player2Score++;
+        characterAt(WHITE, player2Score+'0', SCORE_CARD_X+110, SCORE_CARD_Y+50);
+    }
+}
+void clearScoreCard(){
+    showScoreCard(BLACK);
+}
+
+char checkScored(Ball* ball, Paddle* paddle1, Paddle* paddle2){
+    if (ball->x + ball->size < paddle1->x + paddle1->width){
+        updateScore(2);
+        return 1;
+    }
+    if (ball->x - ball->size > paddle2->x){
+        updateScore(1);
+        return 1;
+    }
+    return 0;
+}       
+
 void moveBall(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* score2) {
     clearBall(*ball);
+    if (checkScored(ball, paddle1, paddle2)){
+        clearBall(*ball);
+        resetGame(ball, paddle1, paddle2, score1, score2);
+        return;
+    }
     ball->x += ball->speedX;
     ball->y += ball->speedY;
 
@@ -68,6 +108,7 @@ void moveBall(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* sc
     if (ball->x <= BORDER_SIZE) {
         ball->x = BORDER_SIZE + 1;
         ball->speedX = -ball->speedX;
+
         resetGame(ball, paddle1, paddle2, score1, score2);
     }
     else if (ball->x >= SCREEN_WIDTH - BORDER_SIZE - BALL_SIZE) {
@@ -102,50 +143,110 @@ void drawBorders() {
     drawRectangle2(WHITE, 0, 0, SCREEN_WIDTH, BORDER_SIZE); 
     drawRectangle2(WHITE, 0, SCREEN_HEIGHT - BORDER_SIZE, SCREEN_WIDTH, BORDER_SIZE);  
 }
+void pauseModular(uint64_t hexColor){
+    setFontSize(18);
+    drawWordColorAt(hexColor, "PAUSED", SCREEN_WIDTH/2-270, SCREEN_HEIGHT/2-200);
+    setFontSize(DEFAULT_FONT_SIZE);
+    drawWordColorAt(hexColor, "Press X to exit. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+100);
+    drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+126);
+}
+
+void pauseGame(){
+    pauseModular(WHITE);
+}
+void unpause(){
+    pauseModular(BLACK);
+}
+
+// void checkScored(Ball* ball){
+//     if (ball->x < ball->speedX)
+//         player2Score++;
+//     if (ball->x > ball->speedX - SCREEN_WIDTH )
+//         player1Score++;
+// }       
 
 void Pong() {
-    Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED};
-    Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED};
+    Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, UP};
+    Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, DOWN};
     Ball ball = {SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED};
 
     player1Score = 0;
     player2Score = 0;
 
-    paintScreen(BLACK);
+    clear(BLACK);
+    setFontSize(24);
+    drawWordColorAt(WHITE, "PONG", SCREEN_WIDTH/2-270, SCREEN_HEIGHT/2-200);
+    setFontSize(DEFAULT_FONT_SIZE);
+    drawWordColorAt(WHITE, "Press any key to begin: ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+100);
+    char c = sys_read(&c, 1, 0);
+    char p = 0;
+    clear(BLACK);
     drawBorders();  
     drawPaddle(&paddle1, WHITE);  
     drawPaddle(&paddle2, WHITE);
+    showScoreCard(WHITE);
 
-
-    char c;
     while (1) {
-        // c = getc();
-        // sys_read(&c, 1, 0);
-        // if (c == 'W')
-        //     movePaddleUp(&paddle1);
-        // else if (c == 'S')
-        //     movePaddleDown(&paddle1);
-        // else if (c == 'I')
-        //     movePaddleUp(&paddle2);
-        // else if (c == 'K')
-        //     movePaddleDown(&paddle2);
+        showScoreCard(WHITE);
+        c = getCharAt(getBufferPosition()-1);
+        if (c=='P'){
+            pauseGame();
+            sys_read(&p, 1, 0);
+            if (p == 'X'){
+                clear();
+                return;
+            } 
+            unpause();
+        }
+        if (paddle1.direction == UP){
+            movePaddleUp(&paddle1);
+            if (c == 'S')
+                paddle1.direction = DOWN;
+        }
+        else{
+            movePaddleDown(&paddle1);
+            if (c == 'W')
+                paddle1.direction = UP;
+        }
+
+        if (paddle2.direction == UP){
+            movePaddleUp(&paddle2);
+            if (c == 'K')
+                paddle2.direction = DOWN;
+        }
+        else{
+            movePaddleDown(&paddle2);
+            if (c == 'I')
+                paddle2.direction = UP;
+        }
 
         moveBall(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
-        if (ball.y + ball.size < paddle1.y + paddle1.height / 2) {
-            movePaddleUp(&paddle1);
-        }
-        else if (ball.y > paddle1.y + paddle1.height / 2) {
-            movePaddleDown(&paddle1);
-        }
-        if (ball.y + ball.size < paddle2.y + paddle2.height / 2) {
-            movePaddleUp(&paddle2);
-        }
+        // if (ball.y + ball.size < paddle1.y + paddle1.height / 2) {
+        //     movePaddleUp(&paddle1);
+        // }
+        // else if (ball.y > paddle1.y + paddle1.height / 2) {
+        //     movePaddleDown(&paddle1);
+        // }
+        // if (ball.y + ball.size < paddle2.y + paddle2.height / 2) {
+        //     movePaddleUp(&paddle2);
+        // }
 
-        else if (ball.y > paddle2.y + paddle2.height / 2) {
-            movePaddleDown(&paddle2);
-        }
+        // else if (ball.y > paddle2.y + paddle2.height / 2) {
+        //     movePaddleDown(&paddle2);
+        // }
 
-        if (player1Score >= 10 || player2Score >= 10) {
+        if (player1Score >= 3 || player2Score >= 3) {
+            clearColor(RED);
+            drawWordColorAt(WHITE, "Press X to exit. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-100);
+            drawWordColorAt(WHITE, "Press any other key to play again.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-74);
+            sys_read(&p, 1, 0);
+            if (p == 'X'){
+                clear();
+                return;
+            }
+            clear();
+            player1Score = 0;
+            player2Score = 0;
             resetGame(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
         }
 

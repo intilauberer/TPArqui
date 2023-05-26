@@ -8,7 +8,7 @@
 
 #define PADDLE_WIDTH 10
 #define PADDLE_HEIGHT 100
-#define PADDLE_SPEED 8
+#define PADDLE_SPEED 13
 
 #define BALL_SIZE 10
 #define BALL_SPEED 10
@@ -21,6 +21,12 @@
 #define CHARACTER_WIDTH 5
 #define CHARACTER_HEIGHT 8
 #define SCORE_PADDING 10
+#define UP 1
+#define DOWN 0
+
+#define SCORE_CARD_X (SCREEN_WIDTH + 10)
+#define SCORE_CARD_Y (SCREEN_HEIGHT - 568)
+#define SCORE_CARD_FONT_SIZE 2
 
 typedef struct {
     int x;
@@ -28,6 +34,7 @@ typedef struct {
     int width;
     int height;
     int speed;
+    char direction;
 } Paddle;
 
 typedef struct {

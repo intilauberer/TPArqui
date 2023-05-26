@@ -15,7 +15,7 @@
 #define FROM_RGB(r,g,b) (r << 16) | (g << 8) | b
 
 #define isMinusc(x) ((x)<='a'?(((x)>='z')?1:0):0)
-
+#define DEFAULT_FONT_SIZE 2
 
 void putPixel(uint64_t hexColor, uint32_t x, uint32_t y);
 void paintScreen(uint64_t hexColor);
@@ -41,11 +41,15 @@ void newline();
 void backspace();
 void tab();
 void character(uint64_t hexColor, char c);
-
+void characterAt(uint64_t hexColor, char c, uint32_t x, uint32_t y);
 void drawWordColor(uint64_t hexColor, char* word);
+void drawWordColorAt(uint64_t hexColor, char* word, uint32_t x, uint32_t y);
+void setFontSize(uint32_t new_size);
+uint32_t getFontSize();
 void drawWord(char* word);
 void invalidFd();
 void clear();
+void clearColor(uint64_t hexColor);
 
 void drawNumberColor(int value, uint64_t hexColor);
 
