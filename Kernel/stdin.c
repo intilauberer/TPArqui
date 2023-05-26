@@ -16,7 +16,7 @@ char * getBufferAddress(){
     return ptr->buff;
 }
 
-char getCharAt(int pos){
+uint16_t getCharAt(int pos){
     return ptr->buff[pos];
 }
 

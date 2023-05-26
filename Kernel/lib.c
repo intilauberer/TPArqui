@@ -58,5 +58,5 @@ void sleep(uint32_t seconds) {
 
 void sleepms(int mseconds) {
 	int startTime = ticks_elapsed();
-	while (mseconds > ticks_elapsed()*55 - startTime*55) _hlt();
+	while (mseconds > ticks_elapsed()*18 - startTime*18)_hlt();
 };

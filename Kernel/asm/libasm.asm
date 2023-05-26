@@ -10,7 +10,7 @@ GLOBAL getKey
 GLOBAL inb
 GLOBAL outb
 GLOBAL kbflag
-
+GLOBAL load_settings
 section .text
 
 %macro enter_func 0
@@ -109,17 +109,30 @@ getKey:
   mov rax, 0
 
   in al, 0x60       ; lee la TECLA PRESIONADA desde el puerto 60h
-  test al, 0x80
-  jnz _skip
-  in al, 0x60
-  movzx eax, al     ; mueve el byte de al a eax y extiende con ceros los 32 bits superiores
-  jmp _good
-_skip:
-  xor eax,eax
+  ;test al, 0x80
+  ;jnz _skip
+  ;in al, 0x60
+  ;movzx eax, al     ; mueve el byte de al a eax y extiende con ceros los 32 bits superiores
+  ;jmp _good
+_;skip:
+  ;xor eax,eax
 _good:  
   mov rsp, rbp 
   pop rbp
   ret
+
+load_settings:
+	enter_func
+	call set_keySpeed
+	leave_func
+	ret
+set_keySpeed:
+	enter_func
+	in al, 0x64
+	mov al, 0xC2
+	out 0x64, al
+	leave_func
+	ret
 
 inb:				; Funciones para el correcto funcionamiento del soundDriver
 	push rbp

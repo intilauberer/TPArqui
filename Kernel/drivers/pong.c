@@ -3,8 +3,11 @@
 #include "include/videoDriver.h"
 #include "include/pong.h"
 #include "stdin.h"
+#include "drivers/include/keyboard_driver.h"
+
 int player1Score = 0;
 int player2Score = 0;
+int movement_vector[] = {-1,1,0};
 
 void drawRectangle2(uint64_t color, int x, int y, int width, int height) {
     for (int i = 0; i < height; i++) {
@@ -32,10 +35,12 @@ void clearBall(Ball ball) {
 
 void movePaddleUp(Paddle* paddle) {
     clearPaddle(paddle);
-    if (paddle->y - paddle->speed >= BORDER_SIZE) {
-        paddle->y -= paddle->speed;
+    int move = paddle->y - movement_vector[paddle->direction]* paddle->speed;
+    if (move >= BORDER_SIZE || move + paddle->height <= SCREEN_HEIGHT- BORDER_SIZE) {
+        paddle->y -= movement_vector[paddle->direction]* paddle->speed;
+        // character(WHITE, movement_vector[paddle->direction]+'0');
     } else {
-        paddle->y = BORDER_SIZE;
+        paddle->y = paddle->direction = STOP;
     }
     drawPaddle(paddle, WHITE);
 }
@@ -180,50 +185,106 @@ void Pong() {
     drawWordColorAt(WHITE, "PONG", SCREEN_WIDTH/2-270, SCREEN_HEIGHT/2-200);
     setFontSize(DEFAULT_FONT_SIZE);
     drawWordColorAt(WHITE, "Press any key to begin: ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+100);
-    char c = sys_read(&c, 1, 0);
-    char p = 0;
+    uint16_t c = sys_read(&c, 1, 0);
+    uint16_t p = 0;
+    uint16_t charToCheck = c;
+    // int pos = getBufferPosition();
     clear(BLACK);
     drawBorders();
     drawMiddleLine();  
     drawPaddle(&paddle1, WHITE);  
     drawPaddle(&paddle2, WHITE);
     showScoreCard(WHITE);
+    uint16_t moveBuff[10]; 
+    int pos = getBufferPosition();
+    int moveBuffPos = 0;
+    long k =0;
 
     while (1) {
         showScoreCard(WHITE);
-        c = getCharAt(getBufferPosition()-1);
-        if (c=='P'){
+        if (c==0x19){
             pauseGame();
             sys_read(&p, 1, 0);
-            if (p == 'X'){
+            if (p == 0x2D){
                 clear();
                 return;
             } 
             unpause();
         }
-        if (paddle1.direction == UP){
-            movePaddleUp(&paddle1);
-            if (c == 'S')
-                paddle1.direction = DOWN;
+        while (pos <= getBufferPosition()) {
+            // character(WHITE, pos+'0');
+            // character(WHITE, getBufferPosition()+'0');
+            // moveBuff[moveBuffPos++] = charToCheck;
+        c = getCharAt(pos++-1);
+        // c = getCharAt(getBufferPosition()-1);
+        // moveBuffPos = 0;
+        // character(WHITE, ScanCodes[c]);
+        // if (c==0x19){
+        //     pauseGame();
+        //     sys_read(&p, 1, 0);
+        //     if (p == 0x2D){
+        //         clear();
+        //         return;
+        //     } 
+        //     unpause();
+        // }
+        if (c == 0x11){
+            paddle1.direction = UP;
         }
-        else{
-            movePaddleDown(&paddle1);
-            if (c == 'W')
-                paddle1.direction = UP;
+        else if (c == 0x91){
+            if (paddle1.direction == UP)
+                paddle1.direction = STOP; 
+        }  
+
+        else if (c == 0x1F) 
+            paddle1.direction = DOWN;
+
+        else if (c == 0x9F){
+            if (paddle1.direction == DOWN)
+                paddle1.direction = STOP;
         }
 
-        if (paddle2.direction == UP){
-            movePaddleUp(&paddle2);
-            if (c == 'K')
-                paddle2.direction = DOWN;
+        else if (c == 0x17){
+            paddle2.direction = UP;
         }
-        else{
-            movePaddleDown(&paddle2);
-            if (c == 'I')
-                paddle2.direction = UP;
-        }
+        else if (c == 0x97){
+            if (paddle2.direction == UP)
+                paddle2.direction = STOP; 
+        }   
 
+        else if (c == 0x25)
+            paddle2.direction = DOWN;
+
+        else if (c == 0xA5){
+            if (paddle2.direction == DOWN)
+                paddle2.direction = STOP;
+        }
+        }
+        movePaddleUp(&paddle1);
+        movePaddleUp(&paddle2);
         moveBall(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
+        // if (paddle1.direction == UP){
+        // movePaddleUp(&paddle1);
+        //     if (c == 'S')
+        //         paddle1.direction = DOWN;
+        // }
+        // else{
+            // movePaddleDown(&paddle1);
+        //     if (c == 'W')
+        //         paddle1.direction = UP;
+        // }
+
+        // if (paddle2.direction == UP){
+        // movePaddleUp(&paddle2);
+        //     if (c == 'K')
+        //         paddle2.direction = DOWN;
+        // }
+        // else{
+            // movePaddleDown(&paddle2);
+        //     if (c == 'I')
+        //         paddle2.direction = UP;
+        // }
+
         // if (ball.y + ball.size < paddle1.y + paddle1.height / 2) {
         //     movePaddleUp(&paddle1);
         // }
@@ -252,7 +313,7 @@ void Pong() {
             drawWordColorAt(WHITE, "Press X to exit. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-100);
             drawWordColorAt(WHITE, "Press any other key to play again.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-75);
             sys_read(&p, 1, 0);
-            if (p == 'X'){
+            if (p == 0x2D){
                 clear();
                 return;
             }
@@ -262,7 +323,7 @@ void Pong() {
             resetGame(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
             drawMiddleLine();
         }
-
-        sleepms(1);
+        // sleepms(1);
+        for (k = 0; k < 1000000; k++);
     }
 }
