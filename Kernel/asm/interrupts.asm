@@ -19,7 +19,7 @@ GLOBAL _exception0Handler
 GLOBAL _exception6Handler
 GLOBAL saveState
 
-EXTERN getStackBase
+EXTERN retUserland
 EXTERN printRegisters
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
@@ -137,7 +137,7 @@ saveState:
 	call exceptionDispatcher
 	popState
 	call clear
-	call getStackBase
+	call retUserland
 	mov [rsp], rax
 	mov [rbp], rax
 	;mov rax, [rsp]

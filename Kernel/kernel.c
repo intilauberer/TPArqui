@@ -27,6 +27,10 @@ void clearBSS(void * bssAddress, uint64_t bssSize)
 	memset(bssAddress, 0, bssSize);
 }
 
+void * retUserland(){
+	return sampleCodeModuleAddress;
+}
+
 void * getStackBase()
 {
 	return (void*)(
