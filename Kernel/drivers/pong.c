@@ -4,6 +4,7 @@
 #include "include/pong.h"
 #include "stdin.h"
 #include "drivers/include/keyboard_driver.h"
+#include "time.h"
 
 int player1Score = 0;
 int player2Score = 0;
@@ -196,29 +197,52 @@ void training(Ball* ball, Paddle* paddle2) {
     movePaddle(paddle2);
 }
 
+int benchmark(){
+    int ticks = ticks_elapsed();
+    for (long i = 0; i < 1000000000; i++);
+    int ticks2 = ticks_elapsed();
+    return ticks2-ticks;
+}
 
-
+void sleepbm(int bm){
+    for (long i = 0; i < 10000*bm;i++);
+}
 
 void Pong() {
     Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
     Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
     Ball ball = {SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED};
-
-    clear(BLACK);
+    int experimental = 0;
+    int setting = 0;
     setFontSize(24);
     drawWordColorAt(WHITE, "PONG", SCREEN_WIDTH/2-270, SCREEN_HEIGHT/2-200);
     setFontSize(DEFAULT_FONT_SIZE);
+    drawWordColorAt(WHITE, "Press E to enable experimental refresh rate", 0, SCREEN_HEIGHT/2+100);
+    drawWordColorAt(WHITE, "Press any other key for default refresh rate", 0, SCREEN_HEIGHT/2+130);
+    char e;
+    sys_read(&e, 1, 0);
+    drawWordColorAt(BLACK, "Press E to enable experimental refresh rate", 0, SCREEN_HEIGHT/2+100);
+    drawWordColorAt(BLACK, "Press any other key for default refresh rate", 0, SCREEN_HEIGHT/2+130);
+    if ( e == 'E'){
+        drawWordColorAt(WHITE, "Wait until benchmark is complete...", 0, SCREEN_HEIGHT/2+100);
+        experimental = 1;
+        setting = benchmark();
+        drawWordColorAt(BLACK, "Wait until benchmark is complete...", 0, SCREEN_HEIGHT/2+100);
+    }
+
+    // clear(BLACK);
     drawWordColorAt(WHITE, "Press T for training", 0, SCREEN_HEIGHT/2+100);
     drawWordColorAt(WHITE, "Press any other key to begin 2 player PONG: ",0, SCREEN_HEIGHT/2+130);
     drawWordColorAt(WHITE, "Player 1 goes up with \"W\" and down with \"S\"",0, SCREEN_HEIGHT/2+160);
     drawWordColorAt(WHITE, "Player 2 goes up with \"I\" and down with \"K\"",0, SCREEN_HEIGHT/2+190);
-    uint16_t c = sys_read(&c, 1, 0);
-    uint16_t p = 0;
-    uint16_t charToCheck = c;
-     int Training = 0;
-    if ( c == 0x14){
+    int Training = 0;
+    char t;
+    sys_read(&t, 1, 0);
+    if ( t == 'T'){
         Training = 1;
     }
+    uint16_t c;
+    uint16_t p = 0;
 
     clear(BLACK);
     drawBorders();
@@ -226,9 +250,7 @@ void Pong() {
     drawPaddle(&paddle1, WHITE);  
     drawPaddle(&paddle2, WHITE);
     showScoreCard(WHITE);
-    uint16_t moveBuff[10]; 
     int pos = getBufferPosition();
-    int moveBuffPos = 0;
     long k =0;
    
     
@@ -263,10 +285,7 @@ void Pong() {
                 if (paddle1.direction == DOWN)
                     paddle1.direction = STOP;
             }
-            if (Training){
-                training(&ball, &paddle2);
-            }
-            else{
+            if (!Training){
                  if (c == 0x17){
                     paddle2.direction = UP;
                 }
@@ -283,6 +302,9 @@ void Pong() {
                         paddle2.direction = STOP;
                 }
             }
+            }
+            if (Training){
+                training(&ball, &paddle2);
             }
             movePaddle(&paddle1);
             movePaddle(&paddle2);
@@ -313,6 +335,9 @@ void Pong() {
                 drawMiddleLine();
             }
             drawMiddleLine();
-            sleepms(1);
+            // sleepms(1);
+            if (experimental)
+                sleepbm(setting);
+            else sleepms(1);
     }
 }

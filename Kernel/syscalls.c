@@ -28,12 +28,9 @@ void sys_read( char *buf, int len, int filedescriptor){
         case STDIN:;
             int pos = getBufferPosition();
             char aux = 0;
-            // int flag_consume = 0;
             for (int i = 0; i < len; ){
                 _hlt();
                 aux = getCharAt(pos);
-                // if (flag_consume == 1)
-                //     consumeBuffAt(pos);
                 if (aux > 0 && aux <= 255){
                     if (aux == 0x39)
                         buf[i++]=' ';

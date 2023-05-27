@@ -15,10 +15,6 @@ void keyboard_handler() {
     uint16_t key = getKey();
     if (key == NULL)
         return key;
-    //_hlt();
-    uint32_t *cursorX = getCursorX();
-    uint32_t *cursorY = getCursorY();
-    int size = getSize();
     uint16_t * buff = getBufferAddress();
     int buff_pos = getBufferPosition();
     
