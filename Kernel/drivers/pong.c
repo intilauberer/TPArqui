@@ -22,9 +22,19 @@ void drawPaddle(Paddle* paddle, uint64_t color) {
 }
 
 void drawBall(Ball ball, uint64_t color) {
-    drawRectangle2(color, ball.x, ball.y, ball.size, ball.size);
-}
+    int radius = ball.size / 2;
+    int centerX = ball.x + radius;
+    int centerY = ball.y + radius;
+    int squaredRadius = radius * radius;
 
+    for (int y = -radius; y <= radius; y++) {
+        for (int x = -radius; x <= radius; x++) {
+            if ((x * x) + (y * y) <= squaredRadius) {
+                putPixel(color, centerX + x, centerY + y);
+            }
+        }
+    }
+}
 void clearPaddle(Paddle* paddle) {
     drawPaddle(paddle, BLACK);
 }
@@ -33,27 +43,6 @@ void clearBall(Ball ball) {
     drawBall(ball, BLACK);
 }
 
-// void movePaddleUp(Paddle* paddle) {
-//     clearPaddle(paddle);
-//     int move = paddle->y - movement_vector[paddle->direction]* paddle->speed;
-//     if (move >= BORDER_SIZE || move + paddle->height <= SCREEN_HEIGHT- BORDER_SIZE) {
-//         paddle->y -= movement_vector[paddle->direction]* paddle->speed;
-//         // character(WHITE, movement_vector[paddle->direction]+'0');
-//     } else {
-//         paddle->y = paddle->direction = STOP;
-//     }
-//     drawPaddle(paddle, WHITE);
-// }
-
-// void movePaddleDown(Paddle* paddle) {
-//     clearPaddle(paddle);
-//     if (paddle->y + paddle->speed + paddle->height <= SCREEN_HEIGHT - BORDER_SIZE) {
-//         paddle->y += paddle->speed;
-//     } else {
-//         paddle->y = SCREEN_HEIGHT - 10 - paddle->height;
-//     }
-//     drawPaddle(paddle, WHITE);
-// }
 void movePaddle(Paddle* paddle) {
     clearPaddle(paddle);
     int move;
@@ -208,20 +197,12 @@ void training(Ball* ball, Paddle* paddle2) {
 }
 
 
-// void checkScored(Ball* ball){
-//     if (ball->x < ball->speedX)
-//         player2Score++;
-//     if (ball->x > ball->speedX - SCREEN_WIDTH )
-//         player1Score++;
-// }       
+
 
 void Pong() {
     Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
     Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
     Ball ball = {SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED};
-
-    player1Score = 0;
-    player2Score = 0;
 
     clear(BLACK);
     setFontSize(24);
@@ -332,7 +313,6 @@ void Pong() {
                 drawMiddleLine();
             }
             drawMiddleLine();
-            nanoms(1);
-            //for (k = 0; k < 1000000; k++);
+            sleepms(1);
     }
 }
