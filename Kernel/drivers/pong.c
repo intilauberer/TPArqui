@@ -237,7 +237,7 @@ void Pong() {
         if (c==0x19){
             pauseGame();
             sys_read(&p, 1, 0);
-            if (p == 0x2D){
+            if (p == 'X'){
                 clear();
                 return;
             } 

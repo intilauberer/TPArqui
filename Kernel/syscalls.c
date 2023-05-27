@@ -34,9 +34,12 @@ void sys_read( char *buf, int len, int filedescriptor){
                 aux = getCharAt(pos);
                 // if (flag_consume == 1)
                 //     consumeBuffAt(pos);
-                if (aux != 0){
-                        buf[i++]=aux;
-                        setPos(pos+1);
+                if (aux > 0 && aux <= 255){
+                    if (aux == 0x39)
+                        buf[i++]=' ';
+                    else
+                        buf[i++]=ScanCodes[aux];
+                    setPos(pos+1);
                     // if (aux == '\b'){
                     //     if (i>0)
                     //         i--;
@@ -51,8 +54,8 @@ void sys_read( char *buf, int len, int filedescriptor){
                     // }
                     // else 
                     //     buf[i++]=aux;
-                    pos = getBufferPosition();
                 }
+                pos = getBufferPosition();
             }
             // int pos2 = getBufferPosition() - len;
             // for (int i = 0; i < len; i++){

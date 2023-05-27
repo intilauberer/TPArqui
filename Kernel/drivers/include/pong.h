@@ -8,10 +8,10 @@
 
 #define PADDLE_WIDTH 10
 #define PADDLE_HEIGHT 100
-#define PADDLE_SPEED 10
+#define PADDLE_SPEED 15
 
 #define BALL_SIZE 10
-#define BALL_SPEED 7
+#define BALL_SPEED 11
 
 #define SCORE_X (SCREEN_WIDTH / 2 - 10)
 #define SCORE_Y (BORDER_SIZE + 10)

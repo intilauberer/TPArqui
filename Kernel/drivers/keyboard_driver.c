@@ -13,8 +13,6 @@
 
 void keyboard_handler() {
     uint16_t key = getKey();
-    // character(WHITE, ScanCodes[key]);
-    // sleepms(1);
     if (key == NULL)
         return key;
     //_hlt();
@@ -31,12 +29,12 @@ void keyboard_handler() {
             setPos(0);   
             buff[0] = 0;
         }
-        buff[buff_pos] = key;
+    buff[buff_pos] = key;
     
-    // if (key[ScanCodes] == ';'){
-    //     saveState();
-    //     flag_snapshot_taken = 1;
-    // }
+    if (key[ScanCodes] == ';'){
+        saveState();
+        flag_snapshot_taken = 1;
+    }
 
     // if (key == 0x39) { // Espacio
     //     buff[buff_pos] = ' ';
