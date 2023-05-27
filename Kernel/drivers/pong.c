@@ -6,9 +6,73 @@
 #include "drivers/include/keyboard_driver.h"
 #include "time.h"
 
+unsigned int BORDER_SIZE = 10;
+
+unsigned int PADDLE_WIDTH = 10;
+unsigned int PADDLE_HEIGHT = 100;
+unsigned int PADDLE_SPEED = 10;
+
+unsigned int BALL_SIZE = 10;
+unsigned int BALL_SPEED = 10;
+
+uint64_t player1Up;
+uint64_t player1Upbeak;
+uint64_t player1Down;
+uint64_t player1Downbeak;
+uint64_t player2Up;
+uint64_t player2Upbeak;
+uint64_t player2Down;
+uint64_t player2Downbeak;
+
 int player1Score = 0;
 int player2Score = 0;
 int movement_vector[] = {-1,1,0};
+
+setBorderSize(unsigned int size) {
+    BORDER_SIZE = size;
+}
+
+setPaddleWidth(unsigned int width) {
+    PADDLE_WIDTH = width;
+}
+
+setPaddleHeight(unsigned int height) {
+    PADDLE_HEIGHT = height;
+}
+
+setPaddleSpeed(unsigned int speed) {
+    PADDLE_SPEED = speed;
+}
+
+setBallSize(unsigned int size) {
+    BALL_SIZE = size;
+}
+
+setBallSpeed(unsigned int speed) {
+    BALL_SPEED = speed;
+}
+
+void setPlayer1Up(uint64_t key) {
+    player1Up = key;
+    player1Upbeak = key + 0x80;
+}
+
+void setPlayer1Down(uint64_t key) {
+    player1Down = key;
+    player1Downbeak = key + 0x80;
+}
+
+
+void setPlayer2Up(uint64_t key) {
+    player2Up = key;
+    player2Upbeak = key + 0x80;
+}
+
+void setPlayer2Down(uint64_t key) {
+    player2Down = key;
+    player2Downbeak = key + 0x80;
+}
+
 
 void drawRectangle2(uint64_t color, int x, int y, int width, int height) {
     for (int i = 0; i < height; i++) {
@@ -205,7 +269,7 @@ int benchmark(){
 }
 
 void sleepbm(int bm){
-    for (long i = 0; i < 10000*bm;i++);
+    for (long i = 0; i < 10000*bm*bm;i++);
 }
 
 void Pong() {
@@ -335,7 +399,7 @@ void Pong() {
                 drawMiddleLine();
             }
             drawMiddleLine();
-            // sleepms(1);
+            sleepms(1);
             if (experimental)
                 sleepbm(setting);
             else sleepms(1);
