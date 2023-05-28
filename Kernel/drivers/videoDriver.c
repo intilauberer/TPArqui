@@ -236,6 +236,7 @@ void drawNumberColor(int value, uint64_t hexColor){
     drawWordColor(hexColor, buffer);
 }
 
+
 void drawNumber(int value){
     drawNumberColor(value, WHITE);
 }
@@ -356,6 +357,7 @@ void invalidFd(){
     drawWordColor(RED, "Invalid file descriptor");
     return;
 }
+
 
 // #define BUFSIZE 4096
 // char buffer[BUFSIZE] = { 0 };
