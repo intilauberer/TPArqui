@@ -4,14 +4,8 @@
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define SCREEN_WIDTH 800
-#define BORDER_SIZE 10
 
-#define PADDLE_WIDTH 10
-#define PADDLE_HEIGHT 100
-#define PADDLE_SPEED 4
 
-#define BALL_SIZE 10
-#define BALL_SPEED 2
 
 #define SCORE_X (SCREEN_WIDTH / 2 - 10)
 #define SCORE_Y (BORDER_SIZE + 10)
