@@ -205,7 +205,7 @@ int benchmark(){
 }
 
 void sleepbm(int bm){
-    for (long i = 0; i < 10000*bm;i++);
+    for (long i = 0; i < 50000000;i+=bm);
 }
 
 void Pong() {
@@ -242,8 +242,8 @@ void Pong() {
         Training = 1;
     }
     uint16_t c;
-    uint16_t p = 0;
-
+    char p = 0;
+    
     clear(BLACK);
     drawBorders();
     drawMiddleLine();  
@@ -324,7 +324,7 @@ void Pong() {
                 drawWordColorAt(WHITE, "Press X to exit. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-100);
                 drawWordColorAt(WHITE, "Press any other key to play again.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-75);
                 sys_read(&p, 1, 0);
-                if (p == 0x2D){
+                if (p == 'X'){
                     clear();
                     return;
                 }
