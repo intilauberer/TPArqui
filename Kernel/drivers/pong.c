@@ -220,7 +220,8 @@ void pauseModular(uint64_t hexColor){
     drawWordColorAt(hexColor, "PAUSED", SCREEN_WIDTH/2-270, SCREEN_HEIGHT/2-200);
     setFontSize(DEFAULT_FONT_SIZE);
     drawWordColorAt(hexColor, "Press X to exit. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+100);
-    drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+126);
+    drawWordColorAt(hexColor, "Press C to acces configuration. ", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+130);
+    drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2+160);
 }
 
 void pauseGame(){
@@ -269,12 +270,16 @@ void options() {
 
 
 int getNumber(){
-    int pos = getBufferPosition();
     char c;
     int number = 0;
-    while ((c = getCharAt(pos++)) != 'X') {
+    sys_read(&c, 1, 0);
+    int i = 0;
+    while (c != '\n') {
+        sys_read(&c, 1, 0);
         if (c >= '0' && c <= '9') {
             number = number * 10 + (c - '0');
+            characterAt(WHITE, c, SCREEN_WIDTH/2 + i, SCREEN_HEIGHT/2); 
+            i+=16;
         }
     }
     return number;
@@ -283,17 +288,17 @@ int getNumber(){
 void configuration(){
     char c;
     options();
-//    while ((c = sys_read(&c, 1, 0)) != 'X') {
-    while (1) {
+   while (1) {
         options();
-        c = sys_read(&c, 1, 0);
+        sys_read(&c, 1, 0);
         switch (c) {
-            case 0x02: {
+            case '1': {
                 clear(BLACK);
                 drawWordColorAt(WHITE, "Current ball speed: ", 0, SCREEN_HEIGHT/2);
                // drawNumberColor(WHITE, BALL_SPEED, 200, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new ball speed: ", 0, SCREEN_HEIGHT/2+50);
                 int speed = getNumber();
+                drawNumberColor( speed, WHITE);
                 if (speed > 0) {
                     BALL_SPEED = speed;
                 }
@@ -383,21 +388,32 @@ void configuration(){
                 }
                 break;
             }
-            // case 'X': {
-            //     clear(BLACK);
-            //     return;
-            // }
+            case 'X': {
+                clear(BLACK);
+                return;
+            }
             default: {
                 break;
             }
         }
-    }
+   }
 }
 
+// Paddle paddle1;
+// Paddle paddle2;
+// Ball ball;
+
+// setPaddle(Paddle *paddle, int x, int y, int width, int height, int speed) {
+//     paddle->x = x;
+//     paddle->y = y;
+//     paddle->width = width;
+//     paddle->height = height;
+//     paddle->speed = speed;
+
+// }
+
 void Pong() {
-    Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
-    Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
-    Ball ball = {SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED};
+   
     int experimental = 0;
     int setting = 0;
     setFontSize(24);
@@ -426,14 +442,15 @@ void Pong() {
     if( t == 'C'){
         clear(BLACK);
         configuration();
-        Pong();
     }
     if ( t == 'T'){
         Training = 1;
     }
     uint16_t c;
     char p = 0;
-    
+    Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
+    Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
+    Ball ball = {SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED};
     clear(BLACK);
     drawBorders();
     drawMiddleLine();  
@@ -452,7 +469,11 @@ void Pong() {
             if (p == 'X'){
                 clear();
                 return;
-            } 
+            }
+            if (p == 'C'){
+                clear(BLACK);
+                configuration();
+            };
             unpause();
         }
         while (pos <= getBufferPosition()) {

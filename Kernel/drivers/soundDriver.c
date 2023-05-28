@@ -36,6 +36,7 @@ extern void outb(uint16_t out1, uint8_t in1);
  	 nosound();
           //set_PIT_2(old_frequency);
  }
+ 
 
  void bokee()
 {
