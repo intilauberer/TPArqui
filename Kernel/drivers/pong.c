@@ -252,21 +252,21 @@ int benchmark(){
 void sleepbm(int bm){
     for (long i = 0; i < 50000000;i+=bm);
 }
-
-void options(){
-    drawWordColorAt(WHITE, "CONFIGURATION", SCREEN_WIDTH/2-270, SCREEN_HEIGHT/2-200);
-    drawWordColorAt(WHITE, "Press 1 to change the ball speed", 0, SCREEN_HEIGHT/2-100);
-    drawWordColorAt(WHITE, "Press 2 to change the paddle speed", 0, SCREEN_HEIGHT/2-50);
-    drawWordColorAt(WHITE, "Press 3 to change the experimental refresh rate", 0, SCREEN_HEIGHT/2);
-    drawWordColorAt(WHITE, "Press 4 to change the ball size", 0, SCREEN_HEIGHT/2+50);
-    drawWordColorAt(WHITE, "Press 5 to change the paddle size", 0, SCREEN_HEIGHT/2+100);
-    drawWordColorAt(WHITE, "Press 6 to change the paddle height", 0, SCREEN_HEIGHT/2+150);
-    drawWordColorAt(WHITE, "Press 7 to change the paddle width", 0, SCREEN_HEIGHT/2+200);
-    drawWordColorAt(WHITE, "Press 8 to change the ball color", 0, SCREEN_HEIGHT/2+250);
-    drawWordColorAt(WHITE, "Press 9 to change the paddle color", 0, SCREEN_HEIGHT/2+300);
-    drawWordColorAt(WHITE, "Press 0 to change the background color", 0, SCREEN_HEIGHT/2+350);
-    drawWordColorAt(WHITE, "Press X to exit", 0, SCREEN_HEIGHT/2+400);
+void options() {
+    drawWordColorAt(WHITE, "CONFIGURATION", SCREEN_WIDTH/2-270, 0);
+    drawWordColorAt(WHITE, "Press 1 to change the ball speed", 0, 30);
+    drawWordColorAt(WHITE, "Press 2 to change the paddle speed", 0, 60);
+    drawWordColorAt(WHITE, "Press 3 to change the experimental refresh rate", 0, 90);
+    drawWordColorAt(WHITE, "Press 4 to change the ball size", 0, 120);
+    drawWordColorAt(WHITE, "Press 5 to change the paddle size", 0, 150);
+    drawWordColorAt(WHITE, "Press 6 to change the paddle height", 0, 180);
+    drawWordColorAt(WHITE, "Press 7 to change the paddle width", 0, 210);
+    drawWordColorAt(WHITE, "Press 8 to change the ball color", 0, 240);
+    drawWordColorAt(WHITE, "Press 9 to change the paddle color", 0, 270);
+    drawWordColorAt(WHITE, "Press 0 to change the background color", 0, 300);
+    drawWordColorAt(WHITE, "Press X to exit", 0, 330);
 }
+
 
 int getNumber(){
     int pos = getBufferPosition();
@@ -281,13 +281,14 @@ int getNumber(){
 }
 
 void configuration(){
-    int pos = getBufferPosition();
     char c;
     options();
-    while ((c = getCharAt(pos++)) != 'X') {
+//    while ((c = sys_read(&c, 1, 0)) != 'X') {
+    while (1) {
         options();
+        c = sys_read(&c, 1, 0);
         switch (c) {
-            case '1': {
+            case 0x02: {
                 clear(BLACK);
                 drawWordColorAt(WHITE, "Current ball speed: ", 0, SCREEN_HEIGHT/2);
                // drawNumberColor(WHITE, BALL_SPEED, 200, SCREEN_HEIGHT/2);
@@ -380,6 +381,13 @@ void configuration(){
                 if (color >= 1 && color <= 15) {
                     BACKGROUND_COLOR = color;
                 }
+                break;
+            }
+            // case 'X': {
+            //     clear(BLACK);
+            //     return;
+            // }
+            default: {
                 break;
             }
         }
