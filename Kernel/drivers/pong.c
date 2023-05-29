@@ -15,8 +15,8 @@ unsigned int PADDLE_SPEED = 3;
 unsigned int BALL_SIZE = 10;
 unsigned int BALL_SPEED = 2;
 
-unsigned int BALL_COLOR = WHITE;
-unsigned int PADDLE_COLOR = WHITE;
+uint64_t BALL_COLOR = WHITE;
+uint64_t PADDLE_COLOR = WHITE;
 uint64_t BACKGROUND_COLOR = BLACK;
 
 uint64_t player1Up;
@@ -156,6 +156,7 @@ void clearPaddle(Paddle* paddle) {
     drawPaddle(paddle, BACKGROUND_COLOR);
 }
 
+
 void clearBall() {
     drawBall(BACKGROUND_COLOR);
 }
@@ -182,7 +183,7 @@ void movePaddle(Paddle* paddle) {
         }
     }
     
-    drawPaddle(paddle, WHITE);
+    drawPaddle(paddle, paddle->color);
 }
 
 
@@ -266,7 +267,7 @@ void moveBall() {
         }
     }
 
-    drawBall(WHITE);
+    drawBall(ball.color);
 }
 // #include <math.h>
 // void moveBall() {
@@ -335,8 +336,8 @@ void resetGame() {
     paddle1.y = SCREEN_HEIGHT / 2 - paddle1.height / 2;
     paddle2.y = SCREEN_HEIGHT / 2 - paddle2.height / 2;
 
-    drawPaddle(&paddle1, WHITE);
-    drawPaddle(&paddle2, WHITE);
+    drawPaddle(&paddle1, paddle1.color);
+    drawPaddle(&paddle2, paddle2.color);
 }
 
 void drawMiddleLine(){
@@ -423,6 +424,33 @@ int getNumber(){
     return number;
 }
 
+#define NUM_COMMON_COLORS 10
+
+uint64_t COMMON_COLORS[NUM_COMMON_COLORS] = {
+    0xFFFFFF,  // White
+    0x000000,  // Black
+    0xFF0000,  // Red
+    0x00FF00,  // Green
+    0x0000FF,  // Blue
+    0xFFFF00,  // Yellow
+    0xFF00FF,  // Magenta
+    0x00FFFF,  // Cyan
+    0x808080,  // Gray
+    0xFFA500   // Orange
+};
+
+
+void showColorOptions() {
+    drawWordColorAt(WHITE, "Choose a color:", 0, 80);
+
+    for (int i = 0; i < NUM_COMMON_COLORS; i++) {
+        uint64_t color = COMMON_COLORS[i];
+        drawNumberColorAt(WHITE, i+1, 0, 80 + (i * 30));
+        put_square(SCREEN_WIDTH/2 + 40, 80 + (i * 30) - 10, 20, color);
+    }
+}
+
+
 void configuration(){
     char c;
     options();
@@ -431,7 +459,7 @@ void configuration(){
         sys_read(&c, 1, 0);
         switch (c) {
             case '1': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current ball speed: ", 0, SCREEN_HEIGHT/2);
                 drawNumberColorAt(WHITE, ball.speedX, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new ball speed: ", 0, SCREEN_HEIGHT/2+50);
@@ -443,7 +471,7 @@ void configuration(){
                 break;
             }
             case '2': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle speed: ", 0, SCREEN_HEIGHT/2);
                 drawNumberColorAt(WHITE, paddle1.speed, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle speed: ", 0, SCREEN_HEIGHT/2+50);
@@ -459,7 +487,7 @@ void configuration(){
                 break;
             }
             case '4': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current ball size: ", 0, SCREEN_HEIGHT/2);
                 drawNumberColorAt(WHITE, ball.size, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new ball size: ", 0, SCREEN_HEIGHT/2+50);
@@ -473,7 +501,7 @@ void configuration(){
                 
             }
             case '6': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle height: ", 0, SCREEN_HEIGHT/2);
                 drawNumberColorAt(WHITE, paddle1.height, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle height: ", 0, SCREEN_HEIGHT/2+50);
@@ -486,7 +514,7 @@ void configuration(){
                 break;
             }
             case '7': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle width: ", 0, SCREEN_HEIGHT/2);
                 drawNumberColorAt(WHITE, paddle1.width, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle width: ", 0, SCREEN_HEIGHT/2+50);
@@ -498,45 +526,48 @@ void configuration(){
                 break;
             }
             case '8': {
-                clear(BACKGROUND_COLOR);
-                drawWordColorAt(WHITE, "Current ball color: ", 0, SCREEN_HEIGHT/2);
-                drawNumberColorAt(WHITE, BALL_COLOR, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-                drawWordColorAt(WHITE, "Enter the new ball color (1-15): ", 0, SCREEN_HEIGHT/2+50);
+                clearColor(BACKGROUND_COLOR);
+                drawWordColorAt(WHITE, "Current ball color: ", 0, 0);
+                put_square(SCREEN_WIDTH/2, 0, 20, BALL_COLOR);
+                drawWordColorAt(WHITE, "Enter the new ball color (1-10): ", 0, 50);
+                showColorOptions();
                 int color = getNumber(); //cambiar a getColor
-                if (color >= 1 && color <= 15) {
-                    ball.color = color;
+                if (color >= 1 && color <= 10) {
+                    ball.color = COMMON_COLORS[color-1];
                 }
                 break;
             }
             case '9': {
-                clear(BACKGROUND_COLOR);
-                drawWordColorAt(WHITE, "Current paddle color: ", 0, SCREEN_HEIGHT/2);
-                drawNumberColorAt(WHITE, PADDLE_COLOR, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-                drawWordColorAt(WHITE, "Enter the new paddle color (1-15): ", 0, SCREEN_HEIGHT/2+50);
+                clearColor(BACKGROUND_COLOR);
+                drawWordColorAt(WHITE, "Current paddle color: ", 0, 0);
+                put_square(SCREEN_WIDTH/2, 0, 20, PADDLE_COLOR);
+                drawWordColorAt(WHITE, "Enter the new paddle color (1-10): ", 0, 50);
+                showColorOptions();
                 int color = getNumber();
-                if (color >= 1 && color <= 15) {
-                    paddle1.color = color;
-                    paddle2.color = color;
+                if (color >= 1 && color <= 10) {
+                    paddle1.color = COMMON_COLORS[color-1];
+                    paddle2.color = COMMON_COLORS[color-1];
                 }
                 break;
             }
             case '0': {
-                clear(BACKGROUND_COLOR);
-                drawWordColorAt(WHITE, "Current background color: ", 0, SCREEN_HEIGHT/2);
-                drawNumberColorAt(WHITE, BACKGROUND_COLOR, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-                drawWordColorAt(WHITE, "Enter the new background color (1-15): ", 0, SCREEN_HEIGHT/2+50);
+                clearColor(BACKGROUND_COLOR);
+                drawWordColorAt(WHITE, "Current background color: ", 0, 0);
+                put_square(SCREEN_WIDTH/2, 0, 20, BACKGROUND_COLOR);
+                drawWordColorAt(WHITE, "Enter the new background color (1-10): ", 0, 50);
+                showColorOptions();
                 int color = getNumber();
-                if (color >= 1 && color <= 15) {
-                    BACKGROUND_COLOR = color;
+                if (color >= 1 && color <= 10) {
+                    BACKGROUND_COLOR = COMMON_COLORS[color-1];
                 }
                 break;
             }
             case 'X': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 return;
             }
             case 'C': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current up key ", 0, SCREEN_HEIGHT/2);
                 characterAt(WHITE, ScanCodes[player1Up], SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new up key: ", 0, SCREEN_HEIGHT/2+50);
@@ -559,7 +590,7 @@ void configuration(){
                 break;
             }
             case 'K': {
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current down key ", 0, SCREEN_HEIGHT/2);
                 characterAt(WHITE, ScanCodes[player2Up], SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new up key: ", 0, SCREEN_HEIGHT/2+50);
@@ -578,14 +609,14 @@ void configuration(){
                     setPlayer2Down(asciiToKeyCode(c));
                 }
                 characterAt(WHITE, c, SCREEN_WIDTH/2, SCREEN_HEIGHT/2+150);
-                
+
                 break;
             }
             default: {
                 break;
             }
         }
-        clear(BACKGROUND_COLOR);
+        clearColor(BACKGROUND_COLOR);
    }
 }
 
@@ -646,7 +677,7 @@ void Pong() {
     char t;
     sys_read(&t, 1, 0);
     if( t == 'C'){
-        clear(BACKGROUND_COLOR);
+        clearColor(BACKGROUND_COLOR);
         configuration();
     }
     if ( t == 'T'){
@@ -655,11 +686,11 @@ void Pong() {
     uint16_t c;
     char p = 0;
 
-    clear(BACKGROUND_COLOR);
+    clearColor(BACKGROUND_COLOR);
     drawBorders();
     drawMiddleLine();  
-    drawPaddle(&paddle1, WHITE);  
-    drawPaddle(&paddle2, WHITE);
+    drawPaddle(&paddle1, paddle1.color);  
+    drawPaddle(&paddle2, paddle2.color);
     showScoreCard(WHITE);
     int pos = getBufferPosition();
     long k =0;
@@ -675,9 +706,16 @@ void Pong() {
                 return;
             }
             if (p == 'C'){
-                clear(BACKGROUND_COLOR);
+                clearColor(BACKGROUND_COLOR);
                 configuration();
             };
+            clearColor(BACKGROUND_COLOR);
+            drawBorders();
+            drawMiddleLine();
+            drawPaddle(&paddle1, paddle1.color);
+            drawPaddle(&paddle2, paddle2.color);
+            showScoreCard(WHITE);
+
             unpause();
         }
         while (pos <= getBufferPosition()) {
