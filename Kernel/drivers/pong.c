@@ -10,10 +10,10 @@ unsigned int BORDER_SIZE = 10;
 
 unsigned int PADDLE_WIDTH = 10;
 unsigned int PADDLE_HEIGHT = 100;
-unsigned int PADDLE_SPEED = 3;
+unsigned int PADDLE_SPEED = 4;
 
 unsigned int BALL_SIZE = 10;
-unsigned int BALL_SPEED = 2;
+unsigned int BALL_SPEED = 3;
 
 uint64_t BALL_COLOR = WHITE;
 uint64_t PADDLE_COLOR = WHITE;
@@ -249,23 +249,41 @@ void moveBall() {
         ball.speedY = -ball.speedY;
     }
 
-
-    if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
-        (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
-        if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
-            // Ball hits the middle third of paddle1
+    if (ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height){
             ball.speedX *= -1;
-            ball.speedY *= 0;
-        } else if (ball.y < paddle1.y + paddle1.height * (1.0 / 3.0)) {
-            // Ball hits the top third of paddle1
-            ball.speedX *= -1;
-            ball.speedY = -BALL_SPEED;
-        } else {
-            // Ball hits the bottom third of paddle1
-            ball.speedX *= -1;
-            ball.speedY = BALL_SPEED;
+            if (paddle1.direction==UP)
+                ball.speedY = -BALL_SPEED;
+            if (paddle1.direction==DOWN)
+                ball.speedY = BALL_SPEED;
+            if (paddle1.direction==STOP)
+                ball.speedY = 0;
         }
-    }
+    if (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height){
+            ball.speedX *= -1;
+            if (paddle2.direction==UP)
+                ball.speedY = -BALL_SPEED;
+            if (paddle2.direction==DOWN)
+                ball.speedY = BALL_SPEED;
+            if (paddle2.direction==STOP)
+                ball.speedY = 0;
+        }
+
+    // if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
+    //     (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
+    //     if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
+    //         // Ball hits the middle third of paddle1
+    //         ball.speedX *= -1;
+    //         ball.speedY *= 0;
+    //     } else if (ball.y < paddle1.y + paddle1.height * (1.0 / 3.0)) {
+    //         // Ball hits the top third of paddle1
+    //         ball.speedX *= -1;
+    //         ball.speedY = -BALL_SPEED;
+    //     } else {
+    //         // Ball hits the bottom third of paddle1
+    //         ball.speedX *= -1;
+    //         ball.speedY = BALL_SPEED;
+    //     }
+    // }
 
     drawBall(ball.color);
 }
@@ -388,7 +406,7 @@ int benchmark(){
 }
 
 void sleepbm(int bm){
-    for (long i = 0; i < 50000000;i+=bm);
+    for (long i = 0; i < 70000000;i+=bm);
 }
 void options() {
     drawWordColorAt(WHITE, "CONFIGURATION", SCREEN_WIDTH/2-270, 0);
