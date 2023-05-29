@@ -591,7 +591,7 @@ void configuration(){
             }
             case 'K': {
                 clearColor(BACKGROUND_COLOR);
-                drawWordColorAt(WHITE, "Current down key ", 0, SCREEN_HEIGHT/2);
+                drawWordColorAt(WHITE, "Current UP key ", 0, SCREEN_HEIGHT/2);
                 characterAt(WHITE, ScanCodes[player2Up], SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new up key: ", 0, SCREEN_HEIGHT/2+50);
                 char c;
@@ -649,8 +649,8 @@ void Pong() {
     setBall(SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED, WHITE);
     setPlayer1Up(0x11);
     setPlayer1Down(0x1F);
-    setPlayer2Up(0x17);
-    setPlayer2Down(0x25);
+    setPlayer2Up(0x48);
+    setPlayer2Down(0x50);
     int experimental = 0;
     int setting = 0;
     setFontSize(24);
@@ -672,7 +672,7 @@ void Pong() {
     drawWordColorAt(WHITE, "Press C for configuration", 0, SCREEN_HEIGHT/2+130);
     drawWordColorAt(WHITE, "Press any other key to begin 2 player PONG: ",0, SCREEN_HEIGHT/2+160);
     drawWordColorAt(WHITE, "Player 1 goes up with \"W\" and down with \"S\"",0, SCREEN_HEIGHT/2+190);
-    drawWordColorAt(WHITE, "Player 2 goes up with \"I\" and down with \"K\"",0, SCREEN_HEIGHT/2+220);
+    drawWordColorAt(WHITE, "Player 2 goes up with \"^\" and down with \"v\"",0, SCREEN_HEIGHT/2+220);
     int Training = 0;
     char t;
     sys_read(&t, 1, 0);
