@@ -6,13 +6,16 @@
 #include "include/interrupts.h"
 #include "include/exceptions.h"
 #include "registers.h"
+#include "drivers/include/videoDriver.h"
+#include "stdin.h"
+
 static void int_20();
 static void int_21();
-static void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8);
+static int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
-typedef void (*InterruptHandler)(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8);
+typedef void (*InterruptHandler)(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
-void irqDispatcher(uint64_t irq, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8) {
+void irqDispatcher(uint64_t irq, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
 	InterruptHandler interruption[256] = {NULL};
 	interruption[0]=&int_20;
 	interruption[1]=&int_21;
@@ -20,7 +23,7 @@ void irqDispatcher(uint64_t irq, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint6
 
     if (irq >= 0 && irq < 256 && interruption[irq] != NULL) {
         InterruptHandler handler = interruption[irq];
-        handler(rdi, rsi, rdx, rcx, r8);
+        handler(rdi, rsi, rdx, rcx, r8, r9);
 		return;
     }
 }
@@ -33,7 +36,7 @@ void int_21() {
 	keyboard_handler();
 }
 
-void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8) {
+int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
 
     switch (rdi)
 	{
@@ -56,6 +59,26 @@ void int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8)
 	case 6:
 		boke();
 		break;
+	case 7:
+		drawRectangle(rsi, rdx, rcx, r8, r9);
+		break;
+	case 8:
+		drawBall(rsi, rdx, rcx, r8);
+		break;
+	case 9:
+		clearColor(rsi);
+		break;
+	case 10:
+		put_square(rsi, rdx, rcx, r8);
+		break;
+	case 11:
+		 return getBufferPosition();
+		 break;
+	case 12:
+		return getCharAt(rsi);
+		break;
+
+
 	default:
 		return;
 	}

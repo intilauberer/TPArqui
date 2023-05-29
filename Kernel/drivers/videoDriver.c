@@ -362,6 +362,21 @@ void invalidFd(){
     return;
 }
 
+void drawBall(uint64_t color, int size, int x, int y) {
+    int radius = size / 2;
+    int centerX = x + radius;
+    int centerY = y + radius;
+    int squaredRadius = radius * radius;
+
+    for (int y = -radius; y <= radius; y++) {
+        for (int x = -radius; x <= radius; x++) {
+            if ((x * x) + (y * y) <= squaredRadius) {
+                putPixel(color, centerX + x, centerY + y);
+            }
+        }
+    }
+}
+
 
 // #define BUFSIZE 4096
 // char buffer[BUFSIZE] = { 0 };

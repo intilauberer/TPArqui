@@ -2,6 +2,7 @@
 #include "UserSyscalls.h"
 #include "stdint.h"
 #include "utils.h"
+#include "pong.h"
 
 
 void __seek_command__(char * command){
@@ -29,6 +30,7 @@ void __call_command__(int i, char * command){
         call_regState();
         return;
     case PONG:;
+        Pong();    
         return;
     case SETCOLOR:;
         setbg(command);

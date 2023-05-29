@@ -5,6 +5,12 @@ GLOBAL call_regState
 GLOBAL call_paintScreen
 GLOBAL call_boke
 GLOBAL call_invalidOp
+GLOBAL call_drawRectangle
+GLOBAL call_drawBall
+GLOBAL call_clearColor
+GLOBAL call_put_square
+GLOBAL call_getBufferPosition
+GLOBAL call_getCharAt
 section .text
 
 %macro call_to_handler 1
@@ -34,3 +40,15 @@ call_paintScreen:
     call_to_handler 5
 call_boke:
     call_to_handler 6
+call_drawRectangle:
+    call_to_handler 7
+call_drawBall:
+    call_to_handler 8
+call_clearColor:
+    call_to_handler 9
+call_put_square:
+    call_to_handler 10
+call_getBufferPosition:
+    call_to_handler 11
+call_getCharAt:
+    call_to_handler 12

@@ -93,7 +93,7 @@ int main()
 {
 	load_idt();
 	//load_settings();
-	Pong();
+	//Pong();
 	// bokee();
 	//boke();
 	((EntryPoint)sampleCodeModuleAddress)();
