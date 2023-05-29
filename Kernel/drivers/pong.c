@@ -10,14 +10,14 @@ unsigned int BORDER_SIZE = 10;
 
 unsigned int PADDLE_WIDTH = 10;
 unsigned int PADDLE_HEIGHT = 100;
-unsigned int PADDLE_SPEED = 10;
+unsigned int PADDLE_SPEED = 3;
 
 unsigned int BALL_SIZE = 10;
-unsigned int BALL_SPEED = 10;
+unsigned int BALL_SPEED = 2;
 
 unsigned int BALL_COLOR = WHITE;
 unsigned int PADDLE_COLOR = WHITE;
-unsigned int BACKGROUND_COLOR = BLACK;
+uint64_t BACKGROUND_COLOR = BLACK;
 
 uint64_t player1Up;
 uint64_t player1Upbeak;
@@ -28,9 +28,80 @@ uint64_t player2Upbeak;
 uint64_t player2Down;
 uint64_t player2Downbeak;
 
+Paddle paddle1;
+Paddle paddle2;
+Ball ball;
+
 int player1Score = 0;
 int player2Score = 0;
 int movement_vector[] = {-1,1,0};
+
+int asciiToKeyCode(char ascii) {
+    switch (ascii) {
+        case 0x1B: return 0x01;  // Escape
+        case 0x08: return 0x0E;  // Backspace
+        case 0x09: return 0x0F;  // Tab
+        case 0x0D: return 0x1C;  // Enter
+        case 0x00: return 0x1D;  // Left Ctrl
+        case ' ':  return 0x39;  // Space
+        
+        case '1': return 0x02;
+        case '2': return 0x03;
+        case '3': return 0x04;
+        case '4': return 0x05;
+        case '5': return 0x06;
+        case '6': return 0x07;
+        case '7': return 0x08;
+        case '8': return 0x09;
+        case '9': return 0x0A;
+        case '0': return 0x0B;
+        case '-': return 0x0C;
+        case '=': return 0x0D;
+        case '[': return 0x1A;
+        case ']': return 0x1B;
+        case ';': return 0x27;
+        case '\'': return 0x28;
+        case '`': return 0x29;
+        case '\\': return 0x2B;
+        case ',': return 0x33;
+        case '.': return 0x34;
+        case '/': return 0x35;
+        
+        case '^': return 0x48;  // Up arrow
+        case 'v': return 0x50;  // Down arrow
+        case '<': return 0x4B;  // Left arrow
+        case '>': return 0x4D;  // Right arrow
+        
+        case 'A': return 0x1E;
+        case 'B': return 0x30;
+        case 'C': return 0x2E;
+        case 'D': return 0x20;
+        case 'E': return 0x12;
+        case 'F': return 0x21;
+        case 'G': return 0x22;
+        case 'H': return 0x23;
+        case 'I': return 0x17;
+        case 'J': return 0x24;
+        case 'K': return 0x25;
+        case 'L': return 0x26;
+        case 'M': return 0x32;
+        case 'N': return 0x31;
+        case 'O': return 0x18;
+        case 'P': return 0x19;
+        case 'Q': return 0x10;
+        case 'R': return 0x13;
+        case 'S': return 0x1F;
+        case 'T': return 0x14;
+        case 'U': return 0x16;
+        case 'V': return 0x2F;
+        case 'W': return 0x11;
+        case 'X': return 0x2D;
+        case 'Y': return 0x2C;
+        case 'Z': return 0x15;
+        
+        default: return -1;  // Return -1 for unsupported characters
+    }
+}
 
 
 void setPlayer1Up(uint64_t key) {
@@ -67,7 +138,7 @@ void drawPaddle(Paddle* paddle, uint64_t color) {
     drawRectangle2(color, paddle->x, paddle->y, paddle->width, paddle->height);
 }
 
-void drawBall(Ball ball, uint64_t color) {
+void drawBall(uint64_t color) {
     int radius = ball.size / 2;
     int centerX = ball.x + radius;
     int centerY = ball.y + radius;
@@ -82,11 +153,11 @@ void drawBall(Ball ball, uint64_t color) {
     }
 }
 void clearPaddle(Paddle* paddle) {
-    drawPaddle(paddle, BLACK);
+    drawPaddle(paddle, BACKGROUND_COLOR);
 }
 
-void clearBall(Ball ball) {
-    drawBall(ball, BLACK);
+void clearBall() {
+    drawBall(BACKGROUND_COLOR);
 }
 
 void movePaddle(Paddle* paddle) {
@@ -124,83 +195,148 @@ void showScoreCard(uint64_t hexColor){
 }
 void updateScore(int player){
     if (player == 1){
-        characterAt(BLACK, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
+        characterAt(BACKGROUND_COLOR, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
         player1Score++;
         characterAt(WHITE, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
     } else {
-        characterAt(BLACK, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
+        characterAt(BACKGROUND_COLOR, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
         player2Score++;
         characterAt(WHITE, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
     }
 }
 void clearScoreCard(){
-    showScoreCard(BLACK);
+    showScoreCard(BACKGROUND_COLOR);
 }
 
-char checkScored(Ball* ball, Paddle* paddle1, Paddle* paddle2){
-    if (ball->x + ball->size < paddle1->x + paddle1->width){
+char checkScored(){
+    if (ball.x + ball.size < paddle1.x + paddle1.width){
         updateScore(2);
         return 1;
     }
-    if (ball->x - ball->size > paddle2->x){
+    if (ball.x - ball.size > paddle2.x){
         updateScore(1);
         return 1;
     }
     return 0;
 }       
 
-void moveBall(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* score2) {
-    clearBall(*ball);
+void moveBall() {
+    clearBall();
     
-    if (checkScored(ball, paddle1, paddle2)) {
-        clearBall(*ball);
-        resetGame(ball, paddle1, paddle2, score1, score2);
+    if (checkScored()) {
+        clearBall();
+        resetGame();
         return;
     }
     
-    ball->x += ball->speedX;
-    ball->y += ball->speedY;
+    ball.x += ball.speedX;
+    ball.y += ball.speedY;
 
-    if (ball->x <= BORDER_SIZE) {
-        ball->x = BORDER_SIZE;
-        ball->speedX = -ball->speedX;
-    } else if (ball->x + ball->size >= SCREEN_WIDTH - BORDER_SIZE) {
-        ball->x = SCREEN_WIDTH - BORDER_SIZE - ball->size;
-        ball->speedX = -ball->speedX;
+    if (ball.x <= BORDER_SIZE) {
+        ball.x = BORDER_SIZE;
+        ball.speedX = -ball.speedX;
+    } else if (ball.x + ball.size >= SCREEN_WIDTH - BORDER_SIZE) {
+        ball.x = SCREEN_WIDTH - BORDER_SIZE - ball.size;
+        ball.speedX = -ball.speedX;
     }
 
-    if (ball->y <= BORDER_SIZE) {
-        ball->y = BORDER_SIZE;
-        ball->speedY = -ball->speedY;
-    } else if (ball->y + ball->size >= SCREEN_HEIGHT - BORDER_SIZE * 2) {
-        ball->y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball->size;
-        ball->speedY = -ball->speedY;
+    if (ball.y <= BORDER_SIZE) {
+        ball.y = BORDER_SIZE;
+        ball.speedY = -ball.speedY;
+    } else if (ball.y + ball.size >= SCREEN_HEIGHT - BORDER_SIZE * 2) {
+        ball.y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball.size;
+        ball.speedY = -ball.speedY;
     }
 
-    if ((ball->x <= paddle1->x + paddle1->width && ball->x + ball->size >= paddle1->x && ball->y + ball->size >= paddle1->y && ball->y <= paddle1->y + paddle1->height) ||
-        (ball->x + ball->size >= paddle2->x && ball->x <= paddle2->x + paddle2->width && ball->y + ball->size >= paddle2->y && ball->y <= paddle2->y + paddle2->height)) {
-        ball->speedX *= -1;
+
+    if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
+        (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
+        if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
+            // Ball hits the middle third of paddle1
+            ball.speedX *= -1;
+            ball.speedY *= 0;
+        } else if (ball.y < paddle1.y + paddle1.height * (1.0 / 3.0)) {
+            // Ball hits the top third of paddle1
+            ball.speedX *= -1;
+            ball.speedY = -BALL_SPEED;
+        } else {
+            // Ball hits the bottom third of paddle1
+            ball.speedX *= -1;
+            ball.speedY = BALL_SPEED;
+        }
     }
 
-    drawBall(*ball, WHITE);
+    drawBall(WHITE);
 }
+// #include <math.h>
+// void moveBall() {
+//     clearBall();
+
+//     if (checkScored()) {
+//         clearBall();
+//         resetGame();
+//         return;
+//     }
+
+//     ball.x += ball.speedX;
+//     ball.y += ball.speedY;
+
+//     if (ball.x <= BORDER_SIZE) {
+//         ball.x = BORDER_SIZE;
+//         ball.speedX = -ball.speedX;
+//     } else if (ball.x + ball.size >= SCREEN_WIDTH - BORDER_SIZE) {
+//         ball.x = SCREEN_WIDTH - BORDER_SIZE - ball.size;
+//         ball.speedX = -ball.speedX;
+//     }
+
+//     if (ball.y <= BORDER_SIZE) {
+//         ball.y = BORDER_SIZE;
+//         ball.speedY = -ball.speedY;
+//     } else if (ball.y + ball.size >= SCREEN_HEIGHT - BORDER_SIZE * 2) {
+//         ball.y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball.size;
+//         ball.speedY = -ball.speedY;
+//     }
+
+//     if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
+//         (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
+//         if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
+//             // Ball hits the middle third of paddle1
+//             float magnitude = sqrt(ball.speedX * ball.speedX + ball.speedY * ball.speedY);
+//             float direction = atan2(ball.speedY, ball.speedX);
+//             ball.speedX = -magnitude * cos(direction);
+//             ball.speedY = magnitude * sin(direction);
+//         } else if (ball.y < paddle1.y + paddle1.height * (1.0 / 3.0)) {
+//             // Ball hits the top third of paddle1
+//             ball.speedX = -ball.speedX;
+//             ball.speedY = -BALL_SPEED;
+//         } else {
+//             // Ball hits the bottom third of paddle1
+//             ball.speedX = -ball.speedX;
+//             ball.speedY = BALL_SPEED;
+//         }
+//     }
+
+//     drawBall(WHITE);
+// }
 
 
 
-void resetGame(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* score2) {
-    clearPaddle(paddle1);
-    clearPaddle(paddle2);
 
-    ball->x = SCREEN_WIDTH / 2 - ball->size / 2; 
-    ball->y = SCREEN_HEIGHT / 2 - ball->size / 2;
+void resetGame() {
+    clearPaddle(&paddle1);
+    clearPaddle(&paddle2);
 
-    ball->speedX *= -1;
+    ball.x = SCREEN_WIDTH / 2 - ball.size / 2; 
+    ball.y = SCREEN_HEIGHT / 2 - ball.size / 2;
 
-    paddle1->y = SCREEN_HEIGHT / 2 - paddle1->height / 2;
-    paddle2->y = SCREEN_HEIGHT / 2 - paddle2->height / 2;
+    ball.speedX *= -1;
+    ball.speedY = 0;
 
-    drawPaddle(paddle1, WHITE);
-    drawPaddle(paddle2, WHITE);
+    paddle1.y = SCREEN_HEIGHT / 2 - paddle1.height / 2;
+    paddle2.y = SCREEN_HEIGHT / 2 - paddle2.height / 2;
+
+    drawPaddle(&paddle1, WHITE);
+    drawPaddle(&paddle2, WHITE);
 }
 
 void drawMiddleLine(){
@@ -228,13 +364,13 @@ void pauseGame(){
     pauseModular(WHITE);
 }
 void unpause(){
-    pauseModular(BLACK);
+    pauseModular(BACKGROUND_COLOR);
 }
 
-void training(Ball* ball, Paddle* paddle2) {
-    if (ball->y + ball->size < paddle2->y + paddle2->height / 2) {
+void training(Paddle* paddle2) {
+    if (ball.y + ball.size < paddle2->y + paddle2->height / 2) {
         paddle2->direction = UP;
-    } else if (ball->y > paddle2->y + paddle2->height / 2) {
+    } else if (ball.y > paddle2->y + paddle2->height / 2) {
         paddle2->direction = DOWN;
     } else {
         paddle2->direction = STOP;
@@ -265,7 +401,9 @@ void options() {
     drawWordColorAt(WHITE, "Press 8 to change the ball color", 0, 240);
     drawWordColorAt(WHITE, "Press 9 to change the paddle color", 0, 270);
     drawWordColorAt(WHITE, "Press 0 to change the background color", 0, 300);
-    drawWordColorAt(WHITE, "Press X to exit", 0, 330);
+    drawWordColorAt(WHITE, "Press C to change the keybinds of P1", 0, 330);
+    drawWordColorAt(WHITE, "Press K to change the keybinds of P2", 0, 360);
+    drawWordColorAt(WHITE, "Press X to exit", 0, 390);
 }
 
 
@@ -278,7 +416,7 @@ int getNumber(){
         sys_read(&c, 1, 0);
         if (c >= '0' && c <= '9') {
             number = number * 10 + (c - '0');
-            characterAt(WHITE, c, SCREEN_WIDTH/2 + i, SCREEN_HEIGHT/2); 
+            characterAt(WHITE, c, SCREEN_WIDTH/2 + i, SCREEN_HEIGHT/2+50); 
             i+=16;
         }
     }
@@ -293,25 +431,26 @@ void configuration(){
         sys_read(&c, 1, 0);
         switch (c) {
             case '1': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current ball speed: ", 0, SCREEN_HEIGHT/2);
-               // drawNumberColor(WHITE, BALL_SPEED, 200, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, ball.speedX, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new ball speed: ", 0, SCREEN_HEIGHT/2+50);
                 int speed = getNumber();
                 drawNumberColor( speed, WHITE);
                 if (speed > 0) {
-                    BALL_SPEED = speed;
+                    ball.speedX = speed;
                 }
                 break;
             }
             case '2': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle speed: ", 0, SCREEN_HEIGHT/2);
-                //drawNumberColor(WHITE, PADDLE_SPEED, 200, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, paddle1.speed, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle speed: ", 0, SCREEN_HEIGHT/2+50);
                 int speed = getNumber();
                 if (speed > 0) {
-                    PADDLE_SPEED = speed;
+                    paddle1.speed = speed;
+                    paddle2.speed = speed;
                 }
                 break;
             }
@@ -320,13 +459,13 @@ void configuration(){
                 break;
             }
             case '4': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current ball size: ", 0, SCREEN_HEIGHT/2);
-               // drawNumberColor(WHITE, BALL_SIZE, 150, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, ball.size, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new ball size: ", 0, SCREEN_HEIGHT/2+50);
                 int size = getNumber();
                 if (size > 0) {
-                    BALL_SIZE = size;
+                    ball.size=size;
                 }
                 break;
             }
@@ -334,53 +473,57 @@ void configuration(){
                 
             }
             case '6': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle height: ", 0, SCREEN_HEIGHT/2);
-               // drawNumberColor(WHITE, PADDLE_HEIGHT, 220, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, paddle1.height, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle height: ", 0, SCREEN_HEIGHT/2+50);
                 int height = getNumber();
                 if (height > 0) {
-                    PADDLE_HEIGHT = height;
+                    paddle1.height = height;
+                    paddle2.height = height;
+
                 }
                 break;
             }
             case '7': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle width: ", 0, SCREEN_HEIGHT/2);
-               // drawNumberColor(WHITE, PADDLE_WIDTH, 220, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, paddle1.width, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle width: ", 0, SCREEN_HEIGHT/2+50);
                 int width = getNumber();
                 if (width > 0) {
-                    PADDLE_WIDTH = width;
+                    paddle1.width = width;
+                    paddle2.width = width;
                 }
                 break;
             }
             case '8': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current ball color: ", 0, SCREEN_HEIGHT/2);
-                //drawNumberColor(WHITE, BALL_COLOR, 180, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, BALL_COLOR, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new ball color (1-15): ", 0, SCREEN_HEIGHT/2+50);
                 int color = getNumber(); //cambiar a getColor
                 if (color >= 1 && color <= 15) {
-                    BALL_COLOR = color;
+                    ball.color = color;
                 }
                 break;
             }
             case '9': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current paddle color: ", 0, SCREEN_HEIGHT/2);
-                //drawNumberColor(WHITE, PADDLE_COLOR, 200, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, PADDLE_COLOR, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new paddle color (1-15): ", 0, SCREEN_HEIGHT/2+50);
                 int color = getNumber();
                 if (color >= 1 && color <= 15) {
-                    PADDLE_COLOR = color;
+                    paddle1.color = color;
+                    paddle2.color = color;
                 }
                 break;
             }
             case '0': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 drawWordColorAt(WHITE, "Current background color: ", 0, SCREEN_HEIGHT/2);
-                //drawNumberColor(WHITE, BACKGROUND_COLOR, 220, SCREEN_HEIGHT/2);
+                drawNumberColorAt(WHITE, BACKGROUND_COLOR, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                 drawWordColorAt(WHITE, "Enter the new background color (1-15): ", 0, SCREEN_HEIGHT/2+50);
                 int color = getNumber();
                 if (color >= 1 && color <= 15) {
@@ -389,31 +532,94 @@ void configuration(){
                 break;
             }
             case 'X': {
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 return;
+            }
+            case 'C': {
+                clear(BACKGROUND_COLOR);
+                drawWordColorAt(WHITE, "Current up key ", 0, SCREEN_HEIGHT/2);
+                characterAt(WHITE, ScanCodes[player1Up], SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+                drawWordColorAt(WHITE, "Enter the new up key: ", 0, SCREEN_HEIGHT/2+50);
+                char c;
+                sys_read(&c, 1, 0);
+                if (c != 0) {
+                    setPlayer1Up(asciiToKeyCode(c));
+                }
+                characterAt(WHITE, c, SCREEN_WIDTH/2, SCREEN_HEIGHT/2+50);
+
+                drawWordColorAt(WHITE, "Current down key ", 0, SCREEN_HEIGHT/2+100);
+                characterAt(WHITE, ScanCodes[player1Down], SCREEN_WIDTH/2, SCREEN_HEIGHT/2+100);
+                drawWordColorAt(WHITE, "Enter the new down key: ", 0, SCREEN_HEIGHT/2+150);
+                sys_read(&c, 1, 0);
+                if (c != 0) {
+                    setPlayer1Down(asciiToKeyCode(c));
+                }
+                characterAt(WHITE, c, SCREEN_WIDTH/2, SCREEN_HEIGHT/2+150);
+
+                break;
+            }
+            case 'K': {
+                clear(BACKGROUND_COLOR);
+                drawWordColorAt(WHITE, "Current down key ", 0, SCREEN_HEIGHT/2);
+                characterAt(WHITE, ScanCodes[player2Up], SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+                drawWordColorAt(WHITE, "Enter the new up key: ", 0, SCREEN_HEIGHT/2+50);
+                char c;
+                sys_read(&c, 1, 0);
+                if (c != 0) {
+                    setPlayer2Up(asciiToKeyCode(c));
+                }
+                characterAt(WHITE, c, SCREEN_WIDTH/2, SCREEN_HEIGHT/2+50);
+
+                drawWordColorAt(WHITE, "Current down key ", 0, SCREEN_HEIGHT/2+100);
+                characterAt(WHITE, ScanCodes[player2Down], SCREEN_WIDTH/2, SCREEN_HEIGHT/2+100);
+                drawWordColorAt(WHITE, "Enter the new down key: ", 0, SCREEN_HEIGHT/2+150);
+                sys_read(&c, 1, 0);
+                if (c != 0) {
+                    setPlayer2Down(asciiToKeyCode(c));
+                }
+                characterAt(WHITE, c, SCREEN_WIDTH/2, SCREEN_HEIGHT/2+150);
+                
+                break;
             }
             default: {
                 break;
             }
         }
+        clear(BACKGROUND_COLOR);
    }
 }
 
-// Paddle paddle1;
-// Paddle paddle2;
-// Ball ball;
 
-// setPaddle(Paddle *paddle, int x, int y, int width, int height, int speed) {
-//     paddle->x = x;
-//     paddle->y = y;
-//     paddle->width = width;
-//     paddle->height = height;
-//     paddle->speed = speed;
 
-// }
+setPaddle(Paddle *paddle, int x, int y, int width, int height, int speed, char directon, uint64_t color) {
+    paddle->x = x;
+    paddle->y = y;
+    paddle->width = width;
+    paddle->height = height;
+    paddle->speed = speed;
+    paddle->direction = directon;
+    paddle->color = color;
+
+}
+
+setBall(int x, int y, int size, int speedX, int speedY, uint64_t color) {
+    ball.x = x;
+    ball.y = y;
+    ball.size = size;
+    ball.speedX = speedX;
+    ball.speedY = speedY;
+    ball.color = color;
+}
+
 
 void Pong() {
-   
+    setPaddle( &paddle1, 50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP, WHITE);
+    setPaddle( &paddle2, SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP, WHITE);
+    setBall(SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED, WHITE);
+    setPlayer1Up(0x11);
+    setPlayer1Down(0x1F);
+    setPlayer2Up(0x17);
+    setPlayer2Down(0x25);
     int experimental = 0;
     int setting = 0;
     setFontSize(24);
@@ -423,16 +629,16 @@ void Pong() {
     drawWordColorAt(WHITE, "Press any other key for default refresh rate", 0, SCREEN_HEIGHT/2+130);
     char e;
     sys_read(&e, 1, 0);
-    drawWordColorAt(BLACK, "Press E to enable experimental refresh rate", 0, SCREEN_HEIGHT/2+100);
-    drawWordColorAt(BLACK, "Press any other key for default refresh rate", 0, SCREEN_HEIGHT/2+130);
+    drawWordColorAt(BACKGROUND_COLOR, "Press E to enable experimental refresh rate", 0, SCREEN_HEIGHT/2+100);
+    drawWordColorAt(BACKGROUND_COLOR, "Press any other key for default refresh rate", 0, SCREEN_HEIGHT/2+130);
     if ( e == 'E'){
         drawWordColorAt(WHITE, "Wait until benchmark is complete...", 0, SCREEN_HEIGHT/2+100);
         experimental = 1;
         setting = benchmark();
-        drawWordColorAt(BLACK, "Wait until benchmark is complete...", 0, SCREEN_HEIGHT/2+100);
+        drawWordColorAt(BACKGROUND_COLOR, "Wait until benchmark is complete...", 0, SCREEN_HEIGHT/2+100);
     }
     drawWordColorAt(WHITE, "Press T for training", 0, SCREEN_HEIGHT/2+100);
-     drawWordColorAt(WHITE, "Press C for configuration", 0, SCREEN_HEIGHT/2+130);
+    drawWordColorAt(WHITE, "Press C for configuration", 0, SCREEN_HEIGHT/2+130);
     drawWordColorAt(WHITE, "Press any other key to begin 2 player PONG: ",0, SCREEN_HEIGHT/2+160);
     drawWordColorAt(WHITE, "Player 1 goes up with \"W\" and down with \"S\"",0, SCREEN_HEIGHT/2+190);
     drawWordColorAt(WHITE, "Player 2 goes up with \"I\" and down with \"K\"",0, SCREEN_HEIGHT/2+220);
@@ -440,7 +646,7 @@ void Pong() {
     char t;
     sys_read(&t, 1, 0);
     if( t == 'C'){
-        clear(BLACK);
+        clear(BACKGROUND_COLOR);
         configuration();
     }
     if ( t == 'T'){
@@ -448,10 +654,8 @@ void Pong() {
     }
     uint16_t c;
     char p = 0;
-    Paddle paddle1 = {50, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
-    Paddle paddle2 = {SCREEN_WIDTH - 50 - PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, STOP};
-    Ball ball = {SCREEN_WIDTH / 2 - BALL_SIZE / 2, SCREEN_HEIGHT / 2 - BALL_SIZE / 2, BALL_SIZE, BALL_SPEED, BALL_SPEED};
-    clear(BLACK);
+
+    clear(BACKGROUND_COLOR);
     drawBorders();
     drawMiddleLine();  
     drawPaddle(&paddle1, WHITE);  
@@ -471,58 +675,56 @@ void Pong() {
                 return;
             }
             if (p == 'C'){
-                clear(BLACK);
+                clear(BACKGROUND_COLOR);
                 configuration();
             };
             unpause();
         }
         while (pos <= getBufferPosition()) {
             c = getCharAt(pos++-1);
-            if (c == 0x14) {
-            Training = 1;
-            }
-            if (c == 0x11){
+            if (c == player1Up) {
                 paddle1.direction = UP;
             }
-            else if (c == 0x91){
+            else if (c == player1Upbeak){
                 if (paddle1.direction == UP)
                     paddle1.direction = STOP; 
             }  
 
-            else if (c == 0x1F) 
+            else if (c == player1Down){ 
                 paddle1.direction = DOWN;
+            }
 
-            else if (c == 0x9F){
+            else if (c == player1Downbeak){ 
                 if (paddle1.direction == DOWN)
                     paddle1.direction = STOP;
             }
             if (!Training){
-                 if (c == 0x17){
+                 if (c == player2Up){
                     paddle2.direction = UP;
                 }
-                else if (c == 0x97){
+                else if (c == player2Upbeak){
                     if (paddle2.direction == UP)
                         paddle2.direction = STOP; 
                 }   
 
-                else if (c == 0x25)
+                else if (c == player2Down)
                     paddle2.direction = DOWN;
 
-                else if (c == 0xA5){
+                else if (c == player2Downbeak){
                     if (paddle2.direction == DOWN)
                         paddle2.direction = STOP;
                 }
             }
             }
             if (Training){
-                training(&ball, &paddle2);
+                training(&paddle2);
             }
             movePaddle(&paddle1);
             movePaddle(&paddle2);
-            moveBall(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
+            moveBall();
 
             if (player1Score >= 3 || player2Score >= 3) {
-                clearColor(BLACK);
+                clearColor(BACKGROUND_COLOR);
                 setFontSize(18);
                 setFontSize(DEFAULT_FONT_SIZE);
                 drawWordColorAt(WHITE, "GAME OVER", SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-170);
@@ -542,11 +744,10 @@ void Pong() {
                 clear();
                 player1Score = 0;
                 player2Score = 0;
-                resetGame(&ball, &paddle1, &paddle2, &player1Score, &player2Score);
+                resetGame();
                 drawMiddleLine();
             }
             drawMiddleLine();
-            sleepms(1);
             if (experimental)
                 sleepbm(setting);
             else sleepms(1);

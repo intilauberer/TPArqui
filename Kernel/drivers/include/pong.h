@@ -31,6 +31,7 @@ typedef struct {
     int height;
     int speed;
     char direction;
+    uint64_t color;
 } Paddle;
 
 typedef struct {
@@ -39,13 +40,14 @@ typedef struct {
     int size;
     int speedX;
     int speedY;
+    uint64_t color;
 } Ball;
 
 void drawPaddle(Paddle* paddle, uint64_t color);
 void clearPaddle(Paddle* paddle);
 void movePaddleUp(Paddle* paddle);
 void movePaddleDown(Paddle* paddle);
-void moveBall(Ball* ball, Paddle* paddle1, Paddle* paddle2, int* score1, int* score2);
+void moveBall();
 void drawBorders();
 void Pong();
 void drawMiddleLine();

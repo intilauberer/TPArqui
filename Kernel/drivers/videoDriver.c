@@ -253,7 +253,11 @@ void drawRegisters(int value){
      newline();
 }
 
-
+drawNumberColorAt(uint64_t hexColor, int value,  uint32_t x, uint32_t y){
+    char buffer[256] = {0};
+    uintToBase(value, buffer, 10);
+    drawWordColorAt(hexColor, buffer, x, y);
+}
 
 void character(uint64_t hexColor, char c){
         if (c == '\b') { // backspace

@@ -56,3 +56,4 @@ void drawNumberColor(int value, uint64_t hexColor);
 void drawNumber(int value);
 
 void drawRegisters(int value);
+drawNumberColorAt(uint64_t hexColor, int value,  uint32_t x, uint32_t y);
