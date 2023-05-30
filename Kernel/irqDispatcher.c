@@ -8,6 +8,9 @@
 #include "registers.h"
 #include "drivers/include/videoDriver.h"
 #include "stdin.h"
+#include "include/lib.h"
+#include "time.h"
+
 
 static void int_20();
 static void int_21();
@@ -77,7 +80,12 @@ int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 	case 12:
 		return getCharAt(rsi);
 		break;
-
+	case 13:
+		sleepms(rsi);
+		break;
+	case 14:
+		return ticks_elapsed();
+		break;
 
 	default:
 		return;

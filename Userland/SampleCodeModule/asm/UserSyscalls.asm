@@ -11,6 +11,8 @@ GLOBAL call_clearColor
 GLOBAL call_put_square
 GLOBAL call_getBufferPosition
 GLOBAL call_getCharAt
+GLOBAL call_sleepms
+GLOBAL call_ticks_elapsed
 section .text
 
 %macro call_to_handler 1
@@ -52,3 +54,7 @@ call_getBufferPosition:
     call_to_handler 11
 call_getCharAt:
     call_to_handler 12
+call_sleepms:
+    call_to_handler 13
+call_ticks_elapsed:
+    call_to_handler 14

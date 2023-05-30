@@ -18,4 +18,6 @@ void call_drawBall( uint64_t color, uint64_t x, uint64_t y, uint64_t size);
 int call_getBufferPosition();
 int call_getCharAt(int pos);
 void call_put_square(uint32_t x, uint32_t y, uint32_t size, uint64_t hexColor);
+void call_sleepms(int mseconds);
+int call_ticks_elapsed();
 #endif /* USERSYSCALLS_H */
