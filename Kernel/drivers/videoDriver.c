@@ -80,19 +80,27 @@ uint64_t getPixelHex(uint32_t x, uint32_t y) {
     return FROM_RGB(r,g,b);
 }
 
-void drawRectangle(uint64_t hexColor, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
-    for (uint32_t i = 0; i < height; i++) {
-        for (uint32_t j = 0; j < width; j++) {
-            putPixel(hexColor, x + j, y + i);
+// void drawRectangle(uint64_t color, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+//     for (int i = 0; i < height; i++) {
+//         for (int j = 0; j < width; j++) {
+//             putPixel(color, x + j, y + i);
+//         }
+//     }
+//     return;
+// }
+void drawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            putPixel(RED, x + j, y + i);
         }
     }
+    return;
 }
-
 void drawCircle(uint64_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
-void drawSquare(uint64_t hexColor, uint32_t side_length, uint32_t x, uint32_t y){
-	drawRectangle(hexColor, side_length, side_length, x, y);
-}
+// void drawSquare(uint64_t hexColor, uint32_t side_length, uint32_t x, uint32_t y){
+// 	drawRectangle(hexColor, side_length, side_length, x, y);
+// }
 
 void fillSection(uint64_t hexColor, int startY, int endY) {
     for (int y = startY; y < endY; y++) {
@@ -210,7 +218,7 @@ void backspace(){
         }
 		int height = getMaxHeight();
         // uint64_t hex_backspace = bg_color;
-		drawRectangle(bg_color, cursorX, cursorY, size*8, size*16);
+		//drawRectangle(bg_color, cursorX, cursorY, size*8, size*16);
 }
 
 void newline(){
@@ -276,7 +284,7 @@ void character(uint64_t hexColor, char c){
             cursorX += size*8;
             return;
         }
-        // Carácter
+        //Carácter
         if (cursorX >= getMaxWidth()) {
             cursorX = 0;
             cursorY += size*16;
@@ -377,35 +385,3 @@ void drawBall(uint64_t color, int size, int x, int y) {
     }
 }
 
-
-// #define BUFSIZE 4096
-// char buffer[BUFSIZE] = { 0 };
-// int bufIndex = 0;
-
-
-// int * getBufIndex(){
-//     return &bufIndex;
-// }
-
-// char * getBuffer(){
-//     return buffer;
-// }
-
-// char getchar(){
-//     char c = getKey();
-//     if (c != 0) {
-//         character(c);
-//     }
-//     return c;
-// }
-
-// void getCommand(char * buf, int len){
-//     int i = 0;
-//     char c = 0;
-//     while ((c = getchar()) && c != '\n' && i < len) {
-//         buf[i] = c;
-//         i++;
-//     }
-//     buf[i] = 0;
-//     return;
-// }

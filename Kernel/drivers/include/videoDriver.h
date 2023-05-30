@@ -21,8 +21,8 @@ void putPixel(uint64_t hexColor, uint32_t x, uint32_t y);
 void paintScreen(uint64_t hexColor);
 void fillSection(uint64_t hexColor, int startY, int endY);
 void boke();
-void drawRectangle(uint64_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y);
-
+// void drawRectangle(uint64_t hexColor, uint32_t b, uint32_t h, uint32_t x, uint32_t y);
+void drawRectangle( uint32_t b, uint32_t h, uint32_t x, uint32_t y);
 
 void drawCircle(uint64_t hexColor, uint32_t b, uint32_t radius, uint32_t x, uint32_t y);
 
