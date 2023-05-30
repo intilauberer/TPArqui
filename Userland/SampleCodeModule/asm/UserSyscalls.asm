@@ -13,6 +13,10 @@ GLOBAL call_getBufferPosition
 GLOBAL call_getCharAt
 GLOBAL call_sleepms
 GLOBAL call_ticks_elapsed
+GLOBAL call_setFontSize
+GLOBAL call_drawWordColorAt
+GLOBAL call_characterAt
+GLOBAL call_beep
 section .text
 
 %macro call_to_handler 1
@@ -58,3 +62,11 @@ call_sleepms:
     call_to_handler 13
 call_ticks_elapsed:
     call_to_handler 14
+call_setFontSize:
+    call_to_handler 15
+call_drawWordColorAt:
+    call_to_handler 16
+call_characterAt:
+    call_to_handler 17
+call_beep:
+    call_to_handler 18
