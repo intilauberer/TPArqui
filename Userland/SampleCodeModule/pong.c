@@ -807,8 +807,8 @@ void Pong(){
          call_drawBall(ball.color, ball.x, 0, ball.size);
          call_put_square(200, 200, 200, GREEN);
        
-         call_drawRectangle( 0, 100, 400, 4);
+         call_drawRectangle(WHITE, 0, 100, 400, 4);
            call_put_square(200, 200, 200, RED);
-         call_drawRectangle( 300, 300, 500, 30);
+         call_drawRectangle(RED, 300, 300, 500, 30);
     
 }

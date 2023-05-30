@@ -60,7 +60,7 @@ int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 		boke();
 		break;
 	case 7:
-		drawRectangle(rsi, rdx, rcx, r8);
+		drawRectangle(rsi, rdx, rcx, r8, r9);
 		break;
 	case 8:
 		drawBall(rsi, rdx, rcx, r8);
