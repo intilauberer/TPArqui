@@ -18,17 +18,15 @@ void exceptionDispatcher(int exception, registerStructT * registers) {
 }
 
 static void zero_division() {
-	saveState();
+	// saveState();
 	flag_snapshot_taken = 1;
 	drawWordColor(RED, "FATAL ERROR:No se puede dividir por 0");
 	newline();
-	// destroy_stack();
 }
 
 static void invalid_opcode() {
-	saveState();
+	// saveState();
 	flag_snapshot_taken = 1;
 	drawWordColor(RED, "FATAL ERROR:Invalid opcode");
 	newline();
-	// destroy_stack();
 }
