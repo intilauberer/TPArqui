@@ -14,7 +14,7 @@ int getBufferPosition();
 int setPos(int new_len);
 int getBufferLen();
 int setLen(int new_len);
-char * getBufferAddress();
+uint16_t * getBufferAddress();
 uint16_t getCharAt(int pos);
 void cleanBuffer();
 void consumeBuffAt(int pos);

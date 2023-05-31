@@ -1,6 +1,6 @@
 #include <time.h>
 #include <stdint.h>
-#include "syscall.h"
+#include "syscalls.h"
 #include "include/defs.h"
 #include "naiveConsole.h"
 #include "include/interrupts.h"
@@ -11,6 +11,7 @@
 #include "include/lib.h"
 #include "time.h"
 #include "drivers/include/soundDriver.h"
+#include "drivers/include/keyboard_driver.h"
 
 
 static void int_20();

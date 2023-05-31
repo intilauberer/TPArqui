@@ -1,16 +1,17 @@
 
 #include <naiveConsole.h>
-#include "syscall.h"
+#include "include/syscalls.h"
 #include "drivers/include/videoDriver.h"
 #include "include/defs.h"
 #include "drivers/include/keyboard_driver.h"
 #include "keyboard_buffer.h"
+#include "include/interrupts.h"
 
 extern int getKey();
 
 
 
-void sys_write(const char *buf, int len, int filedescriptor){
+void sys_write(char *buf, int len, int filedescriptor){
 
     switch (filedescriptor){
         case STDOUT: drawWordLen(buf, len);

@@ -114,7 +114,7 @@ getKey:
   ;in al, 0x60
   ;movzx eax, al     ; mueve el byte de al a eax y extiende con ceros los 32 bits superiores
   ;jmp _good
-_;skip:
+  ;skip:
   ;xor eax,eax
 _good:  
   mov rsp, rbp 

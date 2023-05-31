@@ -5,8 +5,8 @@
 #define STDOUT 1
 #define STDERR 2
 
-void sys_write(const char *buf, int len, int filedescriptor);
-void sys_read( char *buf, int len, int filedescriptor);
+void sys_write(char *buf, int len, int filedescriptor);
+void sys_read(char *buf, int len, int filedescriptor);
 
 
 #endif

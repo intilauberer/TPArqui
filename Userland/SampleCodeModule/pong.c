@@ -158,7 +158,7 @@ void movePaddle(Paddle* paddle) {
     int move;
     
     if (paddle->direction == UP) {
-        move = paddle->y - movement_vector[paddle->direction] * paddle->speed;
+        move = paddle->y - movement_vector[(int)paddle->direction] * paddle->speed;
         if (move >= BORDER_SIZE) {
             paddle->y = move;
         } else {

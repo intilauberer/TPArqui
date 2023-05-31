@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#define SCREEN_WIDTH 1024
+//#define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define SCREEN_WIDTH 800
 
@@ -42,6 +42,7 @@ typedef struct {
     uint64_t color;
 } Ball;
 
+void setPaddle(Paddle *paddle, int x, int y, int width, int height, int speed, char directon, uint64_t color);
 void drawPaddle(Paddle* paddle, uint64_t color);
 void clearPaddle(Paddle* paddle);
 void movePaddleUp(Paddle* paddle);
@@ -50,6 +51,7 @@ void moveBall();
 void drawBorders();
 void Pong();
 void drawMiddleLine();
+void resetGame();
 
 static char ScanCodes[256] = {
     0,   // 0x00 - Null

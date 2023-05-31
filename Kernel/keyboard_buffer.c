@@ -12,7 +12,7 @@ int setPos(int new_pos){
     return new_pos;
 }
 
-char * getBufferAddress(){
+uint16_t * getBufferAddress(){
     return ptr->buff;
 }
 
@@ -26,7 +26,7 @@ void consumeBuffAt(int pos){
 }
 
 void cleanBuffer(){
-    char * buffer = ptr->buff;
+    uint16_t * buffer = ptr->buff;
     for (int i = 0; i < BUFF_SIZE; i++){
         buffer[i] = '\0';
     }
