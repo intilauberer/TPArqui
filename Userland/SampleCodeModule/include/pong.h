@@ -47,6 +47,7 @@ void drawPaddle(Paddle* paddle, uint64_t color);
 void clearPaddle(Paddle* paddle);
 void movePaddleUp(Paddle* paddle);
 void movePaddleDown(Paddle* paddle);
+void setBall(int x, int y, int size, int speedX, int speedY, uint64_t color);
 void moveBall();
 void drawBorders();
 void Pong();

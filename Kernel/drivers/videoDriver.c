@@ -162,7 +162,7 @@ uint32_t* getCursorY() {
 }
 
 uint32_t* getSize() {
-    return size;
+    return &size;
 }
 
 unsigned int getMaxHeight() {
@@ -209,7 +209,6 @@ void backspace(){
             cursorX = getMaxWidth() - size*8; // Establece el cursorX al último carácter de la línea anterior
             
         }
-		int height = getMaxHeight();
         // uint64_t hex_backspace = bg_color;
 		drawRectangle(bg_color, cursorX, cursorY, size*8, size*16);
 }
