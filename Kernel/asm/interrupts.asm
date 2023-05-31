@@ -25,6 +25,7 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN sampleCodeModuleAddress
 EXTERN clear
+EXTERN getStackBase
 
 SECTION .text
 
@@ -137,9 +138,13 @@ saveState:
 	call exceptionDispatcher
 	popState
 	call clear
+	call getStackBase
+	mov [rsp+8*3], rax
 	call retUserland
 	mov [rsp], rax
-	mov [rbp], rax
+	;call retUserland
+;	mov [rsp], rax
+;	mov [rbp], rax
 	;mov rax, [rsp]
 	;add rax, 4
 	;mov [rsp], rax
