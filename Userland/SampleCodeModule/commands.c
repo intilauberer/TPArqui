@@ -7,8 +7,8 @@
 
 void __seek_command__(char * command){
     
-    int i = 0;
-    for (i; i < COMMAND_LEN; i++){
+
+    for (int i = 0; i < COMMAND_LEN; i++){
         if (strcmpspace(command_list[i],command) == 0){
                 __call_command__(i, command);
                 return;
@@ -92,8 +92,8 @@ void setbgEnum(int i){
 
 void findColor(char * color){
     
-    int i = 0;
-    for (i; i < COMMAND_LEN; i++){
+   
+    for (int i = 0; i < COMMAND_LEN; i++){
         if (strcmp(hexArr[i],color) == 0){
                 setbgEnum(i);
                 return;

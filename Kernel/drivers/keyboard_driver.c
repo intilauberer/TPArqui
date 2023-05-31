@@ -11,7 +11,7 @@
 void keyboard_handler() {
     uint16_t key = getKey();
     if (key == NULL)
-        return key;
+        return;
     uint16_t * buff = getBufferAddress();
     int buff_pos = getBufferPosition();
     

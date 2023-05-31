@@ -6,7 +6,6 @@
 #include <idtLoader.h>
 #include "drivers/include/videoDriver.h"
 #include "include/interrupts.h"
-#include "drivers/include/pong.h"
 #include "include/libasm.h"
 
 extern uint8_t text;
