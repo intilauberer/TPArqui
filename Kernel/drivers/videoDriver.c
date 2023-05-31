@@ -322,6 +322,14 @@ void drawWord(char* word) {
     drawWordColor(WHITE, word);
 }
 
+void drawWordColorLen(uint64_t color, char * buff, int len){
+ for (int i=0; buff[i] != 0 && i<len; i++) {
+        character(color, buff[i]);
+    }
+}
+void drawWordLen(char * buff, int len){
+    drawWordColorLen(WHITE, buff, len);
+}
 
 void drawChar(uint64_t hexColor, char character) {
     int a = cursorX;  // Posición horizontal actual

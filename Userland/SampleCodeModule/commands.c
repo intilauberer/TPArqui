@@ -42,7 +42,7 @@ void __call_command__(int i, char * command){
         invalidOp();
         return;
     default:;
-        call_sys_write("ERROR - Comando no reconocido",50,2);
+        call_sys_write("ERROR - Comando no reconocido",30,2);
         putC('\n');
         return;
     }

@@ -1,15 +1,11 @@
 #include "shell.h"
 #include "UserSyscalls.h"
 #include "commands.h"
-#define STDIN 0
-#define BUFFER_SIZE 128
-char buffer[BUFFER_SIZE] = {0};
+#include "stdin.h"
 
-void clearBuffer(){
-    for (int i = 0; i < BUFFER_SIZE; i++){
-        buffer[i] = 0;
-    }
-}
+
+
+
 
 void lineRead(char * line){
     __seek_command__(line);
@@ -17,22 +13,21 @@ void lineRead(char * line){
     clearBuffer();
 }
 
-void putLineStart(){
-    /*
-    putC('O');
-    putC(']');
-    putC(' ');
-    */
-   print("O] ");
+void putLineStart()
+{   
+    char s[] = "O] ";
+    print(s);
     clearBuffer();
 }
 
 void bufferize (){
-    putLineStart();
+    
     int i = 0;
+    int end_of_buffer = 0;
+    char c;
     while (i < BUFFER_SIZE) {
         char c = getC();
-        
+        end_of_buffer = (i == BUFFER_SIZE-1);
         if (c == '\b'){
             if ( i > 0)
                 i--;
@@ -46,12 +41,16 @@ void bufferize (){
             buffer[i]=0;
             lineRead(buffer);
             return;
-        } else
-            buffer[i++] = c;
-            putC(c);
+        } else{
+            if (!end_of_buffer)
+                buffer[i++] = c;
+            else
+                continue;}
+        putC(c);
     }
     return;
 }
+
 void welcome(){
     call_paintScreen(BLACK);
     char WELCOME_MESSAGE[] = "Bienvenido a BOKE.\nIngrese un comando para continuar:\n(Ingrese HELP para ver todos los comandos)\n";
@@ -63,7 +62,9 @@ void welcome(){
 int __shell_init__(){
     welcome();
     while (1){
+        putLineStart();
         bufferize();
+        call_sleepms(1);
     }
 }
 

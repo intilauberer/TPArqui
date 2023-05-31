@@ -2,7 +2,7 @@
 #include <naiveConsole.h>
 #include "include/keyboard_driver.h"
 #include "include/videoDriver.h"
-#include "../stdin.h"
+#include "../keyboard_buffer.h"
 #include "defs.h"
 #include "interrupts.h"
 #include "registers.h"

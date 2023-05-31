@@ -4,7 +4,7 @@
 #include "drivers/include/videoDriver.h"
 #include "include/defs.h"
 #include "drivers/include/keyboard_driver.h"
-#include "stdin.h"
+#include "keyboard_buffer.h"
 
 extern int getKey();
 
@@ -13,9 +13,9 @@ extern int getKey();
 void sys_write(const char *buf, int len, int filedescriptor){
 
     switch (filedescriptor){
-        case STDOUT: drawWord(buf);
+        case STDOUT: drawWordLen(buf, len);
             return;
-        case STDERR: drawWordColor(RED, buf);
+        case STDERR: drawWordColorLen(RED, buf, len);
             return;
         default: invalidFd();
     }

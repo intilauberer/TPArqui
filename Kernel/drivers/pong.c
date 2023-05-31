@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "include/videoDriver.h"
 #include "include/pong.h"
-#include "stdin.h"
+#include "keyboard_buffer.h"
 #include "drivers/include/keyboard_driver.h"
 #include "time.h"
 

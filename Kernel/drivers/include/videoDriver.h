@@ -59,3 +59,5 @@ void drawRegisters(int value);
 drawNumberColorAt(uint64_t hexColor, int value,  uint32_t x, uint32_t y);
 
 void drawBall(uint64_t color, int size, int x, int y);
+void drawWordColorLen(uint64_t color, char * buff, int len);
+void drawWordLen(char * buff, int len);

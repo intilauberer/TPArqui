@@ -1,8 +1,8 @@
-#include "stdin.h"
+#include "keyboard_buffer.h"
 #include "defs.h"
-static struct stdin_buffer buff = { 0, 0, {0} };
+static struct keyboard_buffer buff = { 0, 0, {0} };
 
-static stdin_ptr ptr = &buff;
+static buff_ptr ptr = &buff;
 
 int getBufferPosition(){
     return ptr->bufferPos;

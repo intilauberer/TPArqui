@@ -7,7 +7,7 @@
 #include "include/exceptions.h"
 #include "registers.h"
 #include "drivers/include/videoDriver.h"
-#include "stdin.h"
+#include "keyboard_buffer.h"
 #include "include/lib.h"
 #include "time.h"
 #include "drivers/include/soundDriver.h"

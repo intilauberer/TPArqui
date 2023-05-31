@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 #define BUFF_SIZE 4096
-typedef struct stdin_buffer* stdin_ptr; 
+typedef struct keyboard_buffer* buff_ptr; 
 
-struct stdin_buffer { 
+struct keyboard_buffer { 
     int bufferPos;
     int bufferLen;
     uint16_t buff[BUFF_SIZE];
