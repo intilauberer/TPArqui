@@ -4,11 +4,11 @@
 #include "UserSyscalls.h"
 #include "stdin.h"
 int null_or_space(char c){
-    return (c == NULL || c == ' ');
+    return (c == '\0' || c == ' ');
 }
 
 int null_or_newline(char c){
-    return (c == NULL || c == '\n');
+    return (c == '\0' || c == '\n');
 }
 char getC(){
     char c;
@@ -123,7 +123,6 @@ void print(const char * format, ...){
     va_list args;
     va_start(args, format);
 
-    int len = 0;
 
     while(*format != '\0'){
         if(*format == '%'){
@@ -184,16 +183,16 @@ void putInt(int num) {
 
 int strcmp(char * str1, char * str2){
 	int i = 0;
-	for (i; str1[i] != NULL && str2[i] != NULL; i++){
+	for (; str1[i] != '\0' && str2[i] != '\0'; i++){
 		if (str1[i] > str2[i]){
 			return 1;
 		} else if (str1[i] < str2[i]){
 			return -1;
 		}
 	}
-	if (str1[i] == NULL && str2[i] == NULL) {
+	if (str1[i] == '\0' && str2[i] == '\0') {
         return 0;
-    } else if (str1[i] == NULL) {
+    } else if (str1[i] == '\0') {
         return -1; 
     } else return 1;
 
@@ -202,19 +201,19 @@ int strcmp(char * str1, char * str2){
 int strcmpspace(char * str1, char * str2){
     char partition[BUFFER_SIZE];
     int j = 0;
-    for (j; str2[j] != NULL && str2[j] != ' ';j++){
+    for (; str2[j] != '\0' && str2[j] != ' ';j++){
         partition[j]=str2[j];
     }
     partition[j+1]=0;
 	int i = 0;
-	for (i; str1[i] != NULL && !null_or_space(partition[i]); i++){
+	for (; str1[i] != '\0' && !null_or_space(partition[i]); i++){
 		if (str1[i] > str2[i]){
 			return 1;
 		} else if (str1[i] < str2[i]){
 			return -1;
 		}
 	}
-	if (str1[i] == NULL && null_or_space(partition[i])) {
+	if (str1[i] == '\0' && null_or_space(partition[i])) {
         return 0;
     } else if (null_or_space(partition[i])) {
         return -1; 

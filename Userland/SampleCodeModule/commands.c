@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include "utils.h"
 #include "pong.h"
+#include "funcAsm.h"
 
 
 void __seek_command__(char * command){
@@ -105,10 +106,10 @@ void findColor(char * color){
 void setbg(char * command){
     char partition[20];
     int i=0;
-    for (i; !null_or_space(command[i]); i++);
+    for (; !null_or_space(command[i]); i++);
     i++;
     int j = 0;
-    for (i; command[i] != NULL; i++){
+    for (; command[i] != '\0'; i++){
         partition[j++]=command[i];
     }
     partition[j]=0;

@@ -24,7 +24,6 @@ void bufferize (){
     
     int i = 0;
     int end_of_buffer = 0;
-    char c;
     while (i < BUFFER_SIZE) {
         char c = getC();
         end_of_buffer = (i == BUFFER_SIZE-1);

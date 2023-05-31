@@ -734,7 +734,7 @@ void Pong() {
     drawPaddle(&paddle2, paddle2.color);
     showScoreCard(WHITE);
     int pos = call_getBufferPosition();
-    long k =0;
+
    
     
     while (1) {
