@@ -22,7 +22,7 @@ unsigned int PADDLE_SPEED = 4;
 
 unsigned int BALL_SIZE = 10;
 unsigned int BALL_SPEED = 3;
-
+unsigned int BALL_SPEED_HORIZONTAL = 6;
 uint64_t BALL_COLOR = WHITE;
 uint64_t PADDLE_COLOR = WHITE;
 uint64_t BACKGROUND_COLOR = BLACK;
@@ -245,24 +245,31 @@ void moveBall() {
     }
 
     if (ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height){
-            ball.speedX *= -1;
-            bounce();
+            // bounce();
+            if (paddle1.direction==STOP){
+                ball.speedY = 0;
+                ball.speedX = BALL_SPEED_HORIZONTAL;
+            } else {
             if (paddle1.direction==UP)
                 ball.speedY = -BALL_SPEED;
             if (paddle1.direction==DOWN)
                 ball.speedY = BALL_SPEED;
-            if (paddle1.direction==STOP)
-                ball.speedY = 0;
+            ball.speedX = BALL_SPEED;
+            }
         }
     if (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height){
             ball.speedX *= -1;
-            bounce();
+            // bounce();
+            if (paddle2.direction==STOP){
+                ball.speedY = 0;
+                ball.speedX = -1*BALL_SPEED_HORIZONTAL;
+            } else {
             if (paddle2.direction==UP)
                 ball.speedY = -BALL_SPEED;
             if (paddle2.direction==DOWN)
                 ball.speedY = BALL_SPEED;
-            if (paddle2.direction==STOP)
-                ball.speedY = 0;
+            ball.speedX = BALL_SPEED*-1;
+            }
         }
 
     // if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
@@ -428,12 +435,11 @@ int getNumber(){
     char c;
     int number = 0;
     int i = 0;
-    call_drawWordColorAt(WHITE, "Input = :", SCREEN_WIDTH/2, SCREEN_HEIGHT/2+50);
     while (c != '\n') {
         c = getC();
         if (c >= '0' && c <= '9') {
             number = number * 10 + (c - '0');
-            call_characterAt(WHITE, c, SCREEN_WIDTH/2 +144+ i, SCREEN_HEIGHT/2+50); 
+            call_characterAt(WHITE, c, SCREEN_WIDTH/2 +144+ i, 16); 
             i+=16;
         }
     }
@@ -458,7 +464,7 @@ uint64_t COMMON_COLORS[NUM_COMMON_COLORS] = {
 
 void showColorOptions() {
     print("Choose a color:\n");
-    print("Enter the new background color (1-10): ");
+    print("Enter the new color (1-10): ");
  
     for (int i = 0; i < NUM_COMMON_COLORS; i++) {
         uint64_t color = COMMON_COLORS[i];
@@ -481,7 +487,9 @@ void configuration(){
                 print("Enter the new ball speed: ");
                 int speed = getNumber();
                 if (speed > 0) {
-                    ball.speedX = speed;
+                    BALL_SPEED_HORIZONTAL = speed*2;
+                    BALL_SPEED = speed;
+                    ball.speedX = BALL_SPEED;
                 }
                 break;
             }
