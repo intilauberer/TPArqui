@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <utils.h>
 #include <UserSyscalls.h>
-#include <stdin.h>
+#include <buffer.h>
 
 
 int null_or_space(char c){

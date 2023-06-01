@@ -527,7 +527,7 @@ void pauseModular(uint64_t hexColor){
     call_drawWordColorAt(hexColor, "PAUSED", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2-200);
     call_setFontSize(DEFAULT_FONT_SIZE);
     call_drawWordColorAt(hexColor, "Press X to exit. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+100);
-    call_drawWordColorAt(hexColor, "Press C to acces configuration. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+130);
+    call_drawWordColorAt(hexColor, "Press C to access configuration. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+130);
     call_drawWordColorAt(hexColor, "Press S to toggle sound.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+160);
     call_drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+190);
 

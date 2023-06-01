@@ -17,7 +17,7 @@ void keyboard_handler() {
     uint16_t * buff = getBufferAddress();
     int buff_pos = getBufferPosition();
     
-     if (buff_pos+1 < BUFF_SIZE){
+    if (buff_pos+1 < BUFF_SIZE){
             setPos(buff_pos+1);
             buff[buff_pos+1] = 0;
         } else {

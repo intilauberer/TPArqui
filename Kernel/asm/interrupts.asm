@@ -139,6 +139,7 @@ saveState:
 	popState
 	call clear
 	call getStackBase
+	sub rax, 20h
 	mov [rsp+8*3], rax
 	call retUserland
 	mov [rsp], rax
