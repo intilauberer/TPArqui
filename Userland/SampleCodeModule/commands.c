@@ -5,7 +5,7 @@
 #include "pong.h"
 #include "funcAsm.h"
 
-
+static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR","DIV0", "INVALOP"};
 void __seek_command__(char * command){
     
 
@@ -90,7 +90,7 @@ void setbgEnum(int i){
             return;
     }
 }
-
+static char hexArr[COLOR_LEN][10] = {"RED","GREEN","BLUE","WHITE","BLACK","YELLOW","ORANGE","BOKE"};
 void findColor(char * color){
     
    
@@ -119,7 +119,7 @@ void setbg(char * command){
 void Div0(){
     int a = 0;
     int b = 1;
-    int c = b/a;
+     a = b/a;
 }
 void invalidOp(){
     invalidOpAsm();

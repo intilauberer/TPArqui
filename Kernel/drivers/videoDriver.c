@@ -2,6 +2,7 @@
 #include "include/font.h"
 #include "../include/naiveConsole.h"
 #include <naiveConsole.h>
+#include <lib.h>
 unsigned int SCREEN_WIDTH = 1024;
 unsigned int SCREEN_HEIGHT = 768;
 unsigned int BPP = 3;
@@ -260,13 +261,14 @@ void drawNumberColorAt(uint64_t hexColor, int value,  uint32_t x, uint32_t y){
 }
 
 void moveOneLineUp() {
-	char * dst = (char *) (uint64_t)(VBE_mode_info->framebuffer);
-	char * src = dst + VBE_mode_info->pitch * size*16;
-	for (int i = 0; i < VBE_mode_info->pitch * (VBE_mode_info->height - size*16); i++) {
-		dst[i] = src[i];
-	}
-	memset((void *) (uint64_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - size*16)), 0, VBE_mode_info->pitch * size*16);
-	cursorY -= (size*16);
+    char* dst = (char*)(uintptr_t)(VBE_mode_info->framebuffer);
+    char* src = dst + VBE_mode_info->pitch * size * 16;
+    uint64_t numBytes = VBE_mode_info->pitch * (VBE_mode_info->height - size * 16);
+
+    memcpy(dst, src, numBytes);
+    memset((void*)(uintptr_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - size * 16)), 0, VBE_mode_info->pitch * size * 16);
+
+    cursorY -= (size * 16);
 }
 
 void character(uint64_t hexColor, char c){

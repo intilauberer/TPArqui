@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include "utils.h"
-#include "UserSyscalls.h"
-#include "stdin.h"
+#include <utils.h>
+#include <UserSyscalls.h>
+#include <stdin.h>
+
+
 int null_or_space(char c){
     return (c == '\0' || c == ' ');
 }

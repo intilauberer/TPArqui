@@ -9,4 +9,6 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 void sleep(uint32_t seconds);
 void sleepms(int mseconds);
 void nanoms(int nseconds);
+char * cpuVendor(char* vendor);
+
 #endif

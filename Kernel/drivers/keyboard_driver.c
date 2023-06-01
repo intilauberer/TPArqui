@@ -6,6 +6,8 @@
 #include "defs.h"
 #include "interrupts.h"
 #include "registers.h"
+#include "include/ScanCodes.h"
+
 
 
 void keyboard_handler() {
@@ -24,7 +26,7 @@ void keyboard_handler() {
         }
     buff[buff_pos] = key;
     
-    if (key[ScanCodes] == ';'){
+    if (ScanCodes[key] == ';'){
         saveState();
         flag_snapshot_taken = 1;
     }

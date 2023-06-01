@@ -1,6 +1,5 @@
 #include <time.h>
 #include <stdint.h>
-#include "syscalls.h"
 #include "include/defs.h"
 #include "naiveConsole.h"
 #include "include/interrupts.h"
@@ -12,6 +11,7 @@
 #include "time.h"
 #include "drivers/include/soundDriver.h"
 #include "drivers/include/keyboard_driver.h"
+#include "syscalls.h"
 
 
 static void int_20();
@@ -24,7 +24,7 @@ void irqDispatcher(uint64_t irq, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint6
 	InterruptHandler interruption[256] = {NULL};
 	interruption[0]=&int_20;
 	interruption[1]=&int_21;
-	interruption[96]=&int_80;
+	interruption[96] = (InterruptHandler)int_80;
 
     if (irq >= 0 && irq < 256 && interruption[irq] != NULL) {
         InterruptHandler handler = interruption[irq];
@@ -101,6 +101,7 @@ int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 		beep(rsi, rdx);
 		break;
 	default:
-		return;
+		return 0;
 	}
+	return 0;
 }

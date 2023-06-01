@@ -10,7 +10,7 @@ static const uint32_t height = 25 ;
 #define defaultback 0x00
 
 void ncBackspace(){
-	if(currentVideo>=0xB8002){ // si no es el primer caracter
+	if(*currentVideo>=0xB8002){ // si no es el primer caracter
 		currentVideo -= 2;
 		*currentVideo = ' ';
 	}
