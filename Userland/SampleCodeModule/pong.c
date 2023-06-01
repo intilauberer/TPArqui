@@ -639,9 +639,9 @@ void showColorOptions() {
 
         print("\n");
     }
-
-    print("Enter the new color (1-10), press 11 for cutom hexa:");
+    print("Enter the new color (1-10):");
 }
+
 
 
 
@@ -696,18 +696,8 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber(); 
-                if (color >= 1 && color <= 11) {
-                    if(color == 11){
-                        print("\nEnter the new color in hexa:");
-                        uint64_t newcolor;
-                        own_scanf("%x", &newcolor);
-                        print("%x", newcolor);
-                        BORDER_COLOR = newcolor;    
-                    }
-                    else{
-                        BORDER_COLOR = COMMON_COLORS[color-1];
-                    }
-                    
+                if (color >= 1 && color <= 10) {
+                    BORDER_COLOR = COMMON_COLORS[color-1];
                 }
                 break;
                 
@@ -734,7 +724,7 @@ void configuration(){
                 call_clearColor(BACKGROUND_COLOR);
                 print("Current player1 paddle width: %d \n", paddle1.width);
                 print("Enter the new paddle width: ");
-              
+            
                 int width = getNumber();
                 if (width > 0) {
                     paddle1.width = width;
@@ -756,18 +746,8 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber(); 
-                if (color >= 1 && color <= 11) {
-                    if(color == 11){
-                        print("\nEnter the new color in hexa:");
-                        uint64_t newcolor;
-                        own_scanf("%x", &newcolor);
-                        print("%x", newcolor);
-                        ball.color = newcolor;
-                    }
-                    else{
-                        ball.color = COMMON_COLORS[color-1];
-                    }
-                    
+                if (color >= 1 && color <= 10) {
+                    ball.color = COMMON_COLORS[color-1];
                 }
                 break;
             }
@@ -779,19 +759,9 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber();
-                if (color >= 1 && color <= 11) {
-                    if(color == 11){
-                        print("\nEnter the new color in hexa:");
-                        uint64_t newcolor;
-                        own_scanf("%x", &newcolor);
-                        print("%x", newcolor);
-                        paddle1.color = newcolor;
-                    }
-                    else{
+                if (color >= 1 && color <= 10) {
                         paddle1.color = COMMON_COLORS[color-1];
                         paddle2.color = COMMON_COLORS[color-1];
-                    }
-                    
                 }
                 break;
             }
@@ -803,18 +773,8 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber();
-                if (color >= 1 && color <= 11) {
-                    if(color == 11){
-                        print("\nEnter the new color in hexa:");
-                        uint64_t newcolor;
-                        own_scanf("%x", &newcolor);
-                        print("%x", newcolor);
-                        BACKGROUND_COLOR = newcolor;
-                    }
-                    else{
-                         BACKGROUND_COLOR = COMMON_COLORS[color-1];
-                    }
-                   
+                if (color >= 1 && color <= 10) {
+                    BACKGROUND_COLOR = COMMON_COLORS[color-1];
                 }
                 break;
             }
