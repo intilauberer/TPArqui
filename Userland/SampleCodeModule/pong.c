@@ -886,7 +886,7 @@ void Pong() {
     int pos = call_getBufferPosition();
 
    
-    
+    resetGame();
     while (1) {
         showScoreCard(WHITE);
         if (c==0x19){
