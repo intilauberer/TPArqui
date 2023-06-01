@@ -581,20 +581,24 @@ void options() {
 }
 
 
-int getNumber(){
-    char c;
+int getNumber() {
+    char c = ' ';
     int number = 0;
-    int i = 0;
     while (c != '\n') {
         c = getC();
-        if (c >= '0' && c <= '9') {
-            number = number * 10 + (c - '0');
-            call_characterAt(WHITE, c, SCREEN_WIDTH/2 +144+ i, 16); 
-            i+=16;
+        if ((c >= '0' && c <= '9') || c == '\b') {
+            if (c == '\b' && number != 0) {
+                number = number / 10;
+                print("\b \b");
+            } else {
+                number = number * 10 + (c - '0');
+                print("%c", c);
+            }
         }
     }
     return number;
 }
+
 
 #define NUM_COMMON_COLORS 10
 
@@ -614,15 +618,27 @@ uint64_t COMMON_COLORS[NUM_COMMON_COLORS] = {
 
 void showColorOptions() {
     print("Choose a color:\n");
-    print("Enter the new color (1-10): ");
- 
     for (int i = 0; i < NUM_COMMON_COLORS; i++) {
         uint64_t color = COMMON_COLORS[i];
         print("%d", i+1);
-        call_put_square(SCREEN_WIDTH/2 + 40, 80 + (i * 30) - 10, 20, color);
+
+        int firstSquareX = 50;
+        int firstSquareY = (16 * DEFAULT_FONT_SIZE * i) + 70;
+        int firstSquareSize = 25;
+
+        int secondSquareSize = 20;
+        int secondSquareX = firstSquareX + (firstSquareSize - secondSquareSize) / 2;
+        int secondSquareY = firstSquareY + (firstSquareSize - secondSquareSize) / 2;
+
+        call_put_square(firstSquareX, firstSquareY, firstSquareSize, WHITE);
+        call_put_square(secondSquareX, secondSquareY, secondSquareSize, color);
+
         print("\n");
     }
+
+    print("Enter the new color (1-10):");
 }
+
 
 
 void configuration(){
@@ -633,7 +649,7 @@ void configuration(){
         switch (c) {
             case '1': {
                 call_clearColor(BACKGROUND_COLOR);
-                print("Current ball speed: %d\n", ball.speedX);
+                print("Current ball speed: %d\n", BALL_SPEED);
                 print("Enter the new ball speed: ");
                 int speed = getNumber();
                 if (speed > 0) {
@@ -670,8 +686,10 @@ void configuration(){
             }
             case '5': {
                 call_clearColor(BACKGROUND_COLOR);
-                print("Current color: ");
-                call_put_square(SCREEN_WIDTH/2+300, 0, 20, BALL_COLOR);
+                print("Current color:");
+                call_put_square(SCREEN_WIDTH / 2 - 150, 2, 25, WHITE);
+                call_put_square(SCREEN_WIDTH / 2 - 150 + (25 - 20) / 2, 2 + (25 - 20) / 2, 20, BORDER_COLOR);
+                print("\n");
                 showColorOptions();
                 int color = getNumber(); 
                 if (color >= 1 && color <= 10) {
