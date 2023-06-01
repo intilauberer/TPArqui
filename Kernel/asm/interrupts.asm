@@ -25,8 +25,9 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN sampleCodeModuleAddress
 EXTERN clear
+EXTERN clearColor
 EXTERN getStackBase
-
+EXTERN getKey
 SECTION .text
 
 %macro dState 0
@@ -133,22 +134,19 @@ saveState:
 %macro exceptionHandler 1
 	pushState
 	dState
+	mov rdi, 0x0000FF
+	call clearColor
 	mov rsi, registers
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
-	popState
 	call clear
+	popState
+	
 	call getStackBase
 	sub rax, 20h
 	mov [rsp+8*3], rax
 	call retUserland
 	mov [rsp], rax
-	;call retUserland
-;	mov [rsp], rax
-;	mov [rbp], rax
-	;mov rax, [rsp]
-	;add rax, 4
-	;mov [rsp], rax
 	iretq
 %endmacro
 

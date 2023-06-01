@@ -13,6 +13,11 @@ void exceptionDispatcher(int exception, registerStructT * registers) {
 		invalid_opcode();
 	}
 	printRegisters(registers);
+	drawWordColor(RED, "Press any key to continue");
+	char c;
+	sys_read(&c, 1, 0);
+	
+
 }
 
  void zero_division() {

@@ -116,13 +116,7 @@ void boke() {
     fillSection(BLUE, height * 2, VBE_mode_info->height);
 }
 void clear(){
-	for (int x = 0; x < VBE_mode_info->width; x++){
-		for (int y = 0; y < VBE_mode_info-> pitch; y++){
-			putPixel(bg_color,x,y);
-		}
-	}
-    cursorX=0;
-    cursorY=0;
+	clearColor(bg_color);
 	return;
 }
 
