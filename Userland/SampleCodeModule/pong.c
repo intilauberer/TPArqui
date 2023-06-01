@@ -14,7 +14,8 @@
 #define ORANGE 0xFFA500
 #define DEFAULT_FONT_SIZE 2
 
-unsigned int BORDER_SIZE = 10;
+unsigned int score =3;
+unsigned int BORDER_SIZE = 20;
 
 unsigned int PADDLE_WIDTH = 10;
 unsigned int PADDLE_HEIGHT = 100;
@@ -44,6 +45,7 @@ Paddle paddle2;
 Ball ball;
 
 int sound =1;
+int gsound =1;
 int player1Score = 0;
 int player2Score = 0;
 int movement_vector[] = {-1,1,0};
@@ -349,7 +351,7 @@ void moveBall() {
     clearBall();
     
     if (checkScored()) {
-        if(sound){
+        if(gsound){
             goal();
         }
         clearBall();
@@ -419,7 +421,6 @@ void moveBall() {
             ball.speedX = BALL_SPEED*-1;
             }
         }
-
     // if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
     //     (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
     //     if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
@@ -528,8 +529,10 @@ void pauseModular(uint64_t hexColor){
     call_setFontSize(DEFAULT_FONT_SIZE);
     call_drawWordColorAt(hexColor, "Press X to exit. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+100);
     call_drawWordColorAt(hexColor, "Press C to access configuration. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+130);
-    call_drawWordColorAt(hexColor, "Press S to toggle sound.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+160);
-    call_drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+190);
+    call_drawWordColorAt(hexColor, "Press S to toggle bounce sound.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+160);
+    call_drawWordColorAt(hexColor, "Press G to toggle goal sound.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+190);
+    call_drawWordColorAt(hexColor, "Press R to reset.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+220);
+    call_drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+250);
 
 }
 
@@ -576,6 +579,7 @@ void options() {
     print("Press 0 to change the background color\n");
     print("Press C to change the keybinds of P1\n");
     print("Press K to change the keybinds of P2\n");
+    print("Press S to change the score to win.\n");
     print("Press D to restore deafult values\n");
     print("Press X to exit\n");
 }
@@ -636,7 +640,7 @@ void showColorOptions() {
         print("\n");
     }
 
-    print("Enter the new color (1-10):");
+    print("Enter the new color (1-10), press 11 for cutom hexa:");
 }
 
 
@@ -692,19 +696,35 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber(); 
-                if (color >= 1 && color <= 10) {
-                    BORDER_COLOR = COMMON_COLORS[color-1];
+                if (color >= 1 && color <= 11) {
+                    if(color == 11){
+                        print("\nEnter the new color in hexa:");
+                        uint64_t newcolor;
+                        own_scanf("%x", &newcolor);
+                        print("%x", newcolor);
+                        BORDER_COLOR = newcolor;    
+                    }
+                    else{
+                        BORDER_COLOR = COMMON_COLORS[color-1];
+                    }
+                    
                 }
                 break;
                 
             }
             case '6': {
                 call_clearColor(BACKGROUND_COLOR);
-                print("Current paddle height: %d \n", paddle1.height);
+                print("Current player1 paddle height: %d \n", paddle1.height);
                 print("Enter the new paddle height: ");
                 int height = getNumber();
                 if (height > 0) {
                     paddle1.height = height;
+
+                }
+                print("\nCurrent player2 paddle height: %d \n", paddle2.height);
+                print("Enter the new paddle height: ");
+                height = getNumber();
+                if (height > 0) {
                     paddle2.height = height;
 
                 }
@@ -712,13 +732,19 @@ void configuration(){
             }
             case '7': {
                 call_clearColor(BACKGROUND_COLOR);
-                print("Current paddle width: %d \n", paddle1.width);
+                print("Current player1 paddle width: %d \n", paddle1.width);
                 print("Enter the new paddle width: ");
               
                 int width = getNumber();
                 if (width > 0) {
                     paddle1.width = width;
-                    paddle2.width = width;
+                }
+                print("\nCurrent player2 paddle width: %d \n", paddle2.width);
+                print("Enter the new paddle width: ");
+              
+                width = getNumber();
+                if (width > 0) {
+                    paddle1.width = width;
                 }
                 break;
             }
@@ -730,8 +756,18 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber(); 
-                if (color >= 1 && color <= 10) {
-                    ball.color = COMMON_COLORS[color-1];
+                if (color >= 1 && color <= 11) {
+                    if(color == 11){
+                        print("\nEnter the new color in hexa:");
+                        uint64_t newcolor;
+                        own_scanf("%x", &newcolor);
+                        print("%x", newcolor);
+                        ball.color = newcolor;
+                    }
+                    else{
+                        ball.color = COMMON_COLORS[color-1];
+                    }
+                    
                 }
                 break;
             }
@@ -743,9 +779,19 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber();
-                if (color >= 1 && color <= 10) {
-                    paddle1.color = COMMON_COLORS[color-1];
-                    paddle2.color = COMMON_COLORS[color-1];
+                if (color >= 1 && color <= 11) {
+                    if(color == 11){
+                        print("\nEnter the new color in hexa:");
+                        uint64_t newcolor;
+                        own_scanf("%x", &newcolor);
+                        print("%x", newcolor);
+                        paddle1.color = newcolor;
+                    }
+                    else{
+                        paddle1.color = COMMON_COLORS[color-1];
+                        paddle2.color = COMMON_COLORS[color-1];
+                    }
+                    
                 }
                 break;
             }
@@ -757,8 +803,18 @@ void configuration(){
                 print("\n");
                 showColorOptions();
                 int color = getNumber();
-                if (color >= 1 && color <= 10) {
-                    BACKGROUND_COLOR = COMMON_COLORS[color-1];
+                if (color >= 1 && color <= 11) {
+                    if(color == 11){
+                        print("\nEnter the new color in hexa:");
+                        uint64_t newcolor;
+                        own_scanf("%x", &newcolor);
+                        print("%x", newcolor);
+                        BACKGROUND_COLOR = newcolor;
+                    }
+                    else{
+                         BACKGROUND_COLOR = COMMON_COLORS[color-1];
+                    }
+                   
                 }
                 break;
             }
@@ -807,6 +863,16 @@ void configuration(){
                 putC(c);
 
                 break;
+            }
+            case 'S':{
+                call_clearColor(BACKGROUND_COLOR);
+                print("Current score to win: %d \n", score);
+                print("Enter the new score to win: ");
+                int newScore = getNumber();
+                if (newScore > 0) {
+                    score = newScore;
+                }
+
             }
             case 'D':{
                 BACKGROUND_COLOR = BLACK;
@@ -924,12 +990,23 @@ void Pong() {
             if (p == 'C'){
                 call_clearColor(BACKGROUND_COLOR);
                 configuration();
+                call_clearColor(BACKGROUND_COLOR);
             };
             if(p == 'S'){
                sound=!sound;
             }
+            if(p == 'G'){
+                gsound = !gsound;
+            }
+            if(p == 'R'){
+                player1Score = 0;
+                player2Score = 0;
+                resetGame();
+                call_clearColor(BACKGROUND_COLOR);
+            }
+            
 
-            call_clearColor(BACKGROUND_COLOR);
+            
             drawBorders();
             drawMiddleLine();
             drawPaddle(&paddle1, paddle1.color);
@@ -981,7 +1058,7 @@ void Pong() {
             movePaddle(&paddle2);
             moveBall();
 
-            if (player1Score >= 3 || player2Score >= 3) {
+            if (player1Score >= score || player2Score >= score) {
                 call_clearColor(BACKGROUND_COLOR);
                 call_setFontSize(6);
                 call_setFontSize(DEFAULT_FONT_SIZE);
