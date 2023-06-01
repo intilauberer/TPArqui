@@ -6,6 +6,8 @@
 #include "funcAsm.h"
 
 static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR","DIV0", "INVALOP"};
+
+//busca el comando en la lista de comandos y llama a la funcion correspondiente
 void __seek_command__(char * command){
     
 
@@ -49,6 +51,7 @@ void __call_command__(int i, char * command){
     }
 }
 
+//imprime la lista de comandos disponibles
 void help(){
     call_sys_write("Lista de commandos disponibles:\n", 34,1);
     for (int i = 0; i < COMMAND_LEN; i++){
@@ -103,6 +106,8 @@ void findColor(char * color){
     setbgEnum(-1);
 }
 
+
+//setea el color de fondo de la pantalla segun el comando ingresado
 void setbg(char * command){
     char partition[20];
     int i=0;

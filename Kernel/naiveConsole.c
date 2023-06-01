@@ -9,6 +9,7 @@ static const uint32_t height = 25 ;
 #define deafultcolor 0x0f
 #define defaultback 0x00
 
+//borra el ultimo caracter
 void ncBackspace(){
 	if(*currentVideo>=0xB8002){ // si no es el primer caracter
 		currentVideo -= 2;
@@ -16,7 +17,7 @@ void ncBackspace(){
 	}
 }
 
-
+//imprime un string
 void ncPrint(const char * string)
 {
 	int i;
@@ -24,7 +25,7 @@ void ncPrint(const char * string)
 	for (i = 0; string[i] != 0; i++)
 		ncPrintChar(string[i]);
 }
-
+//imprime un string con un color de letra y de fondo
 void ncPrintColor(const char * string, char color, char back){
 	int i;
 	for (i = 0; string[i] != 0; i++)
@@ -32,7 +33,7 @@ void ncPrintColor(const char * string, char color, char back){
 
 }
 
-
+//imprime un caracter con un color de letra y de fondo
 void ncPrintCharColor(char character, char color, char back){
 	
 	*currentVideo = character;
@@ -89,6 +90,7 @@ void ncClear()
 	currentVideo = video;
 }
 
+//convierte un entero a una base dada y lo guarda en un buffer
  uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 {
 	char *p = buffer;

@@ -4,10 +4,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-// #define MAXBUFFER 64
-// char bufferito[MAXBUFFER] = {0};
-
-// Function declarations
 
 char getC();
 void putC(char c);

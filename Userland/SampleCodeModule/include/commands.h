@@ -1,3 +1,6 @@
+#ifndef __COMMANDS_H__
+#define __COMMANDS_H__
+
 #include "utils.h"
 #include "UserSyscalls.h"
 #define COMMAND_LEN 7
@@ -34,13 +37,15 @@ enum Colors {
 
 
 
-void __seek_command__(char * command);
-void __call_command__(int i, char * command);
-void help();
-void time();
-void setbg(char * command);
-void setbgEnum(int i);
-void findColor(char * color);
-void call_boke();
-void Div0();
-void invalidOp();
+void __seek_command__(char * command); //Busca el comando ingresado por el usuario
+void __call_command__(int i, char * command); //Llama al comando ingresado por el usuario
+void help(); //Imprime la lista de comandos
+void time(); //Imprime la hora actual
+void setbg(char * command); //Cambia el color de fondo de la pantalla
+void setbgEnum(int i); 
+void findColor(char * color); //Busca el color ingresado por el usuario
+void call_boke(); 
+void Div0(); //Divide por 0 y genera una excepcion
+void invalidOp(); //Genera una excepcion de operacion invalida
+
+#endif /*__COMMANDS_H__*/

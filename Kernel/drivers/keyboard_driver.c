@@ -11,28 +11,33 @@
 
 
 void keyboard_handler() {
-    uint16_t key = getKey();
-    if (key == NULL)
+    uint16_t key = getKey();  // Obtiene el valor de la tecla presionada
+    
+    if (key == NULL)  // Si no se presionó ninguna tecla, retorna
         return;
-    uint16_t * buff = getBufferAddress();
-    int buff_pos = getBufferPosition();
     
+    uint16_t * buff = getBufferAddress();  
+    int buff_pos = getBufferPosition();  
+    
+    // Verifica si hay espacio suficiente en el búfer para almacenar el valor de la tecla
     if (buff_pos+1 < BUFF_SIZE){
-            setPos(buff_pos+1);
-            buff[buff_pos+1] = 0;
-        } else {
-            setPos(0);   
-            buff[0] = 0;
-        }
-    buff[buff_pos] = key;
-    
-    if (ScanCodes[key] == ';'){
-        saveState();
-        flag_snapshot_taken = 1;
+        setPos(buff_pos+1); 
+        buff[buff_pos+1] = 0;  
+    } else {
+        setPos(0);  
+        buff[0] = 0;  
     }
-    return;
+    
+    buff[buff_pos] = key;  // Almacena el valor de la tecla en el búfer
+    
+    // Verifica si la tecla presionada es un punto y coma (';')
+    if (ScanCodes[key] == ';'){
+        saveState();  // Guarda el estado actual
+        flag_snapshot_taken = 1;  // Establece la bandera indicando que se tomó una instantánea
+    }
+    
+    return; 
 }
-
 
 
 

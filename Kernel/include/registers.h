@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "interrupts.h"
 
+//Estructura de los registros que se van a guardar en el snapshot y en las interrupciones
 typedef struct registerStrucT{
 	uint64_t rax, rbx, rcx, rdx;
 	uint64_t rsi, rdi, rbp, rsp;
@@ -17,4 +18,4 @@ extern registerStructT registers;
 extern int flag_snapshot_taken;
 
 void printRegisters(registerStructT * dumpedRegisters);
-#endif
+#endif /* _REGISTERS_H */

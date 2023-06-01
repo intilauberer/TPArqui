@@ -88,16 +88,13 @@ void * initializeKernelBinary()
 	return getStackBase();
 	
 }
-// extern void printRegAsm();
+
 int main()
 {
 	load_idt();
-	//load_settings();
-	//Pong();
-	// bokee();
-	//boke();
+
 	((EntryPoint)sampleCodeModuleAddress)();
-	//drawSquare(RED,100,200,200);
+
 	while(1);
 	return 0;
 }

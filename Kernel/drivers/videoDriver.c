@@ -63,6 +63,7 @@ uint32_t getFontSize(){
     return size;
 }
 
+// funcion que dibuja un pixel en la pantalla
 void putPixel(uint64_t hexColor, uint32_t x, uint32_t y) {
 	uint8_t * screen = (uint8_t *) ((uint64_t) (VBE_mode_info->framebuffer));
     uint32_t offset = VBE_mode_info->pitch*y + x*3;
@@ -115,11 +116,12 @@ void boke() {
  
     fillSection(BLUE, height * 2, VBE_mode_info->height);
 }
+// Funcion que limpia la pantalla
 void clear(){
 	clearColor(bg_color);
 	return;
 }
-
+// Funcion que limpia la pantalla con un color
 void clearColor(uint64_t hexColor){
 	for (int x = 0; x < VBE_mode_info->width; x++){
 		for (int y = 0; y < VBE_mode_info-> pitch; y++){
@@ -132,7 +134,7 @@ void clearColor(uint64_t hexColor){
 }
 
 
-
+// Funcion que pinta la pantalla con un color
 void paintScreen(uint64_t hexColor){
     bg_color = hexColor;
 	for (int x = 0; x < VBE_mode_info->pitch; x++){
@@ -177,24 +179,6 @@ void put_square(uint32_t x, uint32_t y, uint32_t size, uint64_t hexColor) {
     }
 }
 
-// void backspace(){
-//      if (cursorX > 0) {
-//             cursorX -= size*8;
-//         } else if (cursorY > 0 && cursorX == 0) { // El cursor está al principio de una línea
-//             // Borra el último carácter de la línea anterior
-//             cursorY -= size*16;
-//             cursorX = getMaxWidth() - size*8; // Establece el cursorX al último carácter de la línea anterior
-            
-//         }
-// 		int height = getMaxHeight();
-// 		if (cursorY >= height / 3 && cursorY < (height / 3) * 2) { // Essizeos en el segundo tercio de la pantalla
-//                 drawRectangle(YELLOW, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo amarillo en lugar del carácter borrado
-//             } else {
-//                 drawRectangle(BLUE, cursorX, cursorY, size*8, size*16); // Dibuja un rectángulo azul en lugar del carácter borrado
-//             }
-//         return;
-// }
-
 void backspace(){
      if (cursorX > 0) {
             cursorX -= size*8;
@@ -237,14 +221,9 @@ void drawNumber(int value){
 }
 
 void drawRegisters(int value){
-   //  if(value == 0){
-   //     drawWordColor(WHITE, "0");
-    // }
-    // else{
         char buffer[256] = {0};
         uintToBase(value, buffer, 16);
         drawWordColor(WHITE, buffer);
-     //}
      newline();
 }
 
@@ -255,15 +234,16 @@ void drawNumberColorAt(uint64_t hexColor, int value,  uint32_t x, uint32_t y){
 }
 
 void moveOneLineUp() {
-    char* dst = (char*)(uintptr_t)(VBE_mode_info->framebuffer);
-    char* src = dst + VBE_mode_info->pitch * size * 16;
-    uint64_t numBytes = VBE_mode_info->pitch * (VBE_mode_info->height - size * 16);
+    char* dst = (char*)(uintptr_t)(VBE_mode_info->framebuffer); // Puntero al framebuffer
+    char* src = dst + VBE_mode_info->pitch * size * 16; // Puntero a la línea de origen
+    uint64_t numBytes = VBE_mode_info->pitch * (VBE_mode_info->height - size * 16); // Cantidad de bytes a copiar
 
-    memcpy(dst, src, numBytes);
-    memset((void*)(uintptr_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - size * 16)), 0, VBE_mode_info->pitch * size * 16);
+    memcpy(dst, src, numBytes); // Copia los bytes desde la línea de origen a la línea de destino
+    memset((void*)(uintptr_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - size * 16)), 0, VBE_mode_info->pitch * size * 16); // Rellena con ceros la parte de la línea de destino copiada
 
-    cursorY -= (size * 16);
+    cursorY -= (size * 16); // Actualiza la posición del cursor en el eje Y
 }
+
 
 void character(uint64_t hexColor, char c){
         if (c == '\b') { // backspace

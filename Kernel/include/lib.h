@@ -11,4 +11,4 @@ void sleepms(int mseconds);
 void nanoms(int nseconds);
 char * cpuVendor(char* vendor);
 
-#endif
+#endif /* LIB_H */

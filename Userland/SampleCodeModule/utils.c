@@ -53,7 +53,7 @@ int own_scanf(char * format, ...){
                     toRet += readHexInt(d);
                     break;
                 }
-                default: //?
+                default:
                 break;
             }
         }
@@ -200,6 +200,7 @@ int strcmp(char * str1, char * str2){
 
 }
 
+// Similar a strcmp pero solo compara hasta el primer espacio o el fin de la cadena (lo que ocurra primero)
 int strcmpspace(char * str1, char * str2){
     char partition[BUFFER_SIZE];
     int j = 0;

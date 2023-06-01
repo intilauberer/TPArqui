@@ -20,6 +20,7 @@ static int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 
 typedef void (*InterruptHandler)(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
+//maneja las interrupciones y recibe el numero de la interrupcion y los registros en el momento de la interrupcion
 void irqDispatcher(uint64_t irq, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
 	InterruptHandler interruption[256] = {NULL};
 	interruption[0]=&int_20;
@@ -41,6 +42,7 @@ void int_21() {
 	keyboard_handler();
 }
 
+//maneja las syscalls y recibe el numero de la syscall y los registros en el momento de la syscall
 int int_80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) {
 
     switch (rdi)

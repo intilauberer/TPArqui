@@ -5,6 +5,7 @@
 #include "include/utils.h"
 #include "include/sounds.h"
 
+//colores predefinidos
 #define RED 0xFF0000
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
@@ -50,6 +51,7 @@ int player1Score = 0;
 int player2Score = 0;
 int movement_vector[] = {-1,1,0};
 
+// Recibe un caracter ascii y devuelve el codigo de tecla correspondiente
 int asciiToKeyCode(char ascii) {
     switch (ascii) {
         case 0x1B: return 0x01;  // Escape
@@ -287,30 +289,32 @@ void clearBall() {
     call_drawBall(BACKGROUND_COLOR, ball.size, ball.x, ball.y);
 }
 
+// Mueve el paddle y lo dibuja
 void movePaddle(Paddle* paddle) {
-    clearPaddle(paddle);
+    clearPaddle(paddle); // Borra el paddle en su posición actual
     int move;
-    
+
     if (paddle->direction == UP) {
-        move = paddle->y - movement_vector[(int)paddle->direction] * paddle->speed;
-        if (move >= BORDER_SIZE) {
-            paddle->y = move;
+        move = paddle->y - movement_vector[(int)paddle->direction] * paddle->speed; // Calcula la nueva posición hacia arriba
+        if (move >= BORDER_SIZE) { // Verifica si la nueva posición está dentro de los límites superiores
+            paddle->y = move; // Actualiza la posición del paddle
         } else {
-            paddle->y = BORDER_SIZE;
-            paddle->direction = STOP;
+            paddle->y = BORDER_SIZE; // Establece la posición en el límite superior
+            paddle->direction = STOP; // Detiene el movimiento del paddle
         }
     } else if (paddle->direction == DOWN) {
-        move = paddle->y + paddle->speed;
-        if (move + paddle->height <= SCREEN_HEIGHT - BORDER_SIZE) {
-            paddle->y = move;
+        move = paddle->y + paddle->speed; // Calcula la nueva posición hacia abajo
+        if (move + paddle->height <= SCREEN_HEIGHT - BORDER_SIZE) { // Verifica si la nueva posición está dentro de los límites inferiores
+            paddle->y = move; // Actualiza la posición del paddle
         } else {
-            paddle->y = SCREEN_HEIGHT - BORDER_SIZE - paddle->height;
-            paddle->direction = STOP;
+            paddle->y = SCREEN_HEIGHT - BORDER_SIZE - paddle->height; // Establece la posición en el límite inferior
+            paddle->direction = STOP; // Detiene el movimiento del paddle
         }
     }
-    
-    drawPaddle(paddle, paddle->color);
+
+    drawPaddle(paddle, paddle->color); // Dibuja el paddle en su nueva posición
 }
+
 
 
 
@@ -348,148 +352,83 @@ char checkScored(){
 }       
 
 void moveBall() {
-    clearBall();
-    
-    if (checkScored()) {
-        if(gsound){
-            goal();
+    clearBall(); // Borra la pelota en su posición actual
+
+    if (checkScored()) { // Verifica si se ha anotado un punto
+        if (gsound) {
+            goal(); // Reproduce el sonido de gol
         }
-        clearBall();
-        resetGame();
+        clearBall(); // Borra la pelota
+        resetGame(); // Reinicia el juego
         return;
     }
-    
-    ball.x += ball.speedX;
-    ball.y += ball.speedY;
 
-    if (ball.x <= BORDER_SIZE) {
-        ball.x = BORDER_SIZE;
-        ball.speedX *= -1;
-        if(sound==1){
-            bounce();
+    ball.x += ball.speedX; // Actualiza la posición en el eje X de la pelota
+    ball.y += ball.speedY; // Actualiza la posición en el eje Y de la pelota
+
+    if (ball.x <= BORDER_SIZE) { // Verifica si la pelota ha alcanzado el límite izquierdo
+        ball.x = BORDER_SIZE; // Establece la posición en el límite izquierdo
+        ball.speedX *= -1; // Invierte la dirección horizontal de la pelota
+        if (sound == 1) {
+            bounce(); // Reproduce el sonido de rebote
         }
-    } else if (ball.x + ball.size >= SCREEN_WIDTH - BORDER_SIZE) {
-        ball.x = SCREEN_WIDTH - BORDER_SIZE - ball.size;
-        ball.speedX *= -1;
-        if(sound==1){
-            bounce();
+    } else if (ball.x + ball.size >= SCREEN_WIDTH - BORDER_SIZE) { // Verifica si la pelota ha alcanzado el límite derecho
+        ball.x = SCREEN_WIDTH - BORDER_SIZE - ball.size; // Establece la posición en el límite derecho
+        ball.speedX *= -1; // Invierte la dirección horizontal de la pelota
+        if (sound == 1) {
+            bounce(); // Reproduce el sonido de rebote
         }
     }
 
-    if (ball.y <= BORDER_SIZE) {
-        if(sound==1){
-            bounce();
+    if (ball.y <= BORDER_SIZE) { // Verifica si la pelota ha alcanzado el límite superior
+        if (sound == 1) {
+            bounce(); // Reproduce el sonido de rebote
         }
-        ball.y = BORDER_SIZE;
-        ball.speedY = -ball.speedY;
-    } else if (ball.y + ball.size >= SCREEN_HEIGHT - BORDER_SIZE * 2) {
-        if(sound==1){
-            bounce();
+        ball.y = BORDER_SIZE; // Establece la posición en el límite superior
+        ball.speedY = -ball.speedY; // Invierte la dirección vertical de la pelota
+    } else if (ball.y + ball.size >= SCREEN_HEIGHT - BORDER_SIZE * 2) { // Verifica si la pelota ha alcanzado el límite inferior
+        if (sound == 1) {
+            bounce(); // Reproduce el sonido de rebote
         }
-        ball.y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball.size;
-        ball.speedY = -ball.speedY;
+        ball.y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball.size; // Establece la posición en el límite inferior
+        ball.speedY = -ball.speedY; // Invierte la dirección vertical de la pelota
     }
 
-    if (ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height){
-            if(sound==1){
-                 bounce();
-            }           
-            if (paddle1.direction==STOP){
-                ball.speedY = 0;
-                ball.speedX = BALL_SPEED_HORIZONTAL;
-            } else {
-            if (paddle1.direction==UP)
+    if (ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) {
+        if (sound == 1) {
+            bounce(); // Reproduce el sonido de rebote
+        }
+        if (paddle1.direction == STOP) {
+            ball.speedY = 0;
+            ball.speedX = BALL_SPEED_HORIZONTAL;
+        } else {
+            if (paddle1.direction == UP)
                 ball.speedY = -BALL_SPEED;
-            if (paddle1.direction==DOWN)
+            if (paddle1.direction == DOWN)
                 ball.speedY = BALL_SPEED;
             ball.speedX = BALL_SPEED;
-            }
         }
-    if (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height){
-            ball.speedX *= -1;
-            if(sound==1){
-                 bounce();  
-            }           
-            if (paddle2.direction==STOP){
-                ball.speedY = 0;
-                ball.speedX = -1*BALL_SPEED_HORIZONTAL;
-            } else {
-            if (paddle2.direction==UP)
+    }
+
+    if (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height) {
+        ball.speedX *= -1;
+        if (sound == 1) {
+            bounce(); // Reproduce el sonido de rebote
+        }
+        if (paddle2.direction == STOP) {
+            ball.speedY = 0;
+            ball.speedX = -1 * BALL_SPEED_HORIZONTAL;
+        } else {
+            if (paddle2.direction == UP)
                 ball.speedY = -BALL_SPEED;
-            if (paddle2.direction==DOWN)
+            if (paddle2.direction == DOWN)
                 ball.speedY = BALL_SPEED;
-            ball.speedX = BALL_SPEED*-1;
-            }
+            ball.speedX = BALL_SPEED * -1;
         }
-    // if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
-    //     (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
-    //     if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
-    //         // Ball hits the middle third of paddle1
-    //         ball.speedX *= -1;
-    //         ball.speedY *= 0;
-    //     } else if (ball.y < paddle1.y + paddle1.height * (1.0 / 3.0)) {
-    //         // Ball hits the top third of paddle1
-    //         ball.speedX *= -1;
-    //         ball.speedY = -BALL_SPEED;
-    //     } else {
-    //         // Ball hits the bottom third of paddle1
-    //         ball.speedX *= -1;
-    //         ball.speedY = BALL_SPEED;
-    //     }
-    // }
+    }
 
-    call_drawBall(ball.color, ball.size, ball.x, ball.y);
+    call_drawBall(ball.color, ball.size, ball.x, ball.y); // Dibuja la pelota en su nueva posición
 }
-// #include <math.h>
-// void moveBall() {
-//     clearBall();
-
-//     if (checkScored()) {
-//         clearBall();
-//         resetGame();
-//         return;
-//     }
-
-//     ball.x += ball.speedX;
-//     ball.y += ball.speedY;
-
-//     if (ball.x <= BORDER_SIZE) {
-//         ball.x = BORDER_SIZE;
-//         ball.speedX = -ball.speedX;
-//     } else if (ball.x + ball.size >= SCREEN_WIDTH - BORDER_SIZE) {
-//         ball.x = SCREEN_WIDTH - BORDER_SIZE - ball.size;
-//         ball.speedX = -ball.speedX;
-//     }
-
-//     if (ball.y <= BORDER_SIZE) {
-//         ball.y = BORDER_SIZE;
-//         ball.speedY = -ball.speedY;
-//     } else if (ball.y + ball.size >= SCREEN_HEIGHT - BORDER_SIZE * 2) {
-//         ball.y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball.size;
-//         ball.speedY = -ball.speedY;
-//     }
-
-//     if ((ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height) ||
-//         (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height)) {
-//         if (ball.y >= paddle1.y + paddle1.height * (1.0 / 3.0) && ball.y <= paddle1.y + paddle1.height * (2.0 / 3.0)) {
-//             // Ball hits the middle third of paddle1
-//             float magnitude = sqrt(ball.speedX * ball.speedX + ball.speedY * ball.speedY);
-//             float direction = atan2(ball.speedY, ball.speedX);
-//             ball.speedX = -magnitude * cos(direction);
-//             ball.speedY = magnitude * sin(direction);
-//         } else if (ball.y < paddle1.y + paddle1.height * (1.0 / 3.0)) {
-//             // Ball hits the top third of paddle1
-//             ball.speedX = -ball.speedX;
-//             ball.speedY = -BALL_SPEED;
-//         } else {
-//             // Ball hits the bottom third of paddle1
-//             ball.speedX = -ball.speedX;
-//             ball.speedY = BALL_SPEED;
-//         }
-//     }
-
-//     call_drawBall(WHITE);
-// }
 
 
 

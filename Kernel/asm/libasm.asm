@@ -109,13 +109,6 @@ getKey:
   mov rax, 0
 
   in al, 0x60       ; lee la TECLA PRESIONADA desde el puerto 60h
-  ;test al, 0x80
-  ;jnz _skip
-  ;in al, 0x60
-  ;movzx eax, al     ; mueve el byte de al a eax y extiende con ceros los 32 bits superiores
-  ;jmp _good
-  ;skip:
-  ;xor eax,eax
 _good:  
   mov rsp, rbp 
   pop rbp

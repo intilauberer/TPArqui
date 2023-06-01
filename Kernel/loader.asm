@@ -3,10 +3,10 @@ extern main
 extern initializeKernelBinary
 
 loader:
-	call initializeKernelBinary	; Set up the kernel binary, and get thet stack address
-	mov rsp, rax				; Set up the stack with the returned address
+	call initializeKernelBinary	; Setea el kernel binario y devuelve la direccion de la pila
+	mov rsp, rax				; Setea la pila con la direccion retornada 
 	call main
 hang:
 	cli
-	hlt	; halt machine should kernel return
+	hlt	; Espera a que se produzca una interrupcion
 	jmp hang

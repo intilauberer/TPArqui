@@ -5,10 +5,10 @@
 
 static char buffer[BUFFER_SIZE] = {0};
 
-
+//Lee linea y la manda a __seek_command__
 void lineRead(char * line){
     __seek_command__(line);
-    // Morfar linea
+    //---
     clearBuffer();
 }
 
@@ -19,6 +19,16 @@ void putLineStart()
     clearBuffer();
 }
 
+/*
+La función bufferize() lee caracteres de entrada y los almacena en un búfer hasta que se cumplan ciertas condiciones: 
+retroceso (\b), salto de línea (\n) o el búfer alcanza su capacidad máxima. 
+Si se detecta un retroceso, se retrocede una posición en el búfer si es posible. 
+Si se detecta un salto de línea, muestra el caracter en la salida, 
+almacena el búfer en una línea y retorna. 
+En caso contrario, si el búfer no ha alcanzado su capacidad máxima, 
+se almacena el caracter en el búfer y se muestra en la salida. 
+La función finaliza cuando se completa el búfer o no hay más caracteres de entrada.
+*/
 void bufferize (){
     
     int i = 0;
@@ -65,12 +75,3 @@ int __shell_init__(){
         call_sleepms(1);
     }
 }
-
-
-
-// Vuelve a principio de userland cuando se lanza excepcion
-// RESTAURAR STACK
-
-// MAPEAR TECLA A FOTO DE REGISTROS
-
-// 
