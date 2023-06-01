@@ -725,7 +725,9 @@ void configuration(){
             case '8': {
                 call_clearColor(BACKGROUND_COLOR);
                 print("Current ball color: ");
-                call_put_square(SCREEN_WIDTH/2+300, 0, 20, BALL_COLOR);
+                call_put_square(SCREEN_WIDTH / 2 - 80, 2, 25, WHITE);
+                call_put_square(SCREEN_WIDTH / 2 - 80 + (25 - 20) / 2, 2 + (25 - 20) / 2, 20, ball.color);
+                print("\n");
                 showColorOptions();
                 int color = getNumber(); 
                 if (color >= 1 && color <= 10) {
@@ -736,7 +738,9 @@ void configuration(){
             case '9': {
                 call_clearColor(BACKGROUND_COLOR);
                 print("Current paddle color: ");
-                call_put_square(SCREEN_WIDTH/2+300, 0, 20, PADDLE_COLOR);
+                call_put_square(SCREEN_WIDTH / 2 - 50, 2, 25, WHITE);
+                call_put_square(SCREEN_WIDTH / 2 - 50 + (25 - 20) / 2, 2 + (25 - 20) / 2, 20, PADDLE_COLOR);
+                print("\n");
                 showColorOptions();
                 int color = getNumber();
                 if (color >= 1 && color <= 10) {
@@ -748,8 +752,9 @@ void configuration(){
             case '0': {
                 call_clearColor(BACKGROUND_COLOR);
                 print("Current background color: ");
-                call_put_square(SCREEN_WIDTH/2+300, 0, 20, BACKGROUND_COLOR);
-              
+                call_put_square(SCREEN_WIDTH / 2 , 2, 25, WHITE);
+                call_put_square(SCREEN_WIDTH / 2  + (25 - 20) / 2, 2 + (25 - 20) / 2, 20, BACKGROUND_COLOR);
+                print("\n");
                 showColorOptions();
                 int color = getNumber();
                 if (color >= 1 && color <= 10) {
@@ -763,8 +768,8 @@ void configuration(){
             }
             case 'C': {
                 call_clearColor(BACKGROUND_COLOR);
-                print("Enter the new up key: %c", ScanCodes[player1Up]);
-                print("\nEnter the new up key: \t");
+                print("Current up key: %c", ScanCodes[player1Up]);
+                print("\nEnter the new up key: ");
 
                 char c;
  
@@ -773,8 +778,8 @@ void configuration(){
                     setPlayer1Up(asciiToKeyCode(c));
                 }
                 putC(c);
-                print("Enter the new down key: %c", ScanCodes[player1Down]);
-                print("\nEnter the new down key: \t");;
+                print("\nCurrent down key: %c", ScanCodes[player1Down]);
+                print("\nEnter the new down key: ");
                 c = getC();
                 if (c != 0) {
                     setPlayer1Down(asciiToKeyCode(c));
@@ -785,16 +790,16 @@ void configuration(){
             }
             case 'K': {
                 call_clearColor(BACKGROUND_COLOR);
-                print("Enter the new up key: %c", ScanCodes[player2Up]);
-                print("\nEnter the new up key: \t");
+                print("Current up key: %c", ScanCodes[player2Up]);
+                print("\nEnter the new up key: ");
                 char c;
                 c = getC();
                 if (c != 0) {
                     setPlayer2Up(asciiToKeyCode(c));
                 }
                 putC(c);
-                print("Enter the new down key: %c", ScanCodes[player2Down]);
-                print("\nEnter the new down key: \t");
+                print("\nCurrent down key: %c", ScanCodes[player2Down]);
+                print("\nEnter the new down key: ");
                 c = getC();
                 if (c != 0) {
                     setPlayer2Down(asciiToKeyCode(c));
