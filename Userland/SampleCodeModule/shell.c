@@ -3,7 +3,7 @@
 #include <commands.h>
 #include <buffer.h>
 
-
+static char buffer[BUFFER_SIZE] = {0};
 
 
 void lineRead(char * line){

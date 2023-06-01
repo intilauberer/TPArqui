@@ -5,6 +5,6 @@
 
 void clearBuffer();
 
-static char buffer[BUFFER_SIZE] = {0};
+
 
 #endif /* __BUFFER_H__ */
