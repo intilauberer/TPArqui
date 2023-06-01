@@ -43,6 +43,7 @@ Paddle paddle1;
 Paddle paddle2;
 Ball ball;
 
+int sound =1;
 int player1Score = 0;
 int player2Score = 0;
 int movement_vector[] = {-1,1,0};
@@ -348,7 +349,9 @@ void moveBall() {
     clearBall();
     
     if (checkScored()) {
-        goal();
+        if(sound){
+            goal();
+        }
         clearBall();
         resetGame();
         return;
@@ -360,23 +363,35 @@ void moveBall() {
     if (ball.x <= BORDER_SIZE) {
         ball.x = BORDER_SIZE;
         ball.speedX *= -1;
-        bounce();
+        if(sound==1){
+            bounce();
+        }
     } else if (ball.x + ball.size >= SCREEN_WIDTH - BORDER_SIZE) {
         ball.x = SCREEN_WIDTH - BORDER_SIZE - ball.size;
         ball.speedX *= -1;
-        bounce();
+        if(sound==1){
+            bounce();
+        }
     }
 
     if (ball.y <= BORDER_SIZE) {
+        if(sound==1){
+            bounce();
+        }
         ball.y = BORDER_SIZE;
         ball.speedY = -ball.speedY;
     } else if (ball.y + ball.size >= SCREEN_HEIGHT - BORDER_SIZE * 2) {
+        if(sound==1){
+            bounce();
+        }
         ball.y = SCREEN_HEIGHT - BORDER_SIZE * 2 - ball.size;
         ball.speedY = -ball.speedY;
     }
 
     if (ball.x <= paddle1.x + paddle1.width && ball.x + ball.size >= paddle1.x && ball.y + ball.size >= paddle1.y && ball.y <= paddle1.y + paddle1.height){
-            // bounce();
+            if(sound==1){
+                 bounce();
+            }           
             if (paddle1.direction==STOP){
                 ball.speedY = 0;
                 ball.speedX = BALL_SPEED_HORIZONTAL;
@@ -390,7 +405,9 @@ void moveBall() {
         }
     if (ball.x + ball.size >= paddle2.x && ball.x <= paddle2.x + paddle2.width && ball.y + ball.size >= paddle2.y && ball.y <= paddle2.y + paddle2.height){
             ball.speedX *= -1;
-            // bounce();
+            if(sound==1){
+                 bounce();  
+            }           
             if (paddle2.direction==STOP){
                 ball.speedY = 0;
                 ball.speedX = -1*BALL_SPEED_HORIZONTAL;
@@ -511,7 +528,9 @@ void pauseModular(uint64_t hexColor){
     call_setFontSize(DEFAULT_FONT_SIZE);
     call_drawWordColorAt(hexColor, "Press X to exit. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+100);
     call_drawWordColorAt(hexColor, "Press C to acces configuration. ", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+130);
-    call_drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+160);
+    call_drawWordColorAt(hexColor, "Press S to toggle sound.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+160);
+    call_drawWordColorAt(hexColor, "Press any other key to continue.", SCREEN_WIDTH/2-200, SCREEN_HEIGHT/2+190);
+
 }
 
 void pauseGame(){
@@ -875,12 +894,17 @@ void Pong() {
             p = getC();
             if (p == 'X'){
                 call_clearColor(BACKGROUND_COLOR);
+                player1Score = 0;
+                player2Score = 0;
                 return;
             }
             if (p == 'C'){
                 call_clearColor(BACKGROUND_COLOR);
                 configuration();
             };
+            if(p == 'S'){
+               sound=!sound;
+            }
 
             call_clearColor(BACKGROUND_COLOR);
             drawBorders();

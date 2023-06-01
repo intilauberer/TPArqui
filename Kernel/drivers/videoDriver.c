@@ -293,10 +293,8 @@ void character(uint64_t hexColor, char c){
             cursorX = 0;
             cursorY += size*16;
         }
-        if (cursorY >= getMaxHeight()){  //TEMPORARIO HASTA IMPLEMENTAR SCROLLABLE / PAGE UP
+        if (cursorY >= getMaxHeight()){ 
             cursorX = 0;
-            // cursorY = 0;
-            // clear();
              moveOneLineUp();
             
             
