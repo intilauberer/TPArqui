@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "UserSyscalls.h"
 
-#define COMMAND_LEN 7
+#define COMMAND_LEN 8
 #define COLOR_LEN 5
 
 enum Commands {
@@ -14,7 +14,8 @@ enum Commands {
     PONG,
     SETCOLOR,
     DIV0,
-    INVALOP
+    INVALOP,
+    BOKE
 };
 enum Colors {
     GREEN_,

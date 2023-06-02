@@ -44,7 +44,8 @@ call_regState:
     call_to_handler 4
 call_paintScreen:
     call_to_handler 5
-; 6 was removed
+call_boke:
+    call_to_handler 6
 call_drawRectangle:
     call_to_handler 7
 call_drawBall:

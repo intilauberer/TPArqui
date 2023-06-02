@@ -5,7 +5,8 @@
 #include "pong.h"
 #include "funcAsm.h"
 #include "colors.h"
-static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR","DIV0", "INVALOP"};
+#include "shell.h"
+static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR","DIV0", "INVALOP", "BOKE"};
 
 //busca el comando en la lista de comandos y llama a la funcion correspondiente
 void __seek_command__(char * command){
@@ -33,7 +34,8 @@ void __call_command__(int i, char * command){
         call_regState();
         return;
     case PONG:;
-        Pong();    
+        Pong();
+        __shell_init__();    
         return;
     case SETCOLOR:;
         setbg(command);
@@ -43,6 +45,9 @@ void __call_command__(int i, char * command){
         return;
     case INVALOP:;
         invalidOp();
+        return;
+    case BOKE:;
+        call_boke();
         return;
     default:;
         call_sys_write("ERROR - Comando no reconocido",30,2);

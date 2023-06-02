@@ -8,8 +8,6 @@
 #include "include/interrupts.h"
 #include "drivers/include/ScanCodes.h"
 
-extern int getKey();
-
 
 
 void sys_write(char *buf, int len, int filedescriptor){
