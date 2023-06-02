@@ -448,6 +448,7 @@ void resetGame() {
 
     drawPaddle(&paddle1, paddle1.color);
     drawPaddle(&paddle2, paddle2.color);
+    drawBorders();
 }
 
 void drawMiddleLine(){
