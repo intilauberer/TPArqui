@@ -18,19 +18,15 @@ void exceptionDispatcher(int exception, registerStructT * registers) {
 	drawWordColor(RED, "Press any key to continue");
 	char c;
 	sys_read(&c, 1, 0);
-	
-
 }
 //excepcion de division por cero
  void zero_division() {
-	// saveState();
 	flag_snapshot_taken = 1;
 	drawWordColor(RED, "FATAL ERROR: No se puede dividir por 0");
 	newline();
 }
 //excepcion de codigo invalido
  void invalid_opcode() {
-	// saveState();
 	flag_snapshot_taken = 1;
 	drawWordColor(RED, "FATAL ERROR: Invalid opcode");
 	newline();

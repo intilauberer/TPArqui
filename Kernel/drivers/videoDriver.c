@@ -3,6 +3,7 @@
 #include "../include/naiveConsole.h"
 #include <naiveConsole.h>
 #include <lib.h>
+
 unsigned int SCREEN_WIDTH = 1024;
 unsigned int SCREEN_HEIGHT = 768;
 unsigned int BPP = 3;
@@ -124,7 +125,7 @@ void clear(){
 // Funcion que limpia la pantalla con un color
 void clearColor(uint64_t hexColor){
 	for (int x = 0; x < VBE_mode_info->width; x++){
-		for (int y = 0; y < VBE_mode_info-> pitch; y++){
+		for (int y = 0; y < VBE_mode_info-> height; y++){
 			putPixel(hexColor,x,y);
 		}
 	}
@@ -137,8 +138,8 @@ void clearColor(uint64_t hexColor){
 // Funcion que pinta la pantalla con un color
 void paintScreen(uint64_t hexColor){
     bg_color = hexColor;
-	for (int x = 0; x < VBE_mode_info->pitch; x++){
-		for (int y = 0; y < VBE_mode_info-> width; y++){
+	for (int x = 0; x < VBE_mode_info->width; x++){
+		for (int y = 0; y < VBE_mode_info-> height; y++){
             if (getPixelHex(x,y) != font_color && getPixelHex(x,y) != RED)
 			    putPixel(hexColor,x,y);
 		}
@@ -239,8 +240,8 @@ void moveOneLineUp() {
     uint64_t numBytes = VBE_mode_info->pitch * (VBE_mode_info->height - size * 16); // Cantidad de bytes a copiar
 
     memcpy(dst, src, numBytes); // Copia los bytes desde la línea de origen a la línea de destino
-    memset((void*)(uintptr_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - size * 16)), 0, VBE_mode_info->pitch * size * 16); // Rellena con ceros la parte de la línea de destino copiada
-
+    // memset((void*)(uintptr_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - size * 16)), 0, VBE_mode_info->pitch * size * 16); // Rellena con ceros la parte de la línea de destino copiada
+    drawRectangle(bg_color, 0, VBE_mode_info->height - size*16, 1024, size*16 );
     cursorY -= (size * 16); // Actualiza la posición del cursor en el eje Y
 }
 
@@ -269,10 +270,7 @@ void character(uint64_t hexColor, char c){
         }
         if (cursorY >= getMaxHeight()){ 
             cursorX = 0;
-             moveOneLineUp();
-            
-            
-
+            moveOneLineUp();
         }
         drawChar(hexColor, c);
         cursorX += size*8;

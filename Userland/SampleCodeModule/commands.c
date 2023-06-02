@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "pong.h"
 #include "funcAsm.h"
-
+#include "colors.h"
 static char command_list[COMMAND_LEN][10] = {"HELP", "TIME", "REGSTATE","PONG", "SETCOLOR","DIV0", "INVALOP"};
 
 //busca el comando en la lista de comandos y llama a la funcion correspondiente
@@ -73,27 +73,21 @@ void time(){
 
 void setbgEnum(int i){
     switch (i){
-        case RED_:; call_paintScreen(RED);
-            return;
         case GREEN_:; call_paintScreen(GREEN);
             return;
         case BLUE_:; call_paintScreen(BLUE);
-            return;
-        case WHITE_:; call_paintScreen(WHITE);
             return;
         case BLACK_: ;call_paintScreen(BLACK);
             return;
         case YELLOW_: ;call_paintScreen(YELLOW);
             return;
-        case ORANGE_:; call_paintScreen(ORANGE_);
+        case ORANGE_:; call_paintScreen(ORANGE);
             return;
-        case BOKE_: call_boke();
-            return;    
         default:
             return;
     }
 }
-static char hexArr[COLOR_LEN][10] = {"RED","GREEN","BLUE","WHITE","BLACK","YELLOW","ORANGE","BOKE"};
+static char hexArr[COLOR_LEN][10] = {"GREEN","BLUE","BLACK","YELLOW","ORANGE"};
 void findColor(char * color){
     
    
@@ -119,7 +113,6 @@ void setbg(char * command){
     }
     partition[j]=0;
     findColor(partition);
-    putC('\n');
 }
 void Div0(){
     int a = 0;

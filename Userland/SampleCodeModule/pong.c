@@ -4,16 +4,7 @@
 #include "include/UserSyscalls.h"
 #include "include/utils.h"
 #include "include/sounds.h"
-
-//colores predefinidos
-#define RED 0xFF0000
-#define GREEN 0x00FF00
-#define BLUE 0x0000FF
-#define WHITE 0xFFFFFF
-#define BLACK 0x000000
-#define YELLOW 0xFFFF00
-#define ORANGE 0xFFA500
-#define DEFAULT_FONT_SIZE 2
+#include "colors.h"
 
 unsigned int score =3;
 unsigned int BORDER_SIZE = 20;
@@ -340,11 +331,11 @@ void clearScoreCard(){
 }
 
 char checkScored(){
-    if (ball.x + ball.size < paddle1.x + paddle1.width){
+    if (ball.x + ball.size / 2 < paddle1.x + paddle1.width){
         updateScore(2);
         return 1;
     }
-    if (ball.x - ball.size > paddle2.x){
+    if (ball.x + ball.size / 2 > paddle2.x){
         updateScore(1);
         return 1;
     }
@@ -497,13 +488,13 @@ void training(Paddle* paddle2) {
 
 int benchmark(){
     int ticks = call_ticks_elapsed();
-    for (long i = 0; i < 1000000000; i++);
+    for (long i = 0; i < BENCHMARK_UPPER_BOUND; i++);
     int ticks2 = call_ticks_elapsed();
     return ticks2-ticks;
 }
 
 void sleepbm(int bm){
-    for (long i = 0; i < 70000000;i+=bm);
+    for (long i = 0; i < SLEEP_BENCHMARK_UPPER_BOUND;i+=bm);
 }
 void options() {
     print("\tCONFIGURATION\n");

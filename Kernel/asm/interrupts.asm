@@ -132,9 +132,10 @@ saveState:
 
 
 %macro exceptionHandler 1
+	
 	pushState
 	dState
-	mov rdi, 0x0000FF
+	mov qword rdi, 0x0000FF
 	call clearColor
 	mov rsi, registers
 	mov rdi, %1 ; pasaje de parametro
@@ -144,17 +145,15 @@ saveState:
 	
 	call getStackBase
 	sub rax, 20h
-	mov [rsp+8*3], rax
+	mov qword [rsp+8*3], rax
 	call retUserland
-	mov [rsp], rax
+	mov qword [rsp], rax
 	iretq
 %endmacro
 
 printRegAsm:
-	pushState
-	mov rdi, registers
+	mov qword rdi, registers
 	call printRegisters
-	popState
 	ret
 
 _hlt:

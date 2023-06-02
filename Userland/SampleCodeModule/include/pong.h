@@ -2,7 +2,7 @@
 #define PONG_H
 
 #include <stdint.h>
-
+#include "colors.h"
 //#define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define SCREEN_WIDTH 800
@@ -24,6 +24,11 @@
 #define SCORE_CARD_X 385
 #define SCORE_CARD_Y 10
 #define SCORE_CARD_FONT_SIZE 4
+
+#define BENCHMARK_UPPER_BOUND 1000000000
+#define SLEEP_BENCHMARK_UPPER_BOUND 70000000
+
+#define DEFAULT_FONT_SIZE 2
 
 
 typedef struct {
