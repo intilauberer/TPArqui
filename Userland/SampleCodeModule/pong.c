@@ -312,18 +312,18 @@ void movePaddle(Paddle* paddle) {
 
 void showScoreCard(uint64_t hexColor){
     call_setFontSize(SCORE_CARD_FONT_SIZE);
-    call_characterAt(hexColor, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
-    call_characterAt(hexColor, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
+    call_characterAt(hexColor, player1Score+'0', SCORE_CARD_X, SCORE_CARD_Y);
+    call_characterAt(hexColor, player2Score+'0', SCORE_CARD_X+200, SCORE_CARD_Y);
 }
 void updateScore(int player){
     if (player == 1){
-        call_characterAt(BACKGROUND_COLOR, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
+        call_characterAt(BACKGROUND_COLOR, player1Score+'0', SCORE_CARD_X, SCORE_CARD_Y);
         player1Score++;
-        call_characterAt(WHITE, player1Score+'0', SCORE_CARD_X-30, SCORE_CARD_Y+50);
+        call_characterAt(WHITE, player1Score+'0', SCORE_CARD_X, SCORE_CARD_Y);
     } else {
-        call_characterAt(BACKGROUND_COLOR, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
+        call_characterAt(BACKGROUND_COLOR, player2Score+'0', SCORE_CARD_X+200, SCORE_CARD_Y);
         player2Score++;
-        call_characterAt(WHITE, player2Score+'0', SCORE_CARD_X+30, SCORE_CARD_Y+50);
+        call_characterAt(WHITE, player2Score+'0', SCORE_CARD_X+200, SCORE_CARD_Y);
     }
 }
 void clearScoreCard(){
