@@ -1,6 +1,7 @@
 include Makefile.inc
 
 KERNEL=kernel.bin
+KERNEL_ELF=kernel.elf
 SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)
 
@@ -20,8 +21,11 @@ STATICLIBS=
 
 all: $(KERNEL)
 
-$(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM) $(OBJECTS_DRIVERS) $(OBJECTS_INTERRUPTIONS)
-	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_DRIVERS) $(OBJECTS_INTERRUPTIONS) $(OBJECTS_ASM) $(STATICLIBS)
+$(KERNEL): $(KERNEL_ELF)
+	$(OBJCOPY) -O binary -S $(KERNEL_ELF) $(KERNEL)
+
+$(KERNEL_ELF): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM) $(OBJECTS_DRIVERS) $(OBJECTS_INTERRUPTIONS)
+	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL_ELF) $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_DRIVERS) $(OBJECTS_INTERRUPTIONS) $(OBJECTS_ASM) $(STATICLIBS)
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -I./include -I. -c $< -o $@
@@ -37,5 +41,6 @@ clean:
 	rm -rf drivers/*.o *.o *.bin
 	rm -rf interruptions/*.o *.o *.bin
 	rm -rf /*.o *.o *.bin
+	rm -f $(KERNEL) $(KERNEL_ELF)
 
 .PHONY: all clean
